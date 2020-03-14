@@ -42,6 +42,19 @@ coviddata_rki_log.name = "Robert-Koch-Institut (Log)"
 
 factor_rki = coviddata_rki / coviddata_rki.shift(1)
 
+# Fit exponential
+x = np.array([(single_rki_datdata - rki_datdata[0]).days for single_rki_datdata in rki_datdata])
+fit_rki = np.poly1d(np.polyfit(x,np.array(coviddata_rki_log),1))
+fitdata_rki_log = pd.Series(
+    fit_rki(x),
+    index=rki_datdata,
+)
+fitdata_rki = pd.Series(
+    np.exp(np.log(10)*fit_rki(x)),
+    index=rki_datdata,
+)
+fitfactor_rki = fitdata_rki / fitdata_rki.shift(1)
+
 # Plots -----------------------------------------------------------
 
 # Plot 1
@@ -62,6 +75,13 @@ coviddata_rki.plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
+fitdata_rki.plot(
+    style='-',
+    lw=1,
+    c="darkred",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    grid=True)
 coviddata_confirmed_log_country[34:].plot(
     style='ko--',
     ms=4,
@@ -81,6 +101,14 @@ coviddata_rki_log.plot(
     legend=True,
     secondary_y=True,
     grid=True)
+fitdata_rki_log.plot(
+    style='--',
+    lw=1,
+    c="darkred",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    secondary_y=True,
+    grid=True)
 plt.title("Fallzahlen Covid-19")
 plt.show()
 
@@ -95,6 +123,15 @@ factor_country[34:].plot(
     grid=True)
 factor_rki.plot(
     style='o-',
+    ms=4,
+    lw=1,
+    ylim=[0.0, 3.0],
+    c="darkred",
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+fitfactor_rki.plot(
+    style='-',
     ms=4,
     lw=1,
     ylim=[0.0, 3.0],
