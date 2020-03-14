@@ -77,7 +77,7 @@ coviddata_rki.plot(
     grid=True)
 fitdata_rki.plot(
     style='-',
-    lw=1,
+    lw=2,
     c="darkred",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
@@ -103,7 +103,7 @@ coviddata_rki_log.plot(
     grid=True)
 fitdata_rki_log.plot(
     style='--',
-    lw=1,
+    lw=2,
     c="darkred",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
@@ -133,7 +133,7 @@ factor_rki.plot(
 fitfactor_rki.plot(
     style='-',
     ms=4,
-    lw=1,
+    lw=2,
     ylim=[0.0, 3.0],
     c="darkred",
     # yticks=range(ymin, ymax, 500),
