@@ -19,11 +19,11 @@ coviddata_confirmed_country = pd.Series(
         for col in coviddata_confirmed.columns[4:]
     ],
     index=datdata,
-    name="Fallzahlen Covid-19 " +
+    name="CSSE-JHU " +
     coviddata_confirmed["Country/Region"][n_country])
 
 coviddata_confirmed_log_country = coviddata_confirmed_country.apply(np.log10)
-coviddata_confirmed_log_country.name = "Fallzahlen Covid-19 " + coviddata_confirmed[
+coviddata_confirmed_log_country.name = "CSSE-JHU " + coviddata_confirmed[
     "Country/Region"][n_country] + "(Log)"
 
 factor_country = coviddata_confirmed_country / coviddata_confirmed_country.shift(
@@ -35,10 +35,10 @@ rki_datdata = datdata[-1 * rki_input.size:]
 coviddata_rki = pd.Series(
     rki_input,
     index=rki_datdata,
-    name="Fallzahlen Covid-19 Robert-Koch-Institut",
+    name="Robert-Koch-Institut",
 )
 coviddata_rki_log = coviddata_rki.apply(np.log10)
-coviddata_rki_log.name = "Fallzahlen Covid-19 Robert-Koch-Institut (Log)"
+coviddata_rki_log.name = "Robert-Koch-Institut (Log)"
 
 factor_rki = coviddata_rki / coviddata_rki.shift(1)
 
@@ -63,7 +63,7 @@ coviddata_rki.plot(
     legend=True,
     grid=True)
 coviddata_confirmed_log_country[34:].plot(
-    style='ko-',
+    style='ko--',
     ms=4,
     lw=1,
     # ylim=[ymin, ymax],
@@ -72,7 +72,7 @@ coviddata_confirmed_log_country[34:].plot(
     secondary_y=True,
     grid=True)
 coviddata_rki_log.plot(
-    style='o-',
+    style='o--',
     ms=4,
     lw=1,
     c="darkred",
@@ -81,6 +81,7 @@ coviddata_rki_log.plot(
     legend=True,
     secondary_y=True,
     grid=True)
+plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
@@ -101,4 +102,5 @@ factor_rki.plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
+plt.title("Faktor zum vorherigen Tag, Covid-19")
 plt.show()
