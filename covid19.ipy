@@ -1,0 +1,106 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+
+# Read data directly from internet
+coviddata_confirmed = pd.read_csv(
+    "https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_19-covid-Confirmed.csv",
+    sep=',',
+)
+
+# German data
+datdata = np.array([col for col in coviddata_confirmed.columns[4:]])
+
+datdata = pd.to_datetime(datdata)
+
+n_country = 11  # 11: Germany
+coviddata_confirmed_country = pd.Series(
+    [
+        coviddata_confirmed[col][n_country]
+        for col in coviddata_confirmed.columns[4:]
+    ],
+    index=datdata,
+    name="Fallzahlen Covid-19 " +
+    coviddata_confirmed["Country/Region"][n_country])
+
+coviddata_confirmed_log_country = coviddata_confirmed_country.apply(np.log10)
+coviddata_confirmed_log_country.name = "Fallzahlen Covid-19 " + coviddata_confirmed[
+    "Country/Region"][n_country] + "(Log)"
+
+factor_country = coviddata_confirmed_country / coviddata_confirmed_country.shift(
+    1)
+
+# Robert Koch Institut, händischer Input
+rki_input = np.array([262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062])
+rki_datdata = datdata[-1 * rki_input.size:]
+coviddata_rki = pd.Series(
+    rki_input,
+    index=rki_datdata,
+    name="Fallzahlen Covid-19 Robert-Koch-Institut",
+)
+coviddata_rki_log = coviddata_rki.apply(np.log10)
+coviddata_rki_log.name = "Fallzahlen Covid-19 Robert-Koch-Institut (Log)"
+
+factor_rki = coviddata_rki / coviddata_rki.shift(1)
+
+# Plots -----------------------------------------------------------
+
+# Plot 1
+coviddata_confirmed_country[34:].plot(
+    style='ko-',
+    ms=4,
+    lw=1,
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+coviddata_rki.plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="darkred",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+coviddata_confirmed_log_country[34:].plot(
+    style='ko-',
+    ms=4,
+    lw=1,
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    secondary_y=True,
+    grid=True)
+coviddata_rki_log.plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="darkred",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    secondary_y=True,
+    grid=True)
+plt.show()
+
+# Plot 2
+factor_country[34:].plot(
+    style='ko-',
+    ms=4,
+    lw=1,
+    ylim=[0.0, 3.0],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+factor_rki.plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    ylim=[0.0, 3.0],
+    c="darkred",
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+plt.show()
