@@ -3,15 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 
-# Read data directly from internet
-coviddata_confirmed = pd.read_csv(
-    "https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_19-covid-Confirmed.csv",
+# CSSE John Hopkins University, git-repository
+coviddata_confirmed_2 = pd.read_csv(
+    "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     sep=',',
 )
 
-# German data
 datdata = np.array([col for col in coviddata_confirmed.columns[4:]])
-
 datdata = pd.to_datetime(datdata)
 
 n_country = 11  # 11: Germany
