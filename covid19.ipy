@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 
 # CSSE John Hopkins University, git-repository
-coviddata_confirmed_2 = pd.read_csv(
+coviddata_confirmed = pd.read_csv(
     "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     sep=',',
 )
