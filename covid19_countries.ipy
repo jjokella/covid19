@@ -19,6 +19,7 @@ n_countries = [
     16, # 16: Italy
     159, # 159: France
 ]
+country_names = ["Germany", "Italy", "France"]
 
 coviddata_csse = coviddata_csse_all[coviddata_csse_all.columns[4:]]
 # coviddata_csse = coviddata_csse_all.index
@@ -34,7 +35,7 @@ factor_csse = coviddata_csse / coviddata_csse.shift(1,axis=1)
 
 # Plot 1
 coviddata_csse = coviddata_csse.T.set_index(csse_dats)
-coviddata_csse.set_axis(["Germany", "Italy", "France"], axis="columns")
+coviddata_csse.set_axis(country_names, axis="columns")
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
 coviddata_csse["Italy"].shift(8).plot(
     style='o-',
