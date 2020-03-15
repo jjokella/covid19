@@ -10,8 +10,9 @@ coviddata_csse_all = pd.read_csv(
     sep=',',
 )
 
-csse_dats = np.array([col for col in coviddata_csse_all.columns[4:]])
-csse_dats = pd.to_datetime(csse_dats)
+csse_dats_in = np.array(
+    [pd.Timestamp(colname) for colname in coviddata_csse_all.columns[4:]])
+csse_dats = pd.Series(csse_dats_in, index=csse_dats_in)
 
 n_country = 11  # 11: Germany
 coviddata_csse = pd.Series([
@@ -43,22 +44,22 @@ coviddata_rki_log.name = "Robert-Koch-Institut (Log)"
 factor_rki = coviddata_rki / coviddata_rki.shift(1)
 
 # Fit exponential
-x_csse = np.array([(single_csse_dats - csse_dats[0]).days
-                   for single_csse_dats in csse_dats])
-fit_csse = np.poly1d(np.polyfit(x_csse, np.array(coviddata_csse_log), 1))
+startdat = pd.Timestamp("2020/03/01")
+x_csse = pd.Series([cvdf.dat_to_int(dat_csse) for dat_csse in csse_dats],
+                   index=csse_dats)
+fit_csse = np.poly1d(
+    np.polyfit(x_csse[startdat:], coviddata_csse_log[startdat:], 1))
 fitdata_csse_log = pd.Series(
-    fit_csse(x_csse),
-    index=csse_dats,
+    fit_csse(x_csse[startdat:]),
+    index=csse_dats[startdat:],
 )
 fitdata_csse = pd.Series(
-    np.exp(np.log(10) * fit_csse(x_csse)),
-    index=csse_dats,
+    np.exp(np.log(10) * fit_csse(x_csse[startdat:])),
+    index=csse_dats[startdat:],
 )
 fitfactor_csse = fitdata_csse / fitdata_csse.shift(1)
 
-x_rki = np.array([
-    cvdf.dat_to_int(single_rki_dats) for single_rki_dats in rki_dats
-])
+x_rki = np.array([cvdf.dat_to_int(dat_rki) for dat_rki in rki_dats])
 fit_rki = np.poly1d(np.polyfit(x_rki, np.array(coviddata_rki_log), 1))
 fitdata_rki_log = pd.Series(
     fit_rki(x_rki),
