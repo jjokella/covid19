@@ -27,12 +27,13 @@ coviddata_csse_log = coviddata_csse.apply(np.log10)
 coviddata_csse_log.name = "CSSE-JHU " + coviddata_csse_all["Country/Region"][
     n_country] + "(Log)"
 
-factor_country = coviddata_csse / coviddata_csse.shift(1)
+factor_csse = coviddata_csse / coviddata_csse.shift(1)
 
 # Robert Koch Institut, händischer Input
+rki_startdat = pd.Timestamp("2020/03/04")
 rki_input = np.array(
     [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795])
-rki_dats = csse_dats[-1 * rki_input.size:]
+rki_dats = csse_dats[rki_startdat:rki_startdat + pd.Timedelta(days=rki_input.size)]
 coviddata_rki = pd.Series(
     rki_input,
     index=rki_dats,
@@ -144,7 +145,7 @@ plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
-factor_country[34:].plot(
+factor_csse[34:].plot(
     style='ko-',
     ms=4,
     lw=1,
