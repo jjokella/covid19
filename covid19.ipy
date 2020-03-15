@@ -98,6 +98,13 @@ fitdata_rki.plot(
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     grid=True)
+fitdata_csse.plot(
+    style='-',
+    lw=2,
+    c="k",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    grid=True)
 coviddata_csse_log[34:].plot(
     style='ko--',
     ms=4,
@@ -121,6 +128,14 @@ fitdata_rki_log.plot(
     style='--',
     lw=2,
     c="darkred",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    secondary_y=True,
+    grid=True)
+fitdata_csse_log.plot(
+    style='--',
+    lw=2,
+    c="k",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     secondary_y=True,
@@ -152,6 +167,15 @@ fitfactor_rki.plot(
     lw=2,
     ylim=[0.0, 3.0],
     c="darkred",
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+fitfactor_csse.plot(
+    style='-',
+    ms=4,
+    lw=2,
+    ylim=[0.0, 3.0],
+    c="k",
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
