@@ -181,3 +181,21 @@ fitfactor_csse.plot(
     grid=True)
 plt.title("Faktor zum vorherigen Tag, Covid-19")
 plt.show()
+
+# Infected beginning of April
+extrapoldat = "2020/04/01"
+print("Infected at date " + extrapoldat)
+print(
+    "CSSE-JHU: ",
+    np.int64(
+        np.round(
+            np.exp(
+                np.log(10) *
+                fit_csse(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
+print(
+    "RKI     : ",
+    np.int64(
+        np.round(
+            np.exp(
+                np.log(10) *
+                fit_rki(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
