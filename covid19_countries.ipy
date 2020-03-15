@@ -1,0 +1,58 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+
+# CSSE John Hopkins University, git-repository
+coviddata_csse_all = pd.read_csv(
+    "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
+    sep=',',
+)
+
+csse_dats_in = np.array(
+    [pd.Timestamp(colname) for colname in coviddata_csse_all.columns[4:]])
+csse_dats = pd.Series(csse_dats_in, index=csse_dats_in)
+
+n_countries = [
+    11,  # 11: Germany
+    16, # 16: Italy
+    159, # 159: France
+]
+
+coviddata_csse = coviddata_csse_all[coviddata_csse_all.columns[4:]]
+# coviddata_csse = coviddata_csse_all.index
+coviddata_csse = coviddata_csse.iloc[n_countries]
+coviddata_csse.name = ("CSSE-JHU")
+
+coviddata_csse_log = coviddata_csse.apply(np.log10)
+coviddata_csse_log.name = "CSSE-JHU (Log)"
+
+factor_csse = coviddata_csse / coviddata_csse.shift(1,axis=1)
+
+# Plots -----------------------------------------------------------
+
+# Plot 1
+coviddata_csse = coviddata_csse.T.set_index(csse_dats)
+coviddata_csse.set_axis(["Germany", "Italy", "France"], axis="columns")
+coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
+coviddata_csse["Italy"].shift(8).plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="r",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+coviddata_csse["Germany"].shift(0).plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="k",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+    
+plt.show()
