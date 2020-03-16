@@ -17,9 +17,10 @@ csse_dats = pd.Series(csse_dats_in, index=csse_dats_in)
 n_countries = [
     11,  # 11: Germany
     16, # 16: Italy
-    159, # 159: France
+    158, # 158: France
+    20, # 20: Belgium
 ]
-country_names = ["Germany", "Italy", "France"]
+country_names = ["Germany", "Italy", "France", "Belgium"]
 
 coviddata_csse = coviddata_csse_all[coviddata_csse_all.columns[4:]]
 # coviddata_csse = coviddata_csse_all.index
@@ -37,47 +38,56 @@ factor_csse = coviddata_csse / coviddata_csse.shift(1,axis=1)
 coviddata_csse = coviddata_csse.T.set_index(csse_dats)
 coviddata_csse.set_axis(country_names, axis="columns", inplace=True)
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
-coviddata_csse["Italy"].shift(8).plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="r",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-coviddata_csse["Germany"].shift(0).plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="k",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
+
+raw_colors = cm.viridis(np.linspace(0, 1, len(country_names)))
+colors = {country_name: raw_colors[i] for i,country_name in enumerate(country_names)}
+
+for country_name in country_names:
+
+    coviddata_csse[country_name].shift(0).plot(
+        style='o-',
+        ms=4,
+        lw=1,
+        c=colors[country_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+
+# coviddata_csse["Germany"].shift(0).plot(
+#     style='o-',
+#     ms=4,
+#     lw=1,
+#     c="k",
+#     # ylim=[ymin, ymax],
+#     # yticks=range(ymin, ymax, 500),
+#     legend=True,
+#     grid=True)
 
 plt.show()
 
 factor_csse = factor_csse.T.set_index(csse_dats)
 factor_csse.set_axis(country_names, axis="columns", inplace=True)
 factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
-factor_csse["Norway"].shift(0).plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="r",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-factor_csse["Germany"].shift(0).plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="k",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
+
+for country_name in country_names:
+    factor_csse[country_name].shift(0).plot(
+        style='o-',
+        ms=4,
+        lw=1,
+        c=colors[country_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+# factor_csse["Germany"].shift(0).plot(
+#     style='o-',
+#     ms=4,
+#     lw=1,
+#     c="k",
+#     # ylim=[ymin, ymax],
+#     # yticks=range(ymin, ymax, 500),
+#     legend=True,
+#     grid=True)
 
 plt.show()
