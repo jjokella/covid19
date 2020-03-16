@@ -35,7 +35,7 @@ factor_csse = coviddata_csse / coviddata_csse.shift(1,axis=1)
 
 # Plot 1
 coviddata_csse = coviddata_csse.T.set_index(csse_dats)
-coviddata_csse.set_axis(country_names, axis="columns")
+coviddata_csse.set_axis(country_names, axis="columns", inplace=True)
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
 coviddata_csse["Italy"].shift(8).plot(
     style='o-',
@@ -55,5 +55,29 @@ coviddata_csse["Germany"].shift(0).plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-    
+
+plt.show()
+
+factor_csse = factor_csse.T.set_index(csse_dats)
+factor_csse.set_axis(country_names, axis="columns", inplace=True)
+factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
+factor_csse["Norway"].shift(0).plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="r",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+factor_csse["Germany"].shift(0).plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="k",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+
 plt.show()
