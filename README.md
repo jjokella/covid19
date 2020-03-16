@@ -2,7 +2,7 @@
 
 Some Python functions for analyzing COVID-19
 
-## Prerequesites
+## Prerequisites
 
 ### Python
 - Python3 (tested: 3.7.5)
