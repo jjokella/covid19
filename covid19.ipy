@@ -33,8 +33,9 @@ factor_csse = coviddata_csse / coviddata_csse.shift(1)
 # Robert Koch Institut, händischer Input
 rki_startdat = pd.Timestamp("2020/03/04")
 rki_input = np.array(
-    [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795])
-rki_dats = csse_dats[rki_startdat:rki_startdat + pd.Timedelta(days=rki_input.size)]
+    [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795, 4838])
+rki_dats = csse_dats[rki_startdat:rki_startdat +
+                     pd.Timedelta(days=rki_input.size)]
 coviddata_rki = pd.Series(
     rki_input,
     index=rki_dats,
