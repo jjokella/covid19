@@ -4,7 +4,6 @@ import scipy.optimize as sco
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
-import covidfuncs.fits as cvfits
 
 # CSSE John Hopkins University, git-repository
 coviddata_csse_all = pd.read_csv(
@@ -91,11 +90,6 @@ coviddata_rki["Fit (Exp)"] = pd.Series(
 )
 coviddata_rki["Fit (Growth Factor)"] = coviddata_rki[
     "Fit (Exp)"] / coviddata_rki["Fit (Exp)"].shift(1)
-
-# Fit logistic curve
-# def logis(x, L, k, x0, y0):
-#     return L / (1. + np.exp(-k * (x - x0))) + y0
-# L, k, x0, y0 = sco.curve_fit(logis,x_csse[startdat:],coviddata_csse[startdat:], method="trf", p0= [10000.0,0.5,14.0,0.0], sigma=[10.0 for i in range(len(coviddata_csse[startdat:]))], absolute_sigma=True, check_finite=True)[0]
 
 # Plots -----------------------------------------------------------
 
