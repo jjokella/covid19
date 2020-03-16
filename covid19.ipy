@@ -46,6 +46,10 @@ coviddata_rki_log.name = "Robert-Koch-Institut (Log)"
 
 factor_rki = coviddata_rki / coviddata_rki.shift(1)
 
+esri_startdat = pd.Timestamp("2020/03/15")
+esri_input = np.array(
+    [5423])
+
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
 x_csse = pd.Series([cvdf.dat_to_int(dat_csse) for dat_csse in csse_dats],
