@@ -43,10 +43,9 @@ coviddata_csse["Daily Growth Factor"] = coviddata_csse[
 # Robert Koch Institut, händischer Input
 rki_startdat = pd.Timestamp("2020/03/04")
 rki_input = np.array(
-    [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795, 4838])
+    [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795, 4838, 6012])
 coviddata_rki = pd.DataFrame(
-    np.array(
-        [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795, 4838]),
+    rki_input,
     index=x_dates[rki_startdat:rki_startdat +
                   pd.Timedelta(days=len(rki_input) - 1)].index,
     columns=["Confirmed"])
@@ -211,7 +210,7 @@ plt.title("Faktor zum vorherigen Tag, Covid-19")
 plt.show()
 
 # Infected beginning of April
-pextrapoldat = "2020/04/01"
+extrapoldat = "2020/04/01"
 print("Infected at date " + extrapoldat)
 print(
     "CSSE-JHU: ",
