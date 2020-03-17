@@ -4,12 +4,8 @@ import scipy.optimize as sco
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
-
-# CSSE John Hopkins University, git-repository
-coviddata_csse_all = pd.read_csv(
-    "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
-    sep=',',
-)
+import covidfuncs.csse_input as cvcssein
+import covidfuncs.dffuncs as cvdff
 
 # Dates of years 2019/2020
 x_dates = pd.DataFrame([
@@ -24,21 +20,9 @@ x_dates = pd.DataFrame([
 
 # CSSE-JHU Data, Germany
 n_country = 11  # 11: Germany, 157: Korea, South
-coviddata_csse = pd.DataFrame(
-    [
-        coviddata_csse_all[col][n_country]
-        for col in coviddata_csse_all.columns[4:]
-    ],
-    index=[
-        pd.Timestamp(colname) for colname in coviddata_csse_all.columns[4:]
-    ],
-    columns=["Confirmed"],
-)
-coviddata_csse.name = ("CSSE-JHU " +
-                       coviddata_csse_all["Country/Region"][n_country])
-coviddata_csse["Confirmed (Log)"] = coviddata_csse.apply(np.log10)
-coviddata_csse["Daily Growth Factor"] = coviddata_csse[
-    "Confirmed"] / coviddata_csse["Confirmed"].shift(1)
+coviddata_csse = cvcssein.coviddata_csse(n_country,
+                                         is_add_log=True,
+                                         is_add_growth_factor=True)
 
 # Robert Koch Institut, händischer Input
 rki_startdat = pd.Timestamp("2020/03/04")
@@ -49,11 +33,9 @@ coviddata_rki = pd.DataFrame(
     index=x_dates[rki_startdat:rki_startdat +
                   pd.Timedelta(days=len(rki_input) - 1)].index,
     columns=["Confirmed"])
-coviddata_rki.name = ("Robert-Koch-Institut Germany" +
-                      coviddata_csse_all["Country/Region"][n_country])
-coviddata_rki["Confirmed (Log)"] = coviddata_rki.apply(np.log10)
-coviddata_rki["Daily Growth Factor"] = coviddata_rki[
-    "Confirmed"] / coviddata_rki["Confirmed"].shift(1)
+coviddata_rki.name = ("Robert-Koch-Institut Germany")
+coviddata_rki = cvdff.add_log(coviddata_rki, "Confirmed")
+coviddata_rki = cvdff.add_growth_factor(coviddata_rki, "Confirmed")
 
 # SPF, Frankreich, händischer Input
 spf_startdat = pd.Timestamp("2020/03/15")
@@ -64,26 +46,26 @@ coviddata_spf = pd.DataFrame(
                   pd.Timedelta(days=len(spf_input) - 1)].index,
     columns=["Confirmed"])
 coviddata_spf.name = ("Santé-Publique France ")
-coviddata_spf["Confirmed (Log)"] = coviddata_spf.apply(np.log10)
-coviddata_spf["Daily Growth Factor"] = coviddata_spf[
-    "Confirmed"] / coviddata_spf["Confirmed"].shift(1)
+coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
+coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-x_csse = x_dates[coviddata_csse.index[0]:coviddata_csse.index[-1]]
+cvdff.add_exponential_fit(coviddata_csse, "Confirmed", startdat)
+# x_csse = x_dates[coviddata_csse.index[0]:coviddata_csse.index[-1]]
 
-fit_csse = np.poly1d(
-    np.polyfit(x_csse[startdat:]["x"],
-               coviddata_csse["Confirmed (Log)"][startdat:], 1))
+# fit_csse = np.poly1d(
+#     np.polyfit(x_csse[startdat:]["x"],
+#                coviddata_csse["Confirmed (Log)"][startdat:], 1))
 
-coviddata_csse["Fit (Log)"] = pd.Series(fit_csse(x_csse["x"]),
-                                        index=coviddata_csse.index)
-coviddata_csse["Fit (Exp)"] = pd.Series(
-    np.exp(np.log(10) * fit_csse(x_csse["x"])),
-    index=coviddata_csse.index,
-)
-coviddata_csse["Fit (Growth Factor)"] = coviddata_csse[
-    "Fit (Exp)"] / coviddata_csse["Fit (Exp)"].shift(1)
+# coviddata_csse["Fit (Log)"] = pd.Series(fit_csse(x_csse["x"]),
+#                                         index=coviddata_csse.index)
+# coviddata_csse["Fit (Exp)"] = pd.Series(
+#     np.exp(np.log(10) * fit_csse(x_csse["x"])),
+#     index=coviddata_csse.index,
+# )
+# coviddata_csse["Fit (Growth Factor)"] = coviddata_csse[
+#     "Fit (Exp)"] / coviddata_csse["Fit (Exp)"].shift(1)
 
 x_rki = x_dates[coviddata_rki.index[0]:coviddata_rki.index[-1]]
 fit_rki = np.poly1d(
@@ -176,7 +158,7 @@ plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
-coviddata_csse["Daily Growth Factor"][34:].plot(
+coviddata_csse["Confirmed (Growth Factor)"][34:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -184,7 +166,7 @@ coviddata_csse["Daily Growth Factor"][34:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_rki["Daily Growth Factor"].plot(
+coviddata_rki["Confirmed (Growth Factor)"].plot(
     style='o-',
     ms=4,
     lw=1,
@@ -219,19 +201,19 @@ plt.title("Faktor zum vorherigen Tag, Covid-19")
 plt.show()
 
 # Infected beginning of April
-extrapoldat = "2020/04/01"
-print("Infected at date " + extrapoldat)
-print(
-    "CSSE-JHU: ",
-    np.int64(
-        np.round(
-            np.exp(
-                np.log(10) *
-                fit_csse(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
-print(
-    "RKI     : ",
-    np.int64(
-        np.round(
-            np.exp(
-                np.log(10) *
-                fit_rki(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
+# extrapoldat = "2020/04/01"
+# print("Infected at date " + extrapoldat)
+# print(
+#     "CSSE-JHU: ",
+#     np.int64(
+#         np.round(
+#             np.exp(
+#                 np.log(10) *
+#                 fit_csse(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
+# print(
+#     "RKI     : ",
+#     np.int64(
+#         np.round(
+#             np.exp(
+#                 np.log(10) *
+#                 fit_rki(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
