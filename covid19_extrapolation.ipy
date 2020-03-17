@@ -26,6 +26,7 @@ startdat = pd.Timestamp("2020/03/01")
 extrapoldat = pd.Timestamp("2020/04/01")
 fit_csse = cvdff.get_log_fit(coviddata_csse, "Confirmed", startdat)
 fit_rki = cvdff.get_log_fit(coviddata_rki, "Confirmed", startdat)
+print("Country: "+ cvcssein.covid_country(n_country))
 print("Infected at date ", extrapoldat.date(), " (exponential)")
 print("CSSE-JHU: ",
       np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))
