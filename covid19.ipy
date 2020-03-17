@@ -49,15 +49,24 @@ coviddata_rki = pd.DataFrame(
     index=x_dates[rki_startdat:rki_startdat +
                   pd.Timedelta(days=len(rki_input) - 1)].index,
     columns=["Confirmed"])
-coviddata_rki.name = ("Robert-Koch-Institut " +
+coviddata_rki.name = ("Robert-Koch-Institut Germany" +
                       coviddata_csse_all["Country/Region"][n_country])
 coviddata_rki["Confirmed (Log)"] = coviddata_rki.apply(np.log10)
 coviddata_rki["Daily Growth Factor"] = coviddata_rki[
     "Confirmed"] / coviddata_rki["Confirmed"].shift(1)
 
-# ESRI, Frankreich, händischer Input
-esri_startdat = pd.Timestamp("2020/03/15")
-esri_input = np.array([5423])
+# SPF, Frankreich, händischer Input
+spf_startdat = pd.Timestamp("2020/03/15")
+spf_input = np.array([5423, 6633])
+coviddata_spf = pd.DataFrame(
+    spf_input,
+    index=x_dates[spf_startdat:spf_startdat +
+                  pd.Timedelta(days=len(spf_input) - 1)].index,
+    columns=["Confirmed"])
+coviddata_spf.name = ("Santé-Publique France ")
+coviddata_spf["Confirmed (Log)"] = coviddata_spf.apply(np.log10)
+coviddata_spf["Daily Growth Factor"] = coviddata_spf[
+    "Confirmed"] / coviddata_spf["Confirmed"].shift(1)
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
