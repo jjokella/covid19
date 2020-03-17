@@ -6,17 +6,10 @@ import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.csse_input as cvcssein
 import covidfuncs.dffuncs as cvdff
+import covidinput.rki as rki
+import covidinput.spf as spf
 
-# Dates of years 2019/2020
-x_dates = pd.DataFrame([
-    cvdf.dat_to_int(dat) for dat in
-    [pd.Timestamp("2019/01/01") + pd.Timedelta(days=i) for i in range(731)]
-],
-                       index=[
-                           pd.Timestamp("2019/01/01") + pd.Timedelta(days=i)
-                           for i in range(731)
-                       ],
-                       columns=["x"])
+# Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
 n_country = 11  # 11: Germany, 157: Korea, South
@@ -25,12 +18,11 @@ coviddata_csse = cvcssein.coviddata_csse(n_country,
                                          is_add_growth_factor=True)
 
 # Robert Koch Institut, händischer Input
-rki_startdat = pd.Timestamp("2020/03/04")
-rki_input = np.array(
-    [262, 400, 639, 795, 902, 1139, 1296, 1567, 2369, 3062, 3795, 4838, 6012])
+rki_startdat = rki.startdat
+rki_input = rki.cases
 coviddata_rki = pd.DataFrame(
     rki_input,
-    index=x_dates[rki_startdat:rki_startdat +
+    index=cvdf.x_dates[rki_startdat:rki_startdat +
                   pd.Timedelta(days=len(rki_input) - 1)].index,
     columns=["Confirmed"])
 coviddata_rki.name = ("Robert-Koch-Institut Germany")
@@ -38,48 +30,23 @@ coviddata_rki = cvdff.add_log(coviddata_rki, "Confirmed")
 coviddata_rki = cvdff.add_growth_factor(coviddata_rki, "Confirmed")
 
 # SPF, Frankreich, händischer Input
-spf_startdat = pd.Timestamp("2020/03/15")
-spf_input = np.array([5423, 6633])
+spf_startdat = spf.startdat
+spf_input = spf.cases
 coviddata_spf = pd.DataFrame(
     spf_input,
-    index=x_dates[spf_startdat:spf_startdat +
+    index=cvdf.x_dates[spf_startdat:spf_startdat +
                   pd.Timedelta(days=len(spf_input) - 1)].index,
     columns=["Confirmed"])
 coviddata_spf.name = ("Santé-Publique France ")
 coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
 coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 
+# Fits -----------------------------------------------------
+
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
 cvdff.add_exponential_fit(coviddata_csse, "Confirmed", startdat)
-# x_csse = x_dates[coviddata_csse.index[0]:coviddata_csse.index[-1]]
-
-# fit_csse = np.poly1d(
-#     np.polyfit(x_csse[startdat:]["x"],
-#                coviddata_csse["Confirmed (Log)"][startdat:], 1))
-
-# coviddata_csse["Fit (Log)"] = pd.Series(fit_csse(x_csse["x"]),
-#                                         index=coviddata_csse.index)
-# coviddata_csse["Fit (Exp)"] = pd.Series(
-#     np.exp(np.log(10) * fit_csse(x_csse["x"])),
-#     index=coviddata_csse.index,
-# )
-# coviddata_csse["Fit (Growth Factor)"] = coviddata_csse[
-#     "Fit (Exp)"] / coviddata_csse["Fit (Exp)"].shift(1)
-
-x_rki = x_dates[coviddata_rki.index[0]:coviddata_rki.index[-1]]
-fit_rki = np.poly1d(
-    np.polyfit(x_rki[startdat:]["x"],
-               coviddata_rki["Confirmed (Log)"][startdat:], 1))
-
-coviddata_rki["Fit (Log)"] = pd.Series(fit_rki(x_rki["x"]),
-                                       index=coviddata_rki.index)
-coviddata_rki["Fit (Exp)"] = pd.Series(
-    np.exp(np.log(10) * fit_rki(x_rki["x"])),
-    index=coviddata_rki.index,
-)
-coviddata_rki["Fit (Growth Factor)"] = coviddata_rki[
-    "Fit (Exp)"] / coviddata_rki["Fit (Exp)"].shift(1)
+cvdff.add_exponential_fit(coviddata_rki, "Confirmed", startdat)
 
 # Plots -----------------------------------------------------------
 
@@ -199,21 +166,3 @@ plt.legend([
 ])
 plt.title("Faktor zum vorherigen Tag, Covid-19")
 plt.show()
-
-# Infected beginning of April
-# extrapoldat = "2020/04/01"
-# print("Infected at date " + extrapoldat)
-# print(
-#     "CSSE-JHU: ",
-#     np.int64(
-#         np.round(
-#             np.exp(
-#                 np.log(10) *
-#                 fit_csse(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
-# print(
-#     "RKI     : ",
-#     np.int64(
-#         np.round(
-#             np.exp(
-#                 np.log(10) *
-#                 fit_rki(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
