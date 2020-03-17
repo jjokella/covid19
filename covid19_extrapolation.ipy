@@ -6,6 +6,8 @@ import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.csse_input as cvcssein
 import covidfuncs.dffuncs as cvdff
+import covidinput.rki as rki
+import covidinput.spf as spf
 
 # CSSE-JHU Data, Germany
 n_country = 11  # 11: Germany, 157: Korea, South
@@ -14,27 +16,18 @@ coviddata_csse = cvcssein.coviddata_csse(n_country,
                                          is_add_growth_factor=True)
 
 coviddata_rki = pd.DataFrame(
-    rki_input,
-    index=cvdf.x_dates[rki_startdat:rki_startdat +
-                  pd.Timedelta(days=len(rki_input) - 1)].index,
+    rki.cases,
+    index=cvdf.x_dates[rki.startdat:rki.startdat +
+                       pd.Timedelta(days=len(rki.cases) - 1)].index,
     columns=["Confirmed"])
 
 # Infected beginning of April
-extrapoldat = "2020/04/01"
+startdat = pd.Timestamp("2020/03/01")
+extrapoldat = pd.Timestamp("2020/04/01")
 fit_csse = cvdff.get_log_fit(coviddata_csse, "Confirmed", startdat)
 fit_rki = cvdff.get_log_fit(coviddata_rki, "Confirmed", startdat)
-print("Infected at date " + extrapoldat)
-print(
-    "CSSE-JHU: ",
-    np.int64(
-        np.round(
-            np.exp(
-                np.log(10) *
-                fit_csse(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
-print(
-    "RKI     : ",
-    np.int64(
-        np.round(
-            np.exp(
-                np.log(10) *
-                fit_rki(cvdf.dat_to_int(pd.Timestamp(extrapoldat)))))))
+print("Infected at date ", extrapoldat.date())
+print("CSSE-JHU: ",
+      np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))
+print("RKI     : ",
+      np.int64(np.exp(np.log(10) * fit_rki(cvdf.dat_to_int(extrapoldat)))))

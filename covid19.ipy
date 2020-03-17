@@ -23,7 +23,7 @@ rki_input = rki.cases
 coviddata_rki = pd.DataFrame(
     rki_input,
     index=cvdf.x_dates[rki_startdat:rki_startdat +
-                  pd.Timedelta(days=len(rki_input) - 1)].index,
+                       pd.Timedelta(days=len(rki_input) - 1)].index,
     columns=["Confirmed"])
 coviddata_rki.name = ("Robert-Koch-Institut Germany")
 coviddata_rki = cvdff.add_log(coviddata_rki, "Confirmed")
@@ -35,7 +35,7 @@ spf_input = spf.cases
 coviddata_spf = pd.DataFrame(
     spf_input,
     index=cvdf.x_dates[spf_startdat:spf_startdat +
-                  pd.Timedelta(days=len(spf_input) - 1)].index,
+                       pd.Timedelta(days=len(spf_input) - 1)].index,
     columns=["Confirmed"])
 coviddata_spf.name = ("Santé-Publique France ")
 coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
