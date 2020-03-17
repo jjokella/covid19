@@ -4,63 +4,21 @@ import scipy.optimize as sco
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
+import covidfuncs.csse_input as cvcssein
+import covidfuncs.dffuncs as cvdff
+import covidinput.rki as rki
+import covidinput.spf as spf
 
-# CSSE John Hopkins University, git-repository
-coviddata_csse_all = pd.read_csv(
-    "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
-    sep=',',
-)
-
-# Dates of years 2019/2020
-x_dates = pd.DataFrame([
-    cvdf.dat_to_int(dat) for dat in
-    [pd.Timestamp("2019/01/01") + pd.Timedelta(days=i) for i in range(731)]
-],
-                       index=[
-                           pd.Timestamp("2019/01/01") + pd.Timedelta(days=i)
-                           for i in range(731)
-                       ],
-                       columns=["x"])
-
-# CSSE-JHU Data, South Korea
-n_country = 157  # 157: Korea, South
-coviddata_csse = pd.DataFrame(
-    [
-        coviddata_csse_all[col][n_country]
-        for col in coviddata_csse_all.columns[4:]
-    ],
-    index=[
-        pd.Timestamp(colname) for colname in coviddata_csse_all.columns[4:]
-    ],
-    columns=["Confirmed"],
-)
-coviddata_csse.name = ("CSSE-JHU " +
-                       coviddata_csse_all["Country/Region"][n_country])
-coviddata_csse["Confirmed (Log)"] = coviddata_csse.apply(np.log10)
-coviddata_csse["Daily Growth Factor"] = coviddata_csse[
-    "Confirmed"] / coviddata_csse["Confirmed"].shift(1)
+# CSSE-JHU Data, Korea, South
+n_country = 11  # 11: Germany, 156: Korea, South
+coviddata_csse = cvcssein.coviddata_csse(n_country,
+                                         is_add_log=True,
+                                         is_add_growth_factor=True)
 
 
 startdat = pd.Timestamp("2020/02/01")
-x_csse = x_dates[coviddata_csse.index[0]:coviddata_csse.index[-1]]
 
-
-# Fit logistic curve
-def logis(x, L, k, x0, y0):
-    return L / (1. + np.exp(-k * (x - x0))) + y0
-
-
-L, k, x0, y0 = sco.curve_fit(
-    logis,
-    x_csse[startdat:]["x"],
-    coviddata_csse["Confirmed"][startdat:],
-    method="trf",
-    p0=[8000.0, 0.5, 10.0, 0.0],
-    sigma=[1.0 for i in range(len(coviddata_csse["Confirmed"][startdat:].index))],
-    absolute_sigma=True,
-    check_finite=True)[0]
-
-coviddata_csse["Fit (Logistic)"] = logis(x_csse,L, k, x0, y0)
+cvdff.add_logistic_fit(coviddata_csse, "Confirmed", startdat)
 
 # Plot 1
 coviddata_csse["Confirmed"][:].plot(
