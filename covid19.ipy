@@ -8,14 +8,18 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.rki as rki
 import covidinput.spf as spf
 import covidinput.csse as csse
+import covidinput.who as who
 
 # Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
 country = "Germany"  # 11: Germany, 157: Korea, South
 coviddata_csse = csse.coviddata_csse(country,
-                                         is_add_log=True,
-                                         is_add_growth_factor=True)
+                                     is_add_log=True,
+                                     is_add_growth_factor=True)
+coviddata_who = who.coviddata_who(country,
+                                  is_add_log=True,
+                                  is_add_growth_factor=True)
 
 # Robert Koch Institut, händischer Input
 rki_startdat = rki.startdat
@@ -46,15 +50,25 @@ coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
 cvdff.add_exponential_fit(coviddata_csse, country, startdat)
+cvdff.add_exponential_fit(coviddata_who, country, startdat)
 cvdff.add_exponential_fit(coviddata_rki, "Confirmed", startdat)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
-coviddata_csse[country][34:].plot(
+coviddata_csse[country][:].plot(
     style='ko-',
     ms=4,
     lw=1,
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=True,
+    grid=True)
+coviddata_who[country][:].plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="darkblue",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     legend=True,
@@ -68,10 +82,17 @@ coviddata_rki["Confirmed"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse[country+" Fit (Exp)"][34:].plot(
+coviddata_csse[country + " Fit (Exp)"][:].plot(
     style='-',
     lw=2,
     c="k",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    grid=True)
+coviddata_who[country + " Fit (Exp)"][:].plot(
+    style='-',
+    lw=2,
+    c="darkblue",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     grid=True)
@@ -83,13 +104,26 @@ coviddata_rki["Confirmed Fit (Exp)"].plot(
     # yticks=range(ymin, ymax, 500),
     grid=True)
 plt.legend([
-    coviddata_csse.name, coviddata_rki.name, coviddata_csse.name + " Fit",
+    coviddata_csse.name, coviddata_who.name, coviddata_rki.name, coviddata_csse.name + " Fit",
     coviddata_rki.name + " Fit"
 ])
-coviddata_csse[country+" (Log)"][34:].plot(
+
+
+
+coviddata_csse[country + " (Log)"][:].plot(
     style='ko--',
     ms=4,
     lw=1,
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    legend=False,
+    secondary_y=True,
+    grid=True)
+coviddata_who[country + " (Log)"][:].plot(
+    style='o-',
+    ms=4,
+    lw=1,
+    c="darkblue",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     legend=False,
@@ -105,6 +139,14 @@ coviddata_rki["Confirmed (Log)"].plot(
     legend=False,
     secondary_y=True,
     grid=True)
+coviddata_csse[country + " Fit (Log)"][:].plot(
+    style='--',
+    lw=2,
+    c="k",
+    # ylim=[ymin, ymax],
+    # yticks=range(ymin, ymax, 500),
+    secondary_y=True,
+    grid=True)
 coviddata_rki["Confirmed Fit (Log)"].plot(
     style='--',
     lw=2,
@@ -113,19 +155,11 @@ coviddata_rki["Confirmed Fit (Log)"].plot(
     # yticks=range(ymin, ymax, 500),
     secondary_y=True,
     grid=True)
-coviddata_csse[country+" Fit (Log)"][34:].plot(
-    style='--',
-    lw=2,
-    c="k",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    secondary_y=True,
-    grid=True)
 plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
-coviddata_csse[country+" (Growth Factor)"][34:].plot(
+coviddata_csse[country + " (Growth Factor)"][:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -142,7 +176,7 @@ coviddata_rki["Confirmed (Growth Factor)"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse[country+" Fit (Growth Factor)"][34:].plot(
+coviddata_csse[country + " Fit (Growth Factor)"][:].plot(
     style='-',
     ms=4,
     lw=2,
