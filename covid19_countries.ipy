@@ -4,43 +4,26 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import matplotlib.cm as cm
 import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
 
-# CSSE John Hopkins University, git-repository
-coviddata_csse_all = pd.read_csv(
-    "/home/jke/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
-    sep=',',
-)
-
-csse_dats_in = np.array(
-    [pd.Timestamp(colname) for colname in coviddata_csse_all.columns[4:]])
-csse_dats = pd.Series(csse_dats_in, index=csse_dats_in)
-
-n_countries = [
-    11,  # 11: Germany
-    16, # 16: Italy
-    158, # 158: France
-    20, # 20: Belgium
-]
-country_names = ["Germany", "Italy", "France", "Belgium"]
-
-coviddata_csse = coviddata_csse_all[coviddata_csse_all.columns[4:]]
-# coviddata_csse = coviddata_csse_all.index
-coviddata_csse = coviddata_csse.iloc[n_countries]
+country_names = ["Germany", "Italy", "France", "Belgium", "US", "Korea, South", "China"]
+coviddata_csse = csse.coviddata_csse_countries(country_names)
 coviddata_csse.name = ("CSSE-JHU")
 
 coviddata_csse_log = coviddata_csse.apply(np.log10)
 coviddata_csse_log.name = "CSSE-JHU (Log)"
 
-factor_csse = coviddata_csse / coviddata_csse.shift(1,axis=1)
+factor_csse = coviddata_csse / coviddata_csse.shift(1)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
-coviddata_csse = coviddata_csse.T.set_index(csse_dats)
-coviddata_csse.set_axis(country_names, axis="columns", inplace=True)
+# coviddata_csse = coviddata_csse.T.set_index(csse_dats)
+# coviddata_csse.set_axis(country_names, axis="columns", inplace=True)
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
 
-raw_colors = cm.viridis(np.linspace(0, 1, len(country_names)))
+raw_colors = cm.rainbow(np.linspace(0, 1, len(country_names)))
 colors = {country_name: raw_colors[i] for i,country_name in enumerate(country_names)}
 
 for country_name in country_names:
@@ -67,8 +50,8 @@ for country_name in country_names:
 
 plt.show()
 
-factor_csse = factor_csse.T.set_index(csse_dats)
-factor_csse.set_axis(country_names, axis="columns", inplace=True)
+# factor_csse = factor_csse.T.set_index(csse_dats)
+# factor_csse.set_axis(country_names, axis="columns", inplace=True)
 factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
 
 for country_name in country_names:

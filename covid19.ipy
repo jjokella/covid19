@@ -4,16 +4,16 @@ import scipy.optimize as sco
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
-import covidfuncs.csse_input as cvcssein
 import covidfuncs.dffuncs as cvdff
 import covidinput.rki as rki
 import covidinput.spf as spf
+import covidinput.csse as csse
 
 # Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
 n_country = 11  # 11: Germany, 157: Korea, South
-coviddata_csse = cvcssein.coviddata_csse(n_country,
+coviddata_csse = csse.coviddata_csse(n_country,
                                          is_add_log=True,
                                          is_add_growth_factor=True)
 
@@ -68,14 +68,14 @@ coviddata_rki["Confirmed"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse["Fit (Exp)"][34:].plot(
+coviddata_csse["Confirmed Fit (Exp)"][34:].plot(
     style='-',
     lw=2,
     c="k",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     grid=True)
-coviddata_rki["Fit (Exp)"].plot(
+coviddata_rki["Confirmed Fit (Exp)"].plot(
     style='-',
     lw=2,
     c="darkred",
@@ -105,7 +105,7 @@ coviddata_rki["Confirmed (Log)"].plot(
     legend=False,
     secondary_y=True,
     grid=True)
-coviddata_rki["Fit (Log)"].plot(
+coviddata_rki["Confirmed Fit (Log)"].plot(
     style='--',
     lw=2,
     c="darkred",
@@ -113,7 +113,7 @@ coviddata_rki["Fit (Log)"].plot(
     # yticks=range(ymin, ymax, 500),
     secondary_y=True,
     grid=True)
-coviddata_csse["Fit (Log)"][34:].plot(
+coviddata_csse["Confirmed Fit (Log)"][34:].plot(
     style='--',
     lw=2,
     c="k",
@@ -142,7 +142,7 @@ coviddata_rki["Confirmed (Growth Factor)"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse["Fit (Growth Factor)"][34:].plot(
+coviddata_csse["Confirmed Fit (Growth Factor)"][34:].plot(
     style='-',
     ms=4,
     lw=2,
@@ -151,7 +151,7 @@ coviddata_csse["Fit (Growth Factor)"][34:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_rki["Fit (Growth Factor)"].plot(
+coviddata_rki["Confirmed Fit (Growth Factor)"].plot(
     style='-',
     ms=4,
     lw=2,
