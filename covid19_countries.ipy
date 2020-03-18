@@ -7,7 +7,7 @@ import covidfuncs.datfuncs as cvdf
 import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 
-country_names = ["Germany", "Italy", "France", "Belgium", "US", "Korea, South", "China"]
+country_names = ["Germany", "Italy", "France", "Belgium", "Spain"] #["US", "Korea, South", "China"]
 coviddata_csse = csse.coviddata_csse_countries(country_names)
 coviddata_csse.name = ("CSSE-JHU")
 

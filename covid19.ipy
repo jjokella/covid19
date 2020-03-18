@@ -12,8 +12,8 @@ import covidinput.csse as csse
 # Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
-n_country = 11  # 11: Germany, 157: Korea, South
-coviddata_csse = csse.coviddata_csse(n_country,
+country = "Germany"  # 11: Germany, 157: Korea, South
+coviddata_csse = csse.coviddata_csse(country,
                                          is_add_log=True,
                                          is_add_growth_factor=True)
 
@@ -45,13 +45,13 @@ coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, "Confirmed", startdat)
+cvdff.add_exponential_fit(coviddata_csse, country, startdat)
 cvdff.add_exponential_fit(coviddata_rki, "Confirmed", startdat)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
-coviddata_csse["Confirmed"][34:].plot(
+coviddata_csse[country][34:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -68,7 +68,7 @@ coviddata_rki["Confirmed"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse["Confirmed Fit (Exp)"][34:].plot(
+coviddata_csse[country+" Fit (Exp)"][34:].plot(
     style='-',
     lw=2,
     c="k",
@@ -86,7 +86,7 @@ plt.legend([
     coviddata_csse.name, coviddata_rki.name, coviddata_csse.name + " Fit",
     coviddata_rki.name + " Fit"
 ])
-coviddata_csse["Confirmed (Log)"][34:].plot(
+coviddata_csse[country+" (Log)"][34:].plot(
     style='ko--',
     ms=4,
     lw=1,
@@ -113,7 +113,7 @@ coviddata_rki["Confirmed Fit (Log)"].plot(
     # yticks=range(ymin, ymax, 500),
     secondary_y=True,
     grid=True)
-coviddata_csse["Confirmed Fit (Log)"][34:].plot(
+coviddata_csse[country+" Fit (Log)"][34:].plot(
     style='--',
     lw=2,
     c="k",
@@ -125,7 +125,7 @@ plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
-coviddata_csse["Confirmed (Growth Factor)"][34:].plot(
+coviddata_csse[country+" (Growth Factor)"][34:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -142,7 +142,7 @@ coviddata_rki["Confirmed (Growth Factor)"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse["Confirmed Fit (Growth Factor)"][34:].plot(
+coviddata_csse[country+" Fit (Growth Factor)"][34:].plot(
     style='-',
     ms=4,
     lw=2,
