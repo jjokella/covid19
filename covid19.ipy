@@ -32,16 +32,10 @@ cvdff.add_log(coviddata_rki, "Germany")
 cvdff.add_growth_factor(coviddata_rki, "Germany")
 
 # SPF, Frankreich, händischer Input
-spf_startdat = spf.startdat
-spf_input = spf.cases
-coviddata_spf = pd.DataFrame(
-    spf_input,
-    index=cvdf.x_dates[spf_startdat:spf_startdat +
-                       pd.Timedelta(days=len(spf_input) - 1)].index,
-    columns=["Confirmed"])
+coviddata_spf = eudata.coviddata_eudata_france()
 coviddata_spf.name = ("Santé-Publique France ")
-coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
-coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
+cvdff.add_log(coviddata_spf, "France")
+cvdff.add_growth_factor(coviddata_spf, "France")
 
 # Fits -----------------------------------------------------
 
