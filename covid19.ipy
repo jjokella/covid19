@@ -61,18 +61,30 @@ n_colors = 8
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, ["Germany"], min_confirmed=100, legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany"], min_confirmed=100, legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany"], min_confirmed=100, legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, ["Germany"],
+                   min_confirmed=100,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany"],
+                   min_confirmed=100,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany"],
+                   min_confirmed=100,
+                   legendlabel=" RKI")
 cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp)"],
                    min_confirmed=100,
-                   ls="-", marker="", legendlabel=" CSSE")
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
 cvp.plot_countries(coviddata_who, ["Germany Fit (Exp)"],
                    min_confirmed=100,
-                   ls="-", marker="", legendlabel=" WHO")
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
 cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp)"],
                    min_confirmed=100,
-                   ls="-", marker="", legendlabel=" RKI")
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -92,19 +104,45 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, ["Germany (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" RKI")
 cvp.plot_countries(coviddata_csse, ["Germany Fit (Log)"],
                    min_confirmed=2.0,
-                   ls="-", marker="", legendlabel=" CSSE")
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
 cvp.plot_countries(coviddata_who, ["Germany Fit (Log)"],
                    min_confirmed=2.0,
-                   ls="-", marker="", legendlabel=" WHO")
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
 cvp.plot_countries(coviddata_rki, ["Germany Fit (Log)"],
                    min_confirmed=2.0,
-                   ls="-", marker="", legendlabel=" RKI")
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
 ax.set_position([0.1, 0.1, 0.7, 0.8])
+
+# 28000 ICU beds total, 80% occupied, 5% critical symptoms
+icu_germany = 28000
+icu_germany_free = .2
+p_crit = .05
+ax.axhline(np.log10(icu_germany / p_crit),
+           color='.3',
+           ls='-.',
+           label='Total ICU beds')
+ax.axhline(np.log10(icu_germany * icu_germany_free / p_crit),
+           color='.5',
+           ls=':',
+           label='Free ICU beds')
+
 ax.set(
     # yscale='log',
     title='Exponential growth of COVID-19 across countries',
@@ -122,20 +160,29 @@ sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 cvp.plot_countries(coviddata_csse, ["Germany (Growth Factor)"],
-                   min_confirmed=0.0, legendlabel=" CSSE")
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
 cvp.plot_countries(coviddata_who, ["Germany (Growth Factor)"],
-                   min_confirmed=0.0, legendlabel=" WHO")
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
 cvp.plot_countries(coviddata_rki, ["Germany (Growth Factor)"],
-                   min_confirmed=0.0, legendlabel=" RKI")
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
 cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
-                   ls="-", marker="", legendlabel=" CSSE")
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
 cvp.plot_countries(coviddata_who, ["Germany Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
-                   ls="-", marker="", legendlabel=" WHO")
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
 cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
-                   ls="-", marker="", legendlabel=" RKI")
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
