@@ -10,18 +10,18 @@ import covidinput.spf as spf
 import covidinput.csse as csse
 
 # CSSE-JHU Data, Korea, South
-n_country = 11  # 11: Germany, 156: Korea, South
-coviddata_csse = csse.coviddata_csse(n_country,
+country = "Germany"   #
+coviddata_csse = csse.coviddata_csse(country,
                                          is_add_log=True,
                                          is_add_growth_factor=True)
 
 
 startdat = pd.Timestamp("2020/02/01")
 
-cvdff.add_logistic_fit(coviddata_csse, "Confirmed", startdat)
+cvdff.add_logistic_fit(coviddata_csse, country, startdat)
 
 # Plot 1
-coviddata_csse["Confirmed"][:].plot(
+coviddata_csse[country][:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -29,7 +29,7 @@ coviddata_csse["Confirmed"][:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_csse["Fit (Logistic)"][:].plot(
+coviddata_csse[country+ " Fit (Logistic)"][:].plot(
     style='o-',
     ms=4,
     lw=1,
