@@ -11,10 +11,10 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 
 # CSSE-JHU Data, Germany
-country = "Germany"
-coviddata_csse = csse.coviddata_csse(country,
-                                         is_add_log=True,
-                                         is_add_growth_factor=True)
+countries = ["Germany"]
+coviddata_csse = csse.coviddata_csse(countries)
+cvdff.add_log(coviddata_csse, countries[0])
+cvdff.add_growth_factor(coviddata_csse, countries[0])
 
 coviddata_rki = eudata.coviddata_eudata_germany()
 
@@ -25,7 +25,7 @@ fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", startdat)
 fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", startdat)
 
 
-print("Country: "+ country)
+print("Country: "+ countries[0])
 print("Infected at date ", extrapoldat.date(), " (exponential)")
 print("CSSE-JHU: ",
       np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))

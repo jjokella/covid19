@@ -14,46 +14,41 @@ import covidinput.eudata as eudata
 # Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
-country = "Germany"  # 11: Germany, 157: Korea, South
-coviddata_csse = csse.coviddata_csse(country,
-                                     is_add_log=True,
-                                     is_add_growth_factor=True)
-coviddata_who = who.coviddata_who(country,
-                                  is_add_log=True,
-                                  is_add_growth_factor=True)
+countries = ["Germany"]  # 11: Germany, 157: Korea, South
+coviddata_csse = csse.coviddata_csse(countries)
+cvdff.add_log(coviddata_csse, countries[0])
+cvdff.add_growth_factor(coviddata_csse, countries[0])
+coviddata_csse.name = ("CSSE-JHU " + countries[0])
+
+coviddata_who = who.coviddata_who(countries)
+cvdff.add_log(coviddata_who, countries[0])
+cvdff.add_growth_factor(coviddata_who, countries[0])
+coviddata_who.name = ("WHO-JHU " + countries[0])
 
 # Robert Koch Institut
 coviddata_rki = eudata.coviddata_eudata_germany()
-
-# rki_startdat = rki.startdat
-# rki_input = rki.cases
-# coviddata_rki = pd.DataFrame(
-#     rki_input,
-#     index=cvdf.x_dates[rki_startdat:rki_startdat +
-#                        pd.Timedelta(days=len(rki_input) - 1)].index,
-#     columns=["Confirmed"])
 coviddata_rki.name = ("Robert-Koch-Institut Germany")
 cvdff.add_log(coviddata_rki, "Germany")
 cvdff.add_growth_factor(coviddata_rki, "Germany")
 
 # SPF, Frankreich, händischer Input
-# spf_startdat = spf.startdat
-# spf_input = spf.cases
-# coviddata_spf = pd.DataFrame(
-#     spf_input,
-#     index=cvdf.x_dates[spf_startdat:spf_startdat +
-#                        pd.Timedelta(days=len(spf_input) - 1)].index,
-#     columns=["Confirmed"])
-# coviddata_spf.name = ("Santé-Publique France ")
-# coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
-# coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
+spf_startdat = spf.startdat
+spf_input = spf.cases
+coviddata_spf = pd.DataFrame(
+    spf_input,
+    index=cvdf.x_dates[spf_startdat:spf_startdat +
+                       pd.Timedelta(days=len(spf_input) - 1)].index,
+    columns=["Confirmed"])
+coviddata_spf.name = ("Santé-Publique France ")
+coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
+coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 
 # Fits -----------------------------------------------------
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, country, startdat)
-cvdff.add_exponential_fit(coviddata_who, country, startdat)
+cvdff.add_exponential_fit(coviddata_csse, countries[0], startdat)
+cvdff.add_exponential_fit(coviddata_who, countries[0], startdat)
 cvdff.add_exponential_fit(coviddata_rki, "Germany", startdat)
 
 # Plots -----------------------------------------------------------
@@ -68,7 +63,7 @@ covidplotdata_who.index = covidplotdata_who["x"]
 covidplotdata_rki.index = covidplotdata_rki["x"]
 
 # Plot 1
-covidplotdata_csse[country][:].plot(
+covidplotdata_csse[countries[0]][:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -76,7 +71,7 @@ covidplotdata_csse[country][:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-covidplotdata_who[country][:].plot(
+covidplotdata_who[countries[0]][:].plot(
     style='o-',
     ms=4,
     lw=1,
@@ -94,14 +89,14 @@ covidplotdata_rki["Germany"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-covidplotdata_csse[country + " Fit (Exp)"][:].plot(
+covidplotdata_csse[countries[0] + " Fit (Exp)"][:].plot(
     style='-',
     lw=2,
     c="k",
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     grid=True)
-covidplotdata_who[country + " Fit (Exp)"][:].plot(
+covidplotdata_who[countries[0] + " Fit (Exp)"][:].plot(
     style='-',
     lw=2,
     c="darkblue",
@@ -122,7 +117,7 @@ plt.legend([
 
 
 
-covidplotdata_csse[country + " (Log)"][:].plot(
+covidplotdata_csse[countries[0] + " (Log)"][:].plot(
     style='ko--',
     ms=4,
     lw=1,
@@ -131,7 +126,7 @@ covidplotdata_csse[country + " (Log)"][:].plot(
     legend=False,
     secondary_y=True,
     grid=True)
-covidplotdata_who[country + " (Log)"][:].plot(
+covidplotdata_who[countries[0] + " (Log)"][:].plot(
     style='o-',
     ms=4,
     lw=1,
@@ -151,7 +146,7 @@ covidplotdata_rki["Germany (Log)"].plot(
     legend=False,
     secondary_y=True,
     grid=True)
-covidplotdata_csse[country + " Fit (Log)"][:].plot(
+covidplotdata_csse[countries[0] + " Fit (Log)"][:].plot(
     style='--',
     lw=2,
     c="k",
@@ -171,7 +166,7 @@ plt.title("Fallzahlen Covid-19")
 plt.show()
 
 # Plot 2
-covidplotdata_csse[country + " (Growth Factor)"][:].plot(
+covidplotdata_csse[countries[0] + " (Growth Factor)"][:].plot(
     style='ko-',
     ms=4,
     lw=1,
@@ -188,7 +183,7 @@ covidplotdata_rki["Germany (Growth Factor)"].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-covidplotdata_csse[country + " Fit (Exp) (Growth Factor)"][:].plot(
+covidplotdata_csse[countries[0] + " Fit (Exp) (Growth Factor)"][:].plot(
     style='-',
     ms=4,
     lw=2,

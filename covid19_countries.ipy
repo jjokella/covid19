@@ -8,12 +8,12 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 import covidinput.eudata as eudata
 
-country_names = [
+countries = [
     "Germany", "Italy", "France", "Belgium", "Spain", "Netherlands"
 ]  #["US", "Korea, South", "China"]
-coviddata_csse = csse.coviddata_csse_countries(country_names, switch="Confirmed")
+coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
 
-# country_names = [
+# countries = [
 #     'Germany',  #
 #     # 'Mecklenburg-Vorpommern',  #
 #     # 'Bremen',  #
@@ -33,9 +33,9 @@ coviddata_csse = csse.coviddata_csse_countries(country_names, switch="Confirmed"
 #     'Nordrhein-Westfalen'  #
 # ]
 # coviddata_csse = eudata.coviddata_eudata_germany()
-# country_names = [col for col in coviddata_csse.columns if not "Deaths" in col]
+# countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
 
-# country_names = [
+# countries = [
 #     'France',  #
 #     # 'Saint-Barthélémy',  #
 #     # 'Mayotte',  #
@@ -69,16 +69,16 @@ for country_name in coviddata_csse.columns:
 
 # Plot 1
 # coviddata_csse = coviddata_csse.T.set_index(csse_dats)
-# coviddata_csse.set_axis(country_names, axis="columns", inplace=True)
+# coviddata_csse.set_axis(countries, axis="columns", inplace=True)
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
 
-raw_colors = cm.rainbow(np.linspace(0, 1, len(country_names)))
+raw_colors = cm.rainbow(np.linspace(0, 1, len(countries)))
 colors = {
     country_name: raw_colors[i]
-    for i, country_name in enumerate(country_names)
+    for i, country_name in enumerate(countries)
 }
 
-for country_name in country_names:
+for country_name in countries:
 
     coviddata_csse[country_name].shift(0).plot(
         style='o-',
@@ -103,10 +103,10 @@ for country_name in country_names:
 plt.show()
 
 # factor_csse = factor_csse.T.set_index(csse_dats)
-# factor_csse.set_axis(country_names, axis="columns", inplace=True)
+# factor_csse.set_axis(countries, axis="columns", inplace=True)
 # factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
 
-for country_name in country_names:
+for country_name in countries:
     coviddata_csse[country_name + " (Growth Factor)"].shift(0).plot(
         style='o-',
         ms=4,
