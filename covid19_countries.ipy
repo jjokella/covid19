@@ -13,32 +13,27 @@ country_names = [
 ]  #["US", "Korea, South", "China"]
 coviddata_csse = csse.coviddata_csse_countries(country_names)
 
-country_names = [
-    'Germany',  #
-    # 'Mecklenburg-Vorpommern',  #
-    # 'Bremen',  #
-    # 'Thüringen',  #
-    # 'Saarland',  #
-    # 'Brandenburg',  #
-    # 'Sachsen-Anhalt',  #
-    # 'Schleswig-Holstein',  #
-    'Sachsen',  #
-    'Hamburg',  #
-    'Berlin',  #
-    'Hessen',  #
-    # 'Rheinland-Pfalz',  #
-    'Niedersachsen',  #
-    'Bayern',  #
-    'Baden-Württemberg',  #
-    'Nordrhein-Westfalen'  #
-]
-coviddata_csse = eudata.coviddata_eudata_germany()
+# country_names = [
+#     'Germany',  #
+#     # 'Mecklenburg-Vorpommern',  #
+#     # 'Bremen',  #
+#     # 'Thüringen',  #
+#     # 'Saarland',  #
+#     # 'Brandenburg',  #
+#     # 'Sachsen-Anhalt',  #
+#     # 'Schleswig-Holstein',  #
+#     'Sachsen',  #
+#     'Hamburg',  #
+#     'Berlin',  #
+#     'Hessen',  #
+#     # 'Rheinland-Pfalz',  #
+#     'Niedersachsen',  #
+#     'Bayern',  #
+#     'Baden-Württemberg',  #
+#     'Nordrhein-Westfalen'  #
+# ]
+# coviddata_csse = eudata.coviddata_eudata_germany()
 # country_names = [col for col in coviddata_csse.columns if not "Deaths" in col]
-
-# coviddata_csse.name = ("CSSE-JHU")
-
-# coviddata_csse_log = coviddata_csse.apply(np.log10)
-# coviddata_csse_log.name = "CSSE-JHU (Log)"
 
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
