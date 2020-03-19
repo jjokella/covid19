@@ -25,28 +25,28 @@ coviddata_who = who.coviddata_who(country,
 # Robert Koch Institut, händischer Input
 coviddata_rki = eudata.coviddata_eudata_germany()
 
-rki_startdat = rki.startdat
-rki_input = rki.cases
-coviddata_rki = pd.DataFrame(
-    rki_input,
-    index=cvdf.x_dates[rki_startdat:rki_startdat +
-                       pd.Timedelta(days=len(rki_input) - 1)].index,
-    columns=["Confirmed"])
+# rki_startdat = rki.startdat
+# rki_input = rki.cases
+# coviddata_rki = pd.DataFrame(
+#     rki_input,
+#     index=cvdf.x_dates[rki_startdat:rki_startdat +
+#                        pd.Timedelta(days=len(rki_input) - 1)].index,
+#     columns=["Confirmed"])
 coviddata_rki.name = ("Robert-Koch-Institut Germany")
-coviddata_rki = cvdff.add_log(coviddata_rki, "Confirmed")
-coviddata_rki = cvdff.add_growth_factor(coviddata_rki, "Confirmed")
+coviddata_rki = cvdff.add_log(coviddata_rki, "Germany")
+coviddata_rki = cvdff.add_growth_factor(coviddata_rki, "Germany")
 
 # SPF, Frankreich, händischer Input
-spf_startdat = spf.startdat
-spf_input = spf.cases
-coviddata_spf = pd.DataFrame(
-    spf_input,
-    index=cvdf.x_dates[spf_startdat:spf_startdat +
-                       pd.Timedelta(days=len(spf_input) - 1)].index,
-    columns=["Confirmed"])
-coviddata_spf.name = ("Santé-Publique France ")
-coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
-coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
+# spf_startdat = spf.startdat
+# spf_input = spf.cases
+# coviddata_spf = pd.DataFrame(
+#     spf_input,
+#     index=cvdf.x_dates[spf_startdat:spf_startdat +
+#                        pd.Timedelta(days=len(spf_input) - 1)].index,
+#     columns=["Confirmed"])
+# coviddata_spf.name = ("Santé-Publique France ")
+# coviddata_spf = cvdff.add_log(coviddata_spf, "Confirmed")
+# coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 
 # Fits -----------------------------------------------------
 
@@ -54,9 +54,15 @@ coviddata_spf = cvdff.add_growth_factor(coviddata_spf, "Confirmed")
 startdat = pd.Timestamp("2020/03/01")
 cvdff.add_exponential_fit(coviddata_csse, country, startdat)
 cvdff.add_exponential_fit(coviddata_who, country, startdat)
-cvdff.add_exponential_fit(coviddata_rki, "Confirmed", startdat)
+cvdff.add_exponential_fit(coviddata_rki, "Germany", startdat)
 
 # Plots -----------------------------------------------------------
+cvdf.add_x(coviddata_csse)
+coviddata_csse.index = coviddata_csse["x"]
+cvdf.add_x(coviddata_who)
+coviddata_who.index = coviddata_who["x"]
+cvdf.add_x(coviddata_rki)
+coviddata_rki.index = coviddata_rki["x"]
 
 # Plot 1
 coviddata_csse[country][:].plot(
@@ -76,7 +82,7 @@ coviddata_who[country][:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_rki["Confirmed"].plot(
+coviddata_rki["Germany"].plot(
     style='o-',
     ms=4,
     lw=1,
@@ -99,7 +105,7 @@ coviddata_who[country + " Fit (Exp)"][:].plot(
     # ylim=[ymin, ymax],
     # yticks=range(ymin, ymax, 500),
     grid=True)
-coviddata_rki["Confirmed Fit (Exp)"].plot(
+coviddata_rki["Germany Fit (Exp)"].plot(
     style='-',
     lw=2,
     c="darkred",
@@ -132,7 +138,7 @@ coviddata_who[country + " (Log)"][:].plot(
     legend=False,
     secondary_y=True,
     grid=True)
-coviddata_rki["Confirmed (Log)"].plot(
+coviddata_rki["Germany (Log)"].plot(
     style='o--',
     ms=4,
     lw=1,
@@ -150,7 +156,7 @@ coviddata_csse[country + " Fit (Log)"][:].plot(
     # yticks=range(ymin, ymax, 500),
     secondary_y=True,
     grid=True)
-coviddata_rki["Confirmed Fit (Log)"].plot(
+coviddata_rki["Germany Fit (Log)"].plot(
     style='--',
     lw=2,
     c="darkred",
@@ -170,7 +176,7 @@ coviddata_csse[country + " (Growth Factor)"][:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_rki["Confirmed (Growth Factor)"].plot(
+coviddata_rki["Germany (Growth Factor)"].plot(
     style='o-',
     ms=4,
     lw=1,
@@ -188,7 +194,7 @@ coviddata_csse[country + " Fit (Growth Factor)"][:].plot(
     # yticks=range(ymin, ymax, 500),
     legend=True,
     grid=True)
-coviddata_rki["Confirmed Fit (Growth Factor)"].plot(
+coviddata_rki["Germany Fit (Growth Factor)"].plot(
     style='-',
     ms=4,
     lw=2,
