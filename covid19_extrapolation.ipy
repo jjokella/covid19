@@ -8,25 +8,24 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.rki as rki
 import covidinput.spf as spf
 import covidinput.csse as csse
+import covidinput.eudata as eudata
 
 # CSSE-JHU Data, Germany
-n_country = 11  # 11: Germany, 156: Korea, South
-coviddata_csse = csse.coviddata_csse(n_country,
+country = "Germany"
+coviddata_csse = csse.coviddata_csse(country,
                                          is_add_log=True,
                                          is_add_growth_factor=True)
 
-coviddata_rki = pd.DataFrame(
-    rki.cases,
-    index=cvdf.x_dates[rki.startdat:rki.startdat +
-                       pd.Timedelta(days=len(rki.cases) - 1)].index,
-    columns=["Confirmed"])
+coviddata_rki = eudata.coviddata_eudata_germany()
 
 # Infected beginning of April
 startdat = pd.Timestamp("2020/03/01")
 extrapoldat = pd.Timestamp("2020/04/01")
-fit_csse = cvdff.get_log_fit(coviddata_csse, "Confirmed", startdat)
-fit_rki = cvdff.get_log_fit(coviddata_rki, "Confirmed", startdat)
-print("Country: "+ csse.covid_country(n_country))
+fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", startdat)
+fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", startdat)
+
+
+print("Country: "+ country)
 print("Infected at date ", extrapoldat.date(), " (exponential)")
 print("CSSE-JHU: ",
       np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))
@@ -34,6 +33,6 @@ print("RKI     : ",
       np.int64(np.exp(np.log(10) * fit_rki(cvdf.dat_to_int(extrapoldat)))))
 
 print("Infected at date ", extrapoldat.date(), " (logistic)")
-L, k, x0, y0 = cvdff.get_logistic_fit(coviddata_csse, "Confirmed", startdat)
+L, k, x0, y0 = cvdff.get_logistic_fit(coviddata_csse, "Germany", startdat)
 print("CSSE-JHU: ",
       np.int64(cvdff.logistic(cvdf.dat_to_int(extrapoldat), L, k, x0, y0)))

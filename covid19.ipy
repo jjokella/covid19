@@ -22,7 +22,7 @@ coviddata_who = who.coviddata_who(country,
                                   is_add_log=True,
                                   is_add_growth_factor=True)
 
-# Robert Koch Institut, händischer Input
+# Robert Koch Institut
 coviddata_rki = eudata.coviddata_eudata_germany()
 
 # rki_startdat = rki.startdat
