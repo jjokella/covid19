@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import seaborn as sns
 import scipy.optimize as sco
+import matplotlib.ticker
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
@@ -8,6 +10,10 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 import covidinput.who as who
 import covidinput.eudata as eudata
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
 
 # Input -----------------------------------------------------
 
@@ -47,155 +53,97 @@ cvdff.add_exponential_fit(coviddata_rki, "Germany", startdat)
 cvdf.add_x(coviddata_csse)
 cvdf.add_x(coviddata_who)
 cvdf.add_x(coviddata_rki)
-covidplotdata_csse = coviddata_csse
-covidplotdata_who = coviddata_who
-covidplotdata_rki = coviddata_rki
-covidplotdata_csse.index = covidplotdata_csse["x"]
-covidplotdata_who.index = covidplotdata_who["x"]
-covidplotdata_rki.index = covidplotdata_rki["x"]
 
 # Plot 1
-covidplotdata_csse[countries[0]][:].plot(
-    style='ko-',
-    ms=4,
-    lw=1,
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_who[countries[0]][:].plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="darkblue",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_rki["Germany"].plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="darkred",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_csse[countries[0] + " Fit (Exp)"][:].plot(
-    style='-',
-    lw=2,
-    c="k",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    grid=True)
-covidplotdata_who[countries[0] + " Fit (Exp)"][:].plot(
-    style='-',
-    lw=2,
-    c="darkblue",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    grid=True)
-covidplotdata_rki["Germany Fit (Exp)"].plot(
-    style='-',
-    lw=2,
-    c="darkred",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    grid=True)
-plt.legend([
-    covidplotdata_csse.name, covidplotdata_who.name, covidplotdata_rki.name, covidplotdata_csse.name + " Fit",
-    covidplotdata_rki.name + " Fit"
-])
+line_styles = ['-', ':', '--', '-.']
+n_colors = 8
 
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
 
+cvp.plot_countries(coviddata_csse, ["Germany"], min_confirmed=100, legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany"], min_confirmed=100, legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany"], min_confirmed=100, legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-", marker="", legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-", marker="", legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-", marker="", legendlabel=" RKI")
 
-covidplotdata_csse[countries[0] + " (Log)"][:].plot(
-    style='ko--',
-    ms=4,
-    lw=1,
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=False,
-    secondary_y=True,
-    grid=True)
-covidplotdata_who[countries[0] + " (Log)"][:].plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    c="darkblue",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=False,
-    secondary_y=True,
-    grid=True)
-covidplotdata_rki["Germany (Log)"].plot(
-    style='o--',
-    ms=4,
-    lw=1,
-    c="darkred",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    legend=False,
-    secondary_y=True,
-    grid=True)
-covidplotdata_csse[countries[0] + " Fit (Log)"][:].plot(
-    style='--',
-    lw=2,
-    c="k",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    secondary_y=True,
-    grid=True)
-covidplotdata_rki["Germany Fit (Log)"].plot(
-    style='--',
-    lw=2,
-    c="darkred",
-    # ylim=[ymin, ymax],
-    # yticks=range(ymin, ymax, 500),
-    secondary_y=True,
-    grid=True)
-plt.title("Fallzahlen Covid-19")
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Days',
+    ylabel='Confirmed cases')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
 plt.show()
 
 # Plot 2
-covidplotdata_csse[countries[0] + " (Growth Factor)"][:].plot(
-    style='ko-',
-    ms=4,
-    lw=1,
-    ylim=[0.0, 3.0],
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_rki["Germany (Growth Factor)"].plot(
-    style='o-',
-    ms=4,
-    lw=1,
-    ylim=[0.0, 3.0],
-    c="darkred",
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_csse[countries[0] + " Fit (Exp) (Growth Factor)"][:].plot(
-    style='-',
-    ms=4,
-    lw=2,
-    ylim=[0.0, 3.0],
-    c="k",
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-covidplotdata_rki["Germany Fit (Exp) (Growth Factor)"].plot(
-    style='-',
-    ms=4,
-    lw=2,
-    ylim=[0.0, 3.0],
-    c="darkred",
-    # yticks=range(ymin, ymax, 500),
-    legend=True,
-    grid=True)
-plt.legend([
-    covidplotdata_csse.name, covidplotdata_rki.name, covidplotdata_csse.name + " Fit",
-    covidplotdata_rki.name + " Fit"
-])
-plt.title("Faktor zum vorherigen Tag, Covid-19")
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany (Log)"], min_confirmed=2.0, legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, ["Germany Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-", marker="", legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-", marker="", legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-", marker="", legendlabel=" RKI")
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Days',
+    ylabel='Confirmed cases (log)')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+plt.show()
+
+# Plot 3
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, ["Germany (Growth Factor)"],
+                   min_confirmed=0.0, legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany (Growth Factor)"],
+                   min_confirmed=0.0, legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany (Growth Factor)"],
+                   min_confirmed=0.0, legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-", marker="", legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, ["Germany Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-", marker="", legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-", marker="", legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Growth Rate of COVID-19',
+    xlabel='Days',
+    ylabel='Confirmed cases (log)')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
 plt.show()

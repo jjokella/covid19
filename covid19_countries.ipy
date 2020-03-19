@@ -1,17 +1,41 @@
 import pandas as pd
 import numpy as np
+import matplotlib.ticker
 import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import matplotlib.cm as cm
+import seaborn as sns
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 import covidinput.eudata as eudata
+import covidplots as cvp
 
 countries = [
-    "Germany", "Italy", "France", "Belgium", "Spain", "Netherlands"
+    "Germany",  #
+    "Italy",  #
+    "France",  #
+    "Belgium",  #
+    "Spain",  #
+    "Netherlands", #
+    "US", #
+    "Korea, South", #
 ]  #["US", "Korea, South", "China"]
+
+n_inhabitants = {
+    "Germany": 838.0,
+    "Italy": 605.0,
+    "France": 652.0,
+    "Belgium": 116.0,
+    "Spain": 468.0,
+    "Netherlands": 171.0,
+    "US": 3294.0,
+    "Korea, South": 518.0,
+}
 coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+cvdf.add_x(coviddata_csse)
+for country in countries:
+    coviddata_csse[country] = coviddata_csse[country]/n_inhabitants[country]
 
 # countries = [
 #     'Germany',  #
@@ -33,7 +57,8 @@ coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
 #     'Nordrhein-Westfalen'  #
 # ]
 # coviddata_csse = eudata.coviddata_eudata_germany()
-# countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
+# countries = [col for col in coviddata_csse.columns if "Deaths" in col]
+# cvdf.add_x(coviddata_csse)
 
 # countries = [
 #     'France',  #
@@ -61,44 +86,33 @@ coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
 #     # 'Metropolis'  #
 # ]
 # coviddata_csse = eudata.coviddata_eudata_france()
+# cvdf.add_x(coviddata_csse)
 
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
+    cvdff.add_log(coviddata_csse, country_name)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
-# coviddata_csse = coviddata_csse.T.set_index(csse_dats)
-# coviddata_csse.set_axis(countries, axis="columns", inplace=True)
-coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
 
-raw_colors = cm.rainbow(np.linspace(0, 1, len(countries)))
-colors = {
-    country_name: raw_colors[i]
-    for i, country_name in enumerate(countries)
-}
+# countries = [country+" (Log)" for country in countries]
+cvp.plot_countries(coviddata_csse,
+                   countries,
+                   min_confirmed=5,
+                   legendlabel=" CSSE",
+                   same_start=True)
 
-for country_name in countries:
-
-    coviddata_csse[country_name].shift(0).plot(
-        style='o-',
-        ms=4,
-        lw=1,
-        c=colors[country_name],
-        # ylim=[ymin, ymax],
-        # yticks=range(ymin, ymax, 500),
-        legend=True,
-        grid=True)
-
-# coviddata_csse["Germany"].shift(0).plot(
-#     style='o-',
-#     ms=4,
-#     lw=1,
-#     c="k",
-#     # ylim=[ymin, ymax],
-#     # yticks=range(ymin, ymax, 500),
-#     legend=True,
-#     grid=True)
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(yscale='log',
+       title='Exponential growth of COVID-19 across countries',
+       xlabel='Days',
+       ylabel='Confirmed cases/deaths')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
 
@@ -111,7 +125,7 @@ for country_name in countries:
         style='o-',
         ms=4,
         lw=1,
-        c=colors[country_name],
+        # c=colors[country_name],
         # ylim=[ymin, ymax],
         # yticks=range(ymin, ymax, 500),
         legend=True,
