@@ -8,32 +8,59 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 import covidinput.eudata as eudata
 
+# country_names = [
+#     "Germany", "Italy", "France", "Belgium", "Spain", "Netherlands"
+# ]  #["US", "Korea, South", "China"]
+# coviddata_csse = csse.coviddata_csse_countries(country_names)
+
 country_names = [
-    "Germany", "Italy", "France", "Belgium", "Spain", "Netherlands"
-]  #["US", "Korea, South", "China"]
-coviddata_csse = csse.coviddata_csse_countries(country_names)
+    'Germany',  #
+    # 'Mecklenburg-Vorpommern',  #
+    # 'Bremen',  #
+    # 'Thüringen',  #
+    # 'Saarland',  #
+    # 'Brandenburg',  #
+    # 'Sachsen-Anhalt',  #
+    # 'Schleswig-Holstein',  #
+    'Sachsen',  #
+    'Hamburg',  #
+    'Berlin',  #
+    'Hessen',  #
+    # 'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen'  #
+]
+coviddata_csse = eudata.coviddata_eudata_germany()
+# country_names = [col for col in coviddata_csse.columns if not "Deaths" in col]
 
 # country_names = [
-#     'Germany',  #
-#     # 'Mecklenburg-Vorpommern',  #
-#     # 'Bremen',  #
-#     # 'Thüringen',  #
-#     # 'Saarland',  #
-#     # 'Brandenburg',  #
-#     # 'Sachsen-Anhalt',  #
-#     # 'Schleswig-Holstein',  #
-#     'Sachsen',  #
-#     'Hamburg',  #
-#     'Berlin',  #
-#     'Hessen',  #
-#     # 'Rheinland-Pfalz',  #
-#     'Niedersachsen',  #
-#     'Bayern',  #
-#     'Baden-Württemberg',  #
-#     'Nordrhein-Westfalen'  #
+#     'France',  #
+#     # 'Saint-Barthélémy',  #
+#     # 'Mayotte',  #
+#     # 'Saint-Martin',  #
+#     # 'Guyane',  #
+#     # 'La Réunion',  #
+#     # 'Martinique',  #
+#     # 'Guadeloupe',  #
+#     # 'Oversea',  #
+#     # 'Pays de la Loire',  #
+#     # 'Centre-Val de Loire',  #
+#     # 'Corse',  #
+#     # 'Normandie',  #
+#     # 'Nouvelle-Aquitaine',  #
+#     # 'Bretagne',  #
+#     # 'Occitanie',  #
+#     'Provence-Alpes-Côte d’Azur',  #
+#     # 'Bourgogne-Franche-Comté',  #
+#     # 'Hauts-de-France',  #
+#     # 'Auvergne-Rhône-Alpes',  #
+#     'Grand Est',  #
+#     'Ile-de-France',  #
+#     # 'Metropolis'  #
 # ]
-# coviddata_csse = eudata.coviddata_eudata_germany()
-# country_names = [col for col in coviddata_csse.columns if not "Deaths" in col]
+# coviddata_csse = eudata.coviddata_eudata_france()
 
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
