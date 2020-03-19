@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dates
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.dffuncs as cvdff
-import covidinput.rki as rki
-import covidinput.spf as spf
 import covidinput.csse as csse
 import covidinput.eudata as eudata
 
