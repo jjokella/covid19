@@ -6,15 +6,42 @@ import matplotlib.cm as cm
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
+import covidinput.eudata as eudata
 
-country_names = ["Germany", "Italy", "France", "Belgium", "Spain"] #["US", "Korea, South", "China"]
+country_names = [
+    "Germany", "Italy", "France", "Belgium", "Spain", "Netherlands"
+]  #["US", "Korea, South", "China"]
 coviddata_csse = csse.coviddata_csse_countries(country_names)
-coviddata_csse.name = ("CSSE-JHU")
 
-coviddata_csse_log = coviddata_csse.apply(np.log10)
-coviddata_csse_log.name = "CSSE-JHU (Log)"
+country_names = [
+    'Germany',  #
+    # 'Mecklenburg-Vorpommern',  #
+    # 'Bremen',  #
+    # 'Thüringen',  #
+    # 'Saarland',  #
+    # 'Brandenburg',  #
+    # 'Sachsen-Anhalt',  #
+    # 'Schleswig-Holstein',  #
+    'Sachsen',  #
+    'Hamburg',  #
+    'Berlin',  #
+    'Hessen',  #
+    # 'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen'  #
+]
+coviddata_csse = eudata.coviddata_eudata_germany()
+# country_names = [col for col in coviddata_csse.columns if not "Deaths" in col]
 
-factor_csse = coviddata_csse / coviddata_csse.shift(1)
+# coviddata_csse.name = ("CSSE-JHU")
+
+# coviddata_csse_log = coviddata_csse.apply(np.log10)
+# coviddata_csse_log.name = "CSSE-JHU (Log)"
+
+for country_name in coviddata_csse.columns:
+    cvdff.add_growth_factor(coviddata_csse, country_name)
 
 # Plots -----------------------------------------------------------
 
@@ -24,7 +51,10 @@ factor_csse = coviddata_csse / coviddata_csse.shift(1)
 coviddata_csse = coviddata_csse[pd.Timestamp("2020/02/10"):]
 
 raw_colors = cm.rainbow(np.linspace(0, 1, len(country_names)))
-colors = {country_name: raw_colors[i] for i,country_name in enumerate(country_names)}
+colors = {
+    country_name: raw_colors[i]
+    for i, country_name in enumerate(country_names)
+}
 
 for country_name in country_names:
 
@@ -52,10 +82,10 @@ plt.show()
 
 # factor_csse = factor_csse.T.set_index(csse_dats)
 # factor_csse.set_axis(country_names, axis="columns", inplace=True)
-factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
+# factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
 
 for country_name in country_names:
-    factor_csse[country_name].shift(0).plot(
+    coviddata_csse[country_name + " (Growth Factor)"].shift(0).plot(
         style='o-',
         ms=4,
         lw=1,
