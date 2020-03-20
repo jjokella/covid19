@@ -11,54 +11,54 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
-countries = [
-    "Germany",  #
-    "Italy",  #
-    "France",  #
-    "Belgium",  #
-    "Spain",  #
-    "Netherlands", #
-    "US", #
-    "Korea, South", #
-]  #["US", "Korea, South", "China"]
-
-n_inhabitants = {
-    "Germany": 83.80,
-    "Italy": 60.50,
-    "France": 65.20,
-    "Belgium": 11.60,
-    "Spain": 46.80,
-    "Netherlands": 17.10,
-    "US": 329.40,
-    "Korea, South": 51.80,
-}
-coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
-cvdf.add_x(coviddata_csse)
-for country in countries:
-    coviddata_csse[country] = coviddata_csse[country]/n_inhabitants[country]
-
 # countries = [
-#     'Germany',  #
-#     # 'Mecklenburg-Vorpommern',  #
-#     # 'Bremen',  #
-#     # 'Thüringen',  #
-#     # 'Saarland',  #
-#     # 'Brandenburg',  #
-#     # 'Sachsen-Anhalt',  #
-#     # 'Schleswig-Holstein',  #
-#     'Sachsen',  #
-#     'Hamburg',  #
-#     'Berlin',  #
-#     'Hessen',  #
-#     # 'Rheinland-Pfalz',  #
-#     'Niedersachsen',  #
-#     'Bayern',  #
-#     'Baden-Württemberg',  #
-#     'Nordrhein-Westfalen'  #
-# ]
-# coviddata_csse = eudata.coviddata_eudata_germany()
-# countries = [col for col in coviddata_csse.columns if "Deaths" in col]
+#     "Germany",  #
+#     "Italy",  #
+#     "France",  #
+#     "Belgium",  #
+#     "Spain",  #
+#     "Netherlands", #
+#     "US", #
+#     "Korea, South", #
+# ]  #["US", "Korea, South", "China"]
+
+# n_inhabitants = {
+#     "Germany": 83.80,
+#     "Italy": 60.50,
+#     "France": 65.20,
+#     "Belgium": 11.60,
+#     "Spain": 46.80,
+#     "Netherlands": 17.10,
+#     "US": 329.40,
+#     "Korea, South": 51.80,
+# }
+# coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
 # cvdf.add_x(coviddata_csse)
+# for country in countries:
+#     coviddata_csse[country] = coviddata_csse[country]/n_inhabitants[country]
+
+countries = [
+    'Germany',  #
+    # 'Mecklenburg-Vorpommern',  #
+    # 'Bremen',  #
+    # 'Thüringen',  #
+    # 'Saarland',  #
+    # 'Brandenburg',  #
+    # 'Sachsen-Anhalt',  #
+    # 'Schleswig-Holstein',  #
+    # 'Sachsen',  #
+    # 'Hamburg',  #
+    # 'Berlin',  #
+    'Hessen',  #
+    # 'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen'  #
+]
+coviddata_csse = eudata.coviddata_eudata_germany()
+# countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
+cvdf.add_x(coviddata_csse)
 
 # countries = [
 #     'France',  #
@@ -110,34 +110,34 @@ ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(yscale='log',
        title='Exponential growth of COVID-19 across countries',
        xlabel='Days',
-       ylabel='Confirmed cases/deaths')
+       ylabel='Confirmed cases/deaths',)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
 
-# factor_csse = factor_csse.T.set_index(csse_dats)
-# factor_csse.set_axis(countries, axis="columns", inplace=True)
-# factor_csse = factor_csse[pd.Timestamp("2020/02/10"):]
+# Plot 2
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
 
 for country_name in countries:
     coviddata_csse[country_name + " (Growth Factor)"].shift(0).plot(
         style='o-',
-        ms=4,
-        lw=1,
+        # ms=4,
+        # lw=1,
         # c=colors[country_name],
         # ylim=[ymin, ymax],
         # yticks=range(ymin, ymax, 500),
         legend=True,
         grid=True)
-# factor_csse["Germany"].shift(0).plot(
-#     style='o-',
-#     ms=4,
-#     lw=1,
-#     c="k",
-#     # ylim=[ymin, ymax],
-#     # yticks=range(ymin, ymax, 500),
-#     legend=True,
-#     grid=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='Exponential growth of COVID-19 across countries',
+       xlabel='Dates',
+       ylabel='Growth Factor',
+       ylim=[0.0,3.0])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
