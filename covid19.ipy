@@ -18,7 +18,7 @@ plt.style.use('seaborn-whitegrid')
 # Input -----------------------------------------------------
 
 # CSSE-JHU Data, Germany
-countries = ["Germany"]  # 11: Germany, 157: Korea, South
+country = "Germany"  # 11: Germany
 coviddata_csse = csse.coviddata_csse(countries)
 cvdff.add_log(coviddata_csse, countries[0])
 cvdff.add_growth_factor(coviddata_csse, countries[0])
@@ -34,12 +34,6 @@ coviddata_rki = eudata.coviddata_eudata_germany()
 coviddata_rki.name = ("Robert-Koch-Institut Germany")
 cvdff.add_log(coviddata_rki, "Germany")
 cvdff.add_growth_factor(coviddata_rki, "Germany")
-
-# SPF, Frankreich, händischer Input
-coviddata_spf = eudata.coviddata_eudata_france()
-coviddata_spf.name = ("Santé-Publique France ")
-cvdff.add_log(coviddata_spf, "France")
-cvdff.add_growth_factor(coviddata_spf, "France")
 
 # Fits -----------------------------------------------------
 
@@ -189,7 +183,8 @@ ax.set(
     # yscale='log',
     title='Growth Rate of COVID-19',
     xlabel='Days',
-    ylabel='Confirmed cases (log)')
+    ylabel='Confirmed cases (log)',
+    ylim=[0.5,2.5])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
