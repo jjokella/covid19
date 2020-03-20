@@ -15,38 +15,36 @@ import covidplots as cvp
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
-# Input -----------------------------------------------------
 
-# CSSE-JHU Data, Germany
-country = "Germany"  # 11: Germany
-coviddata_csse = csse.coviddata_csse(countries)
-cvdff.add_log(coviddata_csse, countries[0])
-cvdff.add_growth_factor(coviddata_csse, countries[0])
-coviddata_csse.name = ("CSSE-JHU " + countries[0])
+# CSSE-JHU Data, France
+country = "France"  # 11: France
+coviddata_csse = csse.coviddata_csse([country])
+cvdff.add_log(coviddata_csse, country)
+cvdff.add_growth_factor(coviddata_csse, country)
+coviddata_csse.name = ("CSSE-JHU " + country)
 
-coviddata_who = who.coviddata_who(countries)
-cvdff.add_log(coviddata_who, countries[0])
-cvdff.add_growth_factor(coviddata_who, countries[0])
-coviddata_who.name = ("WHO-JHU " + countries[0])
+# WHO-data France
+coviddata_who = who.coviddata_who([country])
+cvdff.add_log(coviddata_who, country)
+cvdff.add_growth_factor(coviddata_who, country)
+coviddata_who.name = ("WHO-JHU " + country)
 
-# Robert Koch Institut
-coviddata_rki = eudata.coviddata_eudata_germany()
-coviddata_rki.name = ("Robert-Koch-Institut Germany")
-cvdff.add_log(coviddata_rki, "Germany")
-cvdff.add_growth_factor(coviddata_rki, "Germany")
-
-# Fits -----------------------------------------------------
+# SPF, Frankreich, händischer Input
+coviddata_spf = eudata.coviddata_eudata_france()
+coviddata_spf.name = ("Santé-Publique France ")
+cvdff.add_log(coviddata_spf, "France")
+cvdff.add_growth_factor(coviddata_spf, "France")
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, countries[0], startdat)
-cvdff.add_exponential_fit(coviddata_who, countries[0], startdat)
-cvdff.add_exponential_fit(coviddata_rki, "Germany", startdat)
+cvdff.add_exponential_fit(coviddata_csse, country, startdat)
+cvdff.add_exponential_fit(coviddata_who, country, startdat)
+cvdff.add_exponential_fit(coviddata_spf, country, startdat)
 
 # Plots -----------------------------------------------------------
 cvdf.add_x(coviddata_csse)
 cvdf.add_x(coviddata_who)
-cvdf.add_x(coviddata_rki)
+cvdf.add_x(coviddata_spf)
 
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
@@ -55,30 +53,30 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, ["Germany"],
+cvp.plot_countries(coviddata_csse, [country],
                    min_confirmed=100,
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany"],
+cvp.plot_countries(coviddata_who, [country],
                    min_confirmed=100,
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany"],
+cvp.plot_countries(coviddata_spf, [country],
                    min_confirmed=100,
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp)"],
+                   legendlabel=" SPF")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany Fit (Exp)"],
+cvp.plot_countries(coviddata_who, [country+" Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp)"],
+cvp.plot_countries(coviddata_spf, [country+" Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
-                   legendlabel=" RKI")
+                   legendlabel=" SPF")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -98,30 +96,30 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, ["Germany (Log)"],
+cvp.plot_countries(coviddata_csse, [country+" (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany (Log)"],
+cvp.plot_countries(coviddata_who, [country+" (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany (Log)"],
+cvp.plot_countries(coviddata_spf, [country+" (Log)"],
                    min_confirmed=2.0,
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_csse, ["Germany Fit (Log)"],
+                   legendlabel=" SPF")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany Fit (Log)"],
+cvp.plot_countries(coviddata_who, [country+" Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany Fit (Log)"],
+cvp.plot_countries(coviddata_spf, [country+" Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
-                   legendlabel=" RKI")
+                   legendlabel=" SPF")
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 
 # 28000 ICU beds total, 80% occupied, 5% critical symptoms
@@ -153,30 +151,30 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, ["Germany (Growth Factor)"],
+cvp.plot_countries(coviddata_csse, [country+" (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany (Growth Factor)"],
+cvp.plot_countries(coviddata_who, [country+" (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany (Growth Factor)"],
+cvp.plot_countries(coviddata_spf, [country+" (Growth Factor)"],
                    min_confirmed=0.0,
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_csse, ["Germany Fit (Exp) (Growth Factor)"],
+                   legendlabel=" SPF")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, ["Germany Fit (Exp) (Growth Factor)"],
+cvp.plot_countries(coviddata_who, [country+" Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, ["Germany Fit (Exp) (Growth Factor)"],
+cvp.plot_countries(coviddata_spf, [country+" Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
-                   legendlabel=" RKI")
+                   legendlabel=" SPF")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -189,3 +187,5 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
+
+

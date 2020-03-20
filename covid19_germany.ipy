@@ -1,0 +1,192 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+# Input -----------------------------------------------------
+
+# CSSE-JHU Data, Germany
+country = "Germany"  # 11: Germany
+coviddata_csse = csse.coviddata_csse([country])
+cvdff.add_log(coviddata_csse, country)
+cvdff.add_growth_factor(coviddata_csse, country)
+coviddata_csse.name = ("CSSE-JHU " + country)
+
+# WHO-data, Germany
+coviddata_who = who.coviddata_who([country])
+cvdff.add_log(coviddata_who, country)
+cvdff.add_growth_factor(coviddata_who, country)
+coviddata_who.name = ("WHO-JHU " + country)
+
+# Robert Koch Institut
+coviddata_rki = eudata.coviddata_eudata_germany()
+coviddata_rki.name = ("Robert-Koch-Institut "+country)
+cvdff.add_log(coviddata_rki, country)
+cvdff.add_growth_factor(coviddata_rki, country)
+
+# Fits -----------------------------------------------------
+
+# Fit exponential
+startdat = pd.Timestamp("2020/03/01")
+cvdff.add_exponential_fit(coviddata_csse, country, startdat)
+cvdff.add_exponential_fit(coviddata_who, country, startdat)
+cvdff.add_exponential_fit(coviddata_rki, country, startdat)
+
+# Plots -----------------------------------------------------------
+cvdf.add_x(coviddata_csse)
+cvdf.add_x(coviddata_who)
+cvdf.add_x(coviddata_rki)
+
+# Plot 1
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, [country],
+                   min_confirmed=100,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country],
+                   min_confirmed=100,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country],
+                   min_confirmed=100,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country+" Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country+" Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Days',
+    ylabel='Confirmed cases')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 2
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, [country+" (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country+" (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country+" (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country+" Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country+" Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+
+# 28000 ICU beds total, 80% occupied, 5% critical symptoms
+icu_germany = 28000
+icu_germany_free = .2
+p_crit = .05
+ax.axhline(np.log10(icu_germany / p_crit),
+           color='.3',
+           ls='-.',
+           label='Total ICU beds')
+ax.axhline(np.log10(icu_germany * icu_germany_free / p_crit),
+           color='.5',
+           ls=':',
+           label='Free ICU beds')
+
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Days',
+    ylabel='Confirmed cases (log)')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+plt.show()
+
+# Plot 3
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, [country+" (Growth Factor)"],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country+" (Growth Factor)"],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country+" (Growth Factor)"],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_csse, [country+" Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country+" Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country+" Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Growth Rate of COVID-19',
+    xlabel='Days',
+    ylabel='Confirmed cases (log)',
+    ylim=[0.5,2.5])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
