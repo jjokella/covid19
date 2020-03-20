@@ -40,9 +40,9 @@ cvdff.add_growth_factor(coviddata_rki, country)
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, country, startdat)
-cvdff.add_exponential_fit(coviddata_who, country, startdat)
-cvdff.add_exponential_fit(coviddata_rki, country, startdat)
+cvdff.add_exponential_fit(coviddata_csse, country,  100, 20000)
+cvdff.add_exponential_fit(coviddata_who, country,  100, 20000)
+cvdff.add_exponential_fit(coviddata_rki, country,  100, 20000)
 
 # Plots -----------------------------------------------------------
 cvdf.add_x(coviddata_csse)
