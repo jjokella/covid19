@@ -49,6 +49,10 @@ cvdf.add_x(coviddata_csse)
 cvdf.add_x(coviddata_who)
 cvdf.add_x(coviddata_rki)
 
+cvdff.add_diff(coviddata_csse, country)
+cvdff.add_diff(coviddata_who, country)
+cvdff.add_diff(coviddata_rki, country)
+
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
 n_colors = 3
@@ -186,6 +190,36 @@ ax.set(
     xlabel='Days',
     ylabel='Confirmed cases (log)',
     ylim=[0.5,2.5])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 4
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='New cases of COVID-19',
+    xlabel='Days',
+    ylabel='New confirmed cases',
+    # ylim=[0.5,2.5]
+)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 

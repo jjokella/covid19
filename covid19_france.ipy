@@ -15,7 +15,6 @@ import covidplots as cvp
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
-
 # CSSE-JHU Data, France
 country = "France"  # 11: France
 coviddata_csse = csse.coviddata_csse([country])
@@ -46,6 +45,10 @@ cvdf.add_x(coviddata_csse)
 cvdf.add_x(coviddata_who)
 cvdf.add_x(coviddata_spf)
 
+cvdff.add_diff(coviddata_csse, country)
+cvdff.add_diff(coviddata_who, country)
+cvdff.add_diff(coviddata_spf, country)
+
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
 n_colors = 3
@@ -62,17 +65,17 @@ cvp.plot_countries(coviddata_who, [country],
 cvp.plot_countries(coviddata_spf, [country],
                    min_confirmed=100,
                    legendlabel=" SPF")
-cvp.plot_countries(coviddata_csse, [country+" Fit (Exp)"],
+cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country+" Fit (Exp)"],
+cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_spf, [country+" Fit (Exp)"],
+cvp.plot_countries(coviddata_spf, [country + " Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
                    marker="",
@@ -96,26 +99,26 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, [country+" (Log)"],
+cvp.plot_countries(coviddata_csse, [country + " (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country+" (Log)"],
+cvp.plot_countries(coviddata_who, [country + " (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_spf, [country+" (Log)"],
+cvp.plot_countries(coviddata_spf, [country + " (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" SPF")
-cvp.plot_countries(coviddata_csse, [country+" Fit (Log)"],
+cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country+" Fit (Log)"],
+cvp.plot_countries(coviddata_who, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_spf, [country+" Fit (Log)"],
+cvp.plot_countries(coviddata_spf, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
@@ -151,26 +154,26 @@ n_colors = 3
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
 
-cvp.plot_countries(coviddata_csse, [country+" (Growth Factor)"],
+cvp.plot_countries(coviddata_csse, [country + " (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country+" (Growth Factor)"],
+cvp.plot_countries(coviddata_who, [country + " (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_spf, [country+" (Growth Factor)"],
+cvp.plot_countries(coviddata_spf, [country + " (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" SPF")
-cvp.plot_countries(coviddata_csse, [country+" Fit (Exp) (Growth Factor)"],
+cvp.plot_countries(coviddata_csse, [country + " Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
                    legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country+" Fit (Exp) (Growth Factor)"],
+cvp.plot_countries(coviddata_who, [country + " Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
                    legendlabel=" WHO")
-cvp.plot_countries(coviddata_spf, [country+" Fit (Exp) (Growth Factor)"],
+cvp.plot_countries(coviddata_spf, [country + " Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
                    marker="",
@@ -182,10 +185,38 @@ ax.set(
     title='Growth Rate of COVID-19',
     xlabel='Days',
     ylabel='Confirmed cases (log)',
-    ylim=[0.5,2.5])
+    ylim=[0.5, 2.5])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
 
+# Plot 4
+line_styles = ['-', ':', '--', '-.']
+n_colors = 3
 
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_countries(coviddata_csse, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_spf, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" SPF")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='New cases of COVID-19',
+    xlabel='Days',
+    ylabel='New confirmed cases',
+    # ylim=[0.5,2.5]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
