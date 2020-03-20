@@ -56,7 +56,7 @@ cvdf.add_x(coviddata_rki)
 
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
-n_colors = 8
+n_colors = 3
 
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))
