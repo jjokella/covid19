@@ -91,6 +91,7 @@ cvdf.add_x(coviddata_csse)
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
     cvdff.add_log(coviddata_csse, country_name)
+    cvdff.add_diff(coviddata_csse, country_name)
 
 # Plots -----------------------------------------------------------
 
@@ -137,6 +138,33 @@ ax.set(title='Exponential growth of COVID-19 across countries',
        xlabel='Dates',
        ylabel='Growth Factor',
        ylim=[0.0,3.0])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 3
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for country_name in countries:
+    coviddata_csse[country_name + " Diff"].shift(0).plot(
+        style='o-',
+        # ms=4,
+        # lw=1,
+        # c=colors[country_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='Exponential growth of COVID-19 across countries',
+       xlabel='Dates',
+       ylabel='New Cases',
+       # ylim=[0.0,3.0]
+)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 

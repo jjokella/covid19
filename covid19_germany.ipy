@@ -188,7 +188,7 @@ ax.set(
     # yscale='log',
     title='Growth Rate of COVID-19',
     xlabel='Days',
-    ylabel='Confirmed cases (log)',
+    ylabel='Factor of cases to day before',
     ylim=[0.5,2.5])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
