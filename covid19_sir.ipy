@@ -19,25 +19,98 @@ from scipy.integrate import odeint
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
-# CSSE-JHU Data, Germany
-country = "Germany"  # 11: Germany
+# CSSE-JHU Data, country
+country = "Germany"  #
 coviddata_csse = csse.coviddata_csse([country])
-S, I, R, t = cvsir.get_sirmodel(coviddata_csse, country)
+
+# Population
+N = csse.population[country]*10**6
+
+# Starting infections
+I0 = coviddata_csse[country][coviddata_csse[country]>100][0]
+# I0 = coviddata_csse[country][-1]
+Rec0= 10
+
+# Time of simulation
+tdays = 120
+
+# beta from exponential fit
+gamma = 1/16.6
+tdouble = cvsir.get_tdouble(coviddata_csse, country, mincol=100, maxcol=20000)
+r0 = cvsir.get_r0(coviddata_csse, country, mincol=100, maxcol=20000)
+# r0 = 0.25*r0
+
+print(country)
+print("tdouble: ", tdouble)
+print("R0: ", r0)
+
+beta = r0*gamma
+
+S, I, R, t = cvsir.get_sirmodel(coviddata_csse, country, N=N, I0=I0, beta=beta, tdays=tdays)
+
+max_inf = np.max(I)/10.0**6
+print("Max Infected: ", max_inf)
+icu_germany = 28000
+icu_germany_free = .2
+p_crit = .05
+print("Max Critical Patients: ", max_inf*p_crit)
+
+
+# Set starting date to zero integer!
+cvdf.add_x(coviddata_csse)
+coviddata_csse["x"] = coviddata_csse["x"]-coviddata_csse["x"][coviddata_csse[country]>100][0]
+
+# Set number of cases to millions
+coviddata_csse[country] = coviddata_csse[country]/1000000.0
 
 # Plot the data on three separate curves for S(t), I(t) and R(t)
-fig = plt.figure(facecolor='w')
-ax = fig.add_subplot(111, axisbelow=True)
-ax.plot(t, S/1000000, 'b', alpha=0.5, lw=2, label='Susceptible')
-ax.plot(t, I/1000000, 'r', alpha=0.5, lw=2, label='Infected')
-ax.plot(t, R/1000000, 'g', alpha=0.5, lw=2, label='Recovered with immunity')
-ax.set_xlabel('Time /days')
-ax.set_ylabel('Number (1 000 000s)')
-ax.set_ylim(0,0.03)
-ax.yaxis.set_tick_params(length=0)
-ax.xaxis.set_tick_params(length=0)
-ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-legend = ax.legend()
-# legend.get_frame().set_alpha(0.5)
-# for spine in ('top', 'right', 'bottom', 'left'):
-#     ax.spines[spine].set_visible(False)
+line_styles = ['-', ':', '--', '-.']
+n_colors = 1
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, (ax1, ax2) = plt.subplots(1,2,figsize=(15, 8))
+
+# ax = fig.add_subplot(111, axisbelow=True)
+# ax1.plot(t, S/1000000, 'b', alpha=0.5, lw=2, label='Susceptible')
+ax1.plot(t, I/1000000, 'r', alpha=0.5, lw=2, label='Infected')
+ax1.plot(t, (I+R)/1000000, 'r', alpha=0.5, lw=2, ls="--", label='Infected plus Recovered')
+ax1.plot(t, R/1000000, 'g', alpha=0.5, lw=2, label='Recovered with immunity')
+
+cvp.plot_countries(coviddata_csse, [country],
+                   min_confirmed=100.0/1000000,
+                   legendlabel=" CSSE", ax=ax1)
+
+ax1.set(
+    # yscale='log',
+    title='Start of SIR-model for '+country,
+    xlabel='Time /days',
+    ylabel='Cases (1 000 000s)')
+ax1.set_ylim(0,1.5*np.max(coviddata_csse[country]))
+ax1.set_xlim(0,30)
+legend = ax1.legend()
+
+
+# Plot 2
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+
+# ax = fig.add_subplot(211, axisbelow=True)
+ax2.plot(t, S/1000000, 'b', alpha=0.5, lw=2, label='Susceptible')
+ax2.plot(t, I/1000000, 'r', alpha=0.5, lw=2, label='Infected')
+ax2.plot(t, (I+R)/1000000, 'r', alpha=0.5, lw=2, ls="--", label='Infected plus Recovered')
+ax2.plot(t, R/1000000, 'g', alpha=0.5, lw=2, label='Recovered with immunity')
+
+cvp.plot_countries(coviddata_csse, [country],
+                   min_confirmed=100.0/1000000,
+                   legendlabel=" CSSE", ax=ax2)
+
+ax2.hlines(icu_germany/10.0**6 /p_crit, 0, 120, label="ICU beds")
+
+ax2.set(
+    yscale='log',
+    title='SIR-model for 120 days for '+country,
+    xlabel='Time /days',
+    ylabel='Cases (1 000 000s) (Log)')
+ax2.set_ylim(10**-5,45.0)
+ax2.set_xlim(-5,120)
+legend = ax2.legend()
 plt.show()
