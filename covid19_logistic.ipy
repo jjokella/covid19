@@ -8,7 +8,7 @@ import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
 
 # CSSE-JHU Data, Korea, South
-countries = ["Korea, South"]   #
+countries = ["Germany"]   #
 coviddata_csse = csse.coviddata_csse(countries)
 cvdff.add_log(coviddata_csse, countries[0])
 cvdff.add_growth_factor(coviddata_csse, countries[0])
