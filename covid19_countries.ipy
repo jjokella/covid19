@@ -21,7 +21,8 @@ countries = [
     "US", #
     "Korea, South", #
     "Sweden", #
-    "United Kingdom",
+    "United Kingdom", #
+    "Poland", #
 ]  #["US", "Korea, South", "China"]
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
