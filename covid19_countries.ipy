@@ -21,12 +21,13 @@ countries = [
     "US", #
     "Korea, South", #
     "Sweden", #
+    "United Kingdom",
 ]  #["US", "Korea, South", "China"]
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
 cvdf.add_x(coviddata_csse)
-for country in countries:
-    coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
+# for country in countries:
+#     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
 
 # countries = [
 #     'Germany',  #
@@ -94,7 +95,7 @@ fig, ax = plt.subplots(figsize=(15, 8))
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_countries(coviddata_csse,
                    countries,
-                   min_confirmed=1.5,
+                   min_confirmed=100,
                    legendlabel=" CSSE",
                    same_start=True)
 
