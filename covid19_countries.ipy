@@ -11,47 +11,47 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
-countries = [
-    "Germany",  #
-    "Italy",  #
-    "France",  #
-    "Belgium",  #
-    "Spain",  #
-    "Netherlands", #
-    "US", #
-    "Korea, South", #
-    "Sweden", #
-    "United Kingdom", #
-    "Poland", #
-]  #["US", "Korea, South", "China"]
+# countries = [
+#     "Germany",  #
+#     "Italy",  #
+#     "France",  #
+#     "Belgium",  #
+#     "Spain",  #
+#     "Netherlands", #
+#     "US", #
+#     "Korea, South", #
+#     "Sweden", #
+#     "United Kingdom", #
+#     "Poland", #
+# ]  #["US", "Korea, South", "China"]
 
-coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
-cvdf.add_x(coviddata_csse)
+# coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+# cvdf.add_x(coviddata_csse)
 # for country in countries:
 #     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
 
-# countries = [
-#     'Germany',  #
-#     # 'Mecklenburg-Vorpommern',  #
-#     # 'Bremen',  #
-#     # 'Thüringen',  #
-#     # 'Saarland',  #
-#     # 'Brandenburg',  #
-#     # 'Sachsen-Anhalt',  #
-#     # 'Schleswig-Holstein',  #
-#     # 'Sachsen',  #
-#     # 'Hamburg',  #
-#     # 'Berlin',  #
-#     'Hessen',  #
-#     # 'Rheinland-Pfalz',  #
-#     'Niedersachsen',  #
-#     'Bayern',  #
-#     'Baden-Württemberg',  #
-#     'Nordrhein-Westfalen'  #
-# ]
-# coviddata_csse = eudata.coviddata_eudata_germany()
-# # countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
-# cvdf.add_x(coviddata_csse)
+countries = [
+    'Germany',  #
+    # 'Mecklenburg-Vorpommern',  #
+    # 'Bremen',  #
+    # 'Thüringen',  #
+    # 'Saarland',  #
+    # 'Brandenburg',  #
+    # 'Sachsen-Anhalt',  #
+    # 'Schleswig-Holstein',  #
+    # 'Sachsen',  #
+    # 'Hamburg',  #
+    # 'Berlin',  #
+    'Hessen',  #
+    # 'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen'  #
+]
+coviddata_csse = eudata.coviddata_eudata_germany()
+# countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
+cvdf.add_x(coviddata_csse)
 
 # countries = [
 #     'France',  #
@@ -96,7 +96,7 @@ fig, ax = plt.subplots(figsize=(15, 8))
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_countries(coviddata_csse,
                    countries,
-                   min_confirmed=20,
+                   min_confirmed=100,
                    legendlabel=" CSSE",
                    same_start=True)
 

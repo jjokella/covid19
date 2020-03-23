@@ -41,7 +41,7 @@ tdays = 120
 gamma = 1/16.6
 tdouble = cvsir.get_tdouble(coviddata_csse, country, mincol=startinfs, maxcol=50000)
 r0 = cvsir.get_r0(coviddata_csse, country, mincol=startinfs, maxcol=50000)
-# r0 = 0.25*r0
+# r0 = 0.5*r0
 
 print(country)
 print("tdouble: ", tdouble)
