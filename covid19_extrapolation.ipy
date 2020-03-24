@@ -19,8 +19,8 @@ coviddata_rki = eudata.coviddata_eudata_germany()
 # Infected beginning of April
 startdat = pd.Timestamp("2020/03/01")
 extrapoldat = pd.Timestamp("2020/04/01")
-fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 100, 20000)
-fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 100, 20000)
+fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 1000, 100000)
+fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 1000, 100000)
 
 
 print("Country: "+ countries[0])

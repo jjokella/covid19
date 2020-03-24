@@ -14,7 +14,7 @@ cvdff.add_log(coviddata_csse, countries[0])
 cvdff.add_growth_factor(coviddata_csse, countries[0])
 
 
-startdat = pd.Timestamp("2020/02/01")
+startdat = pd.Timestamp("2020/03/01")
 
 cvdff.add_logistic_fit(coviddata_csse, countries[0], startdat)
 
