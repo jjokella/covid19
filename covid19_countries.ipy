@@ -23,6 +23,7 @@ countries = [
     "Sweden", #
     "United Kingdom", #
     "Poland", #
+    # "China", #
 ]  #["US", "Korea, South", "China"]
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
