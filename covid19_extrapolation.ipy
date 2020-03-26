@@ -11,24 +11,33 @@ import covidinput.eudata as eudata
 # CSSE-JHU Data, Germany
 countries = ["Germany"]
 coviddata_csse = csse.coviddata_csse(countries)
-cvdff.add_log(coviddata_csse, countries[0])
-cvdff.add_growth_factor(coviddata_csse, countries[0])
-
+coviddata_who = who.coviddata_who([country])
 coviddata_rki = eudata.coviddata_eudata_germany()
+coviddata_ecdc = eudata.coviddata_eudata_europe()
+coviddata_zeit = zeit.coviddata_zeit_germany()
 
 # Infected beginning of April
 startdat = pd.Timestamp("2020/03/01")
 extrapoldat = pd.Timestamp("2020/04/01")
-fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 1000, 100000)
-fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 1000, 100000)
+fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 10000, 100000)
+fit_who = cvdff.get_log_fit(coviddata_who, "Germany", 1000, 100000)
+fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 10000, 100000)
+fit_ecdc = cvdff.get_log_fit(coviddata_ecdc, "Germany", 10000, 100000)
+fit_zeit = cvdff.get_log_fit(coviddata_zeit, "Germany", 10000, 100000)
 
 
 print("Country: "+ countries[0])
 print("Infected at date ", extrapoldat.date(), " (exponential)")
 print("CSSE-JHU: ",
       np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))
+print("WHO     : ",
+      np.int64(np.exp(np.log(10) * fit_who(cvdf.dat_to_int(extrapoldat)))))
 print("RKI     : ",
       np.int64(np.exp(np.log(10) * fit_rki(cvdf.dat_to_int(extrapoldat)))))
+print("ECDC    : ",
+      np.int64(np.exp(np.log(10) * fit_ecdc(cvdf.dat_to_int(extrapoldat)))))
+print("ZEIT    : ",
+      np.int64(np.exp(np.log(10) * fit_zeit(cvdf.dat_to_int(extrapoldat)))))
 
 print("Infected at date ", extrapoldat.date(), " (logistic)")
 L, k, x0, y0 = cvdff.get_logistic_fit(coviddata_csse, "Germany", startdat)
