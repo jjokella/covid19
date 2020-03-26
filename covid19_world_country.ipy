@@ -16,8 +16,8 @@ sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
 # CSSE-JHU Data, US
-country = "US"  # 11: US
-coviddata_csse = csse.coviddata_csse([country])
+country = "Mexico"  # 11: US
+coviddata_csse = csse.coviddata_csse([country], switch="Confirmed")
 cvdff.add_log(coviddata_csse, country)
 cvdff.add_growth_factor(coviddata_csse, country)
 coviddata_csse.name = ("CSSE-JHU " + country)
