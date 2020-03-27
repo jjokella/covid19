@@ -11,7 +11,7 @@ import covidinput.eudata as eudata
 # CSSE-JHU Data, Germany
 countries = ["Germany"]
 coviddata_csse = csse.coviddata_csse(countries)
-coviddata_who = who.coviddata_who([country])
+coviddata_who = who.coviddata_who(countries)
 coviddata_rki = eudata.coviddata_eudata_germany()
 coviddata_ecdc = eudata.coviddata_eudata_europe()
 coviddata_zeit = zeit.coviddata_zeit_germany()
