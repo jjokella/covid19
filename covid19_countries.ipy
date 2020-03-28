@@ -17,12 +17,12 @@ countries = [
     "France",  #
     "Belgium",  #
     "Spain",  #
-    "Netherlands", #
-    "US", #
-    "Korea, South", #
-    "Sweden", #
-    "United Kingdom", #
-    "Poland", #
+    "Netherlands",  #
+    "US",  #
+    "Korea, South",  #
+    "Sweden",  #
+    "United Kingdom",  #
+    "Poland",  #
     # "China", #
 ]  #["US", "Korea, South", "China"]
 
@@ -102,10 +102,12 @@ cvp.plot_countries(coviddata_csse,
                    same_start=True)
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
-ax.set(yscale='log',
-       title='Exponential growth of COVID-19 across countries',
-       xlabel='Days',
-       ylabel='Confirmed cases/deaths',)
+ax.set(
+    yscale='log',
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Days',
+    ylabel='Confirmed cases/deaths',
+)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
@@ -128,10 +130,10 @@ for country_name in countries:
         grid=True)
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
-ax.set(title='Exponential growth of COVID-19 across countries',
+ax.set(title='Growth Factor of COVID-19 across countries',
        xlabel='Dates',
        ylabel='Growth Factor',
-       ylim=[0.0,3.0])
+       ylim=[0.0, 3.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
@@ -154,10 +156,11 @@ for country_name in countries:
         grid=True)
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
-ax.set(title='Exponential growth of COVID-19 across countries',
-       xlabel='Dates',
-       ylabel='New Cases',
-       # ylim=[0.0,3.0]
+ax.set(
+    title='Exponential growth of COVID-19 across countries',
+    xlabel='Dates',
+    ylabel='New Cases',
+    # ylim=[0.0,3.0]
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
