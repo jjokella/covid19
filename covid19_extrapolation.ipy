@@ -19,11 +19,11 @@ coviddata_zeit = zeit.coviddata_zeit_germany()
 # Infected beginning of April
 startdat = pd.Timestamp("2020/03/01")
 extrapoldat = pd.Timestamp("2020/04/01")
-fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 10000, 100000)
+fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 20000, 100000)
 fit_who = cvdff.get_log_fit(coviddata_who, "Germany", 1000, 100000)
-fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 10000, 100000)
-fit_ecdc = cvdff.get_log_fit(coviddata_ecdc, "Germany", 10000, 100000)
-fit_zeit = cvdff.get_log_fit(coviddata_zeit, "Germany", 10000, 100000)
+fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 20000, 100000)
+fit_ecdc = cvdff.get_log_fit(coviddata_ecdc, "Germany", 20000, 100000)
+fit_zeit = cvdff.get_log_fit(coviddata_zeit, "Germany", 20000, 100000)
 
 
 print("Country: "+ countries[0])
