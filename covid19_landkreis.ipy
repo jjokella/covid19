@@ -1,0 +1,120 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+landkreise = [
+    "Kreis Städteregion Aachen",  #
+    "Kreis Minden-Lübbecke",  #
+    "Kreis Heinsberg",  #
+    "Kreis Düren",  #
+    "Landkreis München", #
+    "Kreisfreie Stadt München", #
+    "Kreisfreie Stadt Kassel", #
+    "Landkreis Kassel", #
+]
+
+coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
+
+
+
+for landkreis_name in landkreise:
+    cvdff.add_growth_factor(coviddata_rlay, landkreis_name)
+    cvdff.add_log(coviddata_rlay, landkreis_name)
+    cvdff.add_diff(coviddata_rlay, landkreis_name)
+
+
+
+
+# Plot 1
+sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
+                                s=.8))  # 8 landkreise max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+# landkreise = [landkreis+" (Log)" for landkreis in landkreise]
+cvp.plot_countries(coviddata_rlay,
+                   landkreise,
+                   min_confirmed=100,
+                   legendlabel="",
+                   same_start=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 across landkreise',
+    xlabel='Days',
+    ylabel='Confirmed cases/deaths',
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 2
+sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
+                                s=.8))  # 8 landkreise max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for landkreis_name in landkreise:
+    coviddata_rlay[landkreis_name + " (Growth Factor)"].shift(0).plot(
+        style='o-',
+        # ms=4,
+        # lw=1,
+        # c=colors[landkreis_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='Growth Factor of COVID-19 across landkreise',
+       xlabel='Dates',
+       ylabel='Growth Factor',
+       ylim=[0.0, 3.0])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 3
+sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
+                                s=.8))  # 8 landkreise max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for landkreis_name in landkreise:
+    coviddata_rlay[landkreis_name + " Diff"].shift(0).plot(
+        style='o-',
+        # ms=4,
+        # lw=1,
+        # c=colors[landkreis_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    title='Exponential growth of COVID-19 across landkreise',
+    xlabel='Dates',
+    ylabel='New Cases',
+    # ylim=[0.0,3.0]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+    
