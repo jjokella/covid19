@@ -27,6 +27,7 @@ landkreise = [
     "Kreisfreie Stadt Kassel", #
     "Landkreis Kassel", #
     "Landkreis Region Hannover", #
+    "Kreisfreie Stadt Würzburg", #
 ]
 
 coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
