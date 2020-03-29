@@ -26,18 +26,16 @@ landkreise = [
     "Kreisfreie Stadt München", #
     "Kreisfreie Stadt Kassel", #
     "Landkreis Kassel", #
+    "Landkreis Region Hannover", #
 ]
 
 coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
-
 
 
 for landkreis_name in landkreise:
     cvdff.add_growth_factor(coviddata_rlay, landkreis_name)
     cvdff.add_log(coviddata_rlay, landkreis_name)
     cvdff.add_diff(coviddata_rlay, landkreis_name)
-
-
 
 
 # Plot 1
