@@ -11,6 +11,7 @@ import covidinput.csse as csse
 import covidinput.who as who
 import covidinput.eudata as eudata
 import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
 import covidplots as cvp
 
 sns.set_context('talk')
@@ -49,6 +50,18 @@ coviddata_zeit.name = ("Die ZEIT " + country)
 cvdff.add_log(coviddata_zeit, country)
 cvdff.add_growth_factor(coviddata_zeit, country)
 
+# Risklayer Landkreis data
+coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
+coviddata_rlay.name = ("Risklayer (Landkreise) " + country)
+cvdff.add_log(coviddata_rlay, country)
+cvdff.add_growth_factor(coviddata_rlay, country)
+
+# RKI Landkreis data
+coviddata_rki2 = lkdt.coviddata_landkreise(switch="rki")
+coviddata_rki2.name = ("RKI (Landkreise) " + country)
+cvdff.add_log(coviddata_rki2, country)
+cvdff.add_growth_factor(coviddata_rki2, country)
+
 # Fits -----------------------------------------------------
 
 # Fit exponential
@@ -58,6 +71,8 @@ cvdff.add_exponential_fit(coviddata_who, country, 1000, 100000)
 cvdff.add_exponential_fit(coviddata_rki, country, 20000, 100000)
 cvdff.add_exponential_fit(coviddata_ecdc, country, 20000, 100000)
 cvdff.add_exponential_fit(coviddata_zeit, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_rlay, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_rki2, country, 20000, 100000)
 
 # Plots -----------------------------------------------------------
 cvdf.add_x(coviddata_csse)
@@ -65,16 +80,20 @@ cvdf.add_x(coviddata_who)
 cvdf.add_x(coviddata_rki)
 cvdf.add_x(coviddata_ecdc)
 cvdf.add_x(coviddata_zeit)
+cvdf.add_x(coviddata_rlay)
+cvdf.add_x(coviddata_rki2)
 
 cvdff.add_diff(coviddata_csse, country)
 cvdff.add_diff(coviddata_who, country)
 cvdff.add_diff(coviddata_rki, country)
 cvdff.add_diff(coviddata_ecdc, country)
 cvdff.add_diff(coviddata_zeit, country)
+cvdff.add_diff(coviddata_rlay, country)
+cvdff.add_diff(coviddata_rki2, country)
 
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
-n_colors = 5
+n_colors = 7
 
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(20, 10))
@@ -94,6 +113,12 @@ cvp.plot_countries(coviddata_ecdc, [country],
 cvp.plot_countries(coviddata_zeit, [country],
                    min_confirmed=100,
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country],
+                   min_confirmed=100,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country],
+                   min_confirmed=100,
+                   legendlabel=" RKI2")
 cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
                    min_confirmed=100,
                    ls="-",
@@ -119,6 +144,16 @@ cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp)"],
                    ls="-",
                    marker="",
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -133,7 +168,7 @@ plt.show()
 
 # Plot 2
 line_styles = ['-', ':', '--', '-.']
-n_colors = 5
+n_colors = 7
 
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(20, 10))
@@ -153,6 +188,12 @@ cvp.plot_countries(coviddata_ecdc, [country + " (Log)"],
 cvp.plot_countries(coviddata_zeit, [country + " (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" RKI2")
 cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
@@ -178,6 +219,16 @@ cvp.plot_countries(coviddata_zeit, [country + " Fit (Log)"],
                    ls="-",
                    marker="",
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI2")
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 
 # 28000 ICU beds total, 80% occupied, 5% critical symptoms
@@ -204,7 +255,7 @@ plt.show()
 
 # Plot 3
 line_styles = ['-', ':', '--', '-.']
-n_colors = 5
+n_colors = 7
 
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(20, 10))
@@ -224,6 +275,12 @@ cvp.plot_countries(coviddata_ecdc, [country + " (Growth Factor)"],
 cvp.plot_countries(coviddata_zeit, [country + " (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " (Growth Factor)"],
+                   min_confirmed=0.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " (Growth Factor)"],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI2")
 cvp.plot_countries(coviddata_csse, [country + " Fit (Exp) (Growth Factor)"],
                    min_confirmed=0.0,
                    ls="-",
@@ -249,6 +306,16 @@ cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp) (Growth Factor)"],
                    ls="-",
                    marker="",
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp) (Growth Factor)"],
+                   min_confirmed=0.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -264,7 +331,7 @@ plt.show()
 
 # Plot 4
 line_styles = ['-', ':', '--', '-.']
-n_colors = 5
+n_colors = 7
 
 sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(20, 10))
@@ -284,6 +351,12 @@ cvp.plot_countries(coviddata_ecdc, [country + " Diff"],
 cvp.plot_countries(coviddata_zeit, [country + " Diff"],
                    min_confirmed=0.0,
                    legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " Diff"],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
