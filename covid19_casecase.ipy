@@ -14,6 +14,8 @@ import covidinput.zeit as zeit
 import covidinput.landkreisdaten as lkdt
 import covidplots as cvp
 
+# Idea for this plot: Minute Physics
+
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
