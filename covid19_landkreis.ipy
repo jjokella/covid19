@@ -31,12 +31,13 @@ landkreise = [
 ]
 
 coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
-
+window = 3.0
 
 for landkreis_name in landkreise:
     cvdff.add_growth_factor(coviddata_rlay, landkreis_name)
     cvdff.add_log(coviddata_rlay, landkreis_name)
     cvdff.add_diff(coviddata_rlay, landkreis_name)
+    cvdff.add_mov_avg(coviddata_rlay, landkreis_name, window=window)
 
 
 # Plot 1
@@ -111,6 +112,30 @@ ax.set(
     xlabel='Dates',
     ylabel='New Cases',
     # ylim=[0.0,3.0]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+
+# Plot 4
+sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+cvp.plot_casecase(coviddata_rlay,
+                  [landkreis + " MA" + str(window) for landkreis in landkreise],
+                  min_confirmed=10,
+                  legendlabel=" RLAY")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    yscale='log',
+    xscale='log',
+    title='New cases of COVID-19 against already confirmed cases',
+    xlabel='Confirmed cases',
+    ylabel='New cases',
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
