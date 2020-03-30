@@ -1,0 +1,68 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+
+countries = [
+    "Germany",  #
+    "Italy",  #
+    "France",  #
+    "Belgium",  #
+    "Spain",  #
+    "Netherlands",  #
+    "US",  #
+    "Korea, South",  #
+    "Sweden",  #
+    "United Kingdom",  #
+    "Poland",  #
+    # "China", #
+]  #["US", "Korea, South", "China"]
+
+coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+cvdf.add_x(coviddata_csse)
+
+for country_name in coviddata_csse.columns:
+    cvdff.add_diff(coviddata_csse, country_name)
+
+
+# Plots -----------------------------------------------------------
+
+# Plot 1
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+# countries = [country+" (Log)" for country in countries]
+cvp.plot_casecase(coviddata_csse,
+                  countries,
+                  min_confirmed=1000,
+                  legendlabel=" CSSE")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    yscale='log',
+    xscale='log',
+    title='New cases of COVID-19 against already confirmed cases',
+    xlabel='Confirmed cases',
+    ylabel='New cases',
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+    
