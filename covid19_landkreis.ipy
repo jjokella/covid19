@@ -116,4 +116,3 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
-    
