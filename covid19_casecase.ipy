@@ -17,28 +17,52 @@ import covidplots as cvp
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
+# countries = [
+#     "Germany",  #
+#     "Italy",  #
+#     "France",  #
+#     "Belgium",  #
+#     "Spain",  #
+#     "Netherlands",  #
+#     "US",  #
+#     "Korea, South",  #
+#     "Sweden",  #
+#     "United Kingdom",  #
+#     "Poland",  #
+#     "China",  #
+# ]  #["US", "Korea, South", "China"]
+# coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+# cvdf.add_x(coviddata_csse)
 
 countries = [
-    "Germany",  #
-    "Italy",  #
-    "France",  #
-    "Belgium",  #
-    "Spain",  #
-    "Netherlands",  #
-    "US",  #
-    "Korea, South",  #
-    "Sweden",  #
-    "United Kingdom",  #
-    "Poland",  #
-    # "China", #
-]  #["US", "Korea, South", "China"]
-
-coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+    'Germany',  #
+    # 'Mecklenburg-Vorpommern',  #
+    # 'Bremen',  #
+    # 'Thüringen',  #
+    # 'Saarland',  #
+    # 'Brandenburg',  #
+    # 'Sachsen-Anhalt',  #
+    # 'Schleswig-Holstein',  #
+    # 'Sachsen',  #
+    # 'Hamburg',  #
+    # 'Berlin',  #
+    'Hessen',  #
+    # 'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen'  #
+]
+coviddata_csse = eudata.coviddata_eudata_germany()
+# countries = [col for col in coviddata_csse.columns if not "Deaths" in col]
 cvdf.add_x(coviddata_csse)
 
-for country_name in coviddata_csse.columns:
-    cvdff.add_diff(coviddata_csse, country_name)
 
+window = 5.0
+min_confirmed = 100
+
+for country_name in coviddata_csse.columns:
+    cvdff.add_mov_avg(coviddata_csse, country_name, window=window)
 
 # Plots -----------------------------------------------------------
 
@@ -49,8 +73,8 @@ fig, ax = plt.subplots(figsize=(15, 8))
 
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_casecase(coviddata_csse,
-                  countries,
-                  min_confirmed=1000,
+                  [country + " MA" + str(window) for country in countries],
+                  min_confirmed=min_confirmed,
                   legendlabel=" CSSE")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
@@ -65,4 +89,3 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
-    
