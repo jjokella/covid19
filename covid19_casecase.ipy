@@ -59,7 +59,7 @@ cvdf.add_x(coviddata_csse)
 
 
 window = 5.0
-min_confirmed = 100
+min_confirmed = 500
 
 for country_name in coviddata_csse.columns:
     cvdff.add_mov_avg(coviddata_csse, country_name, window=window)
@@ -69,7 +69,7 @@ for country_name in coviddata_csse.columns:
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
-fig, ax = plt.subplots(figsize=(15, 8))
+fig, ax = plt.subplots(figsize=(11, 11))
 
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_casecase(coviddata_csse,
