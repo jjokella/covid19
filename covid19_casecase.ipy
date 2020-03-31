@@ -19,12 +19,14 @@ import covidplots as cvp
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
+switch="Deaths"              # "Deaths" / "Confirmed"
+
 countries = [
     "Germany",  #
     "Italy",  #
-    # "France",  #
+    "France",  #
     # "Belgium",  #
-    # "Spain",  #
+    "Spain",  #
     # "Netherlands",  #
     "US",  #
     "Korea, South",  #
@@ -32,8 +34,9 @@ countries = [
     "United Kingdom",  #
     # "Poland",  #
     # "China",  #
+    # "Chile", #
 ]  #["US", "Korea, South", "China"]
-coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+coviddata_csse = csse.coviddata_csse(countries, switch=switch)
 cvdf.add_x(coviddata_csse)
 
 # countries = [
@@ -56,12 +59,12 @@ cvdf.add_x(coviddata_csse)
 #     'Nordrhein-Westfalen'  #
 # ]
 # coviddata_csse = eudata.coviddata_eudata_germany()
-# # countries = [col for col in coviddata_csse.columns if "Deaths" in col]
+# countries = [col for col in coviddata_csse.columns if "Deaths" in col]
 # cvdf.add_x(coviddata_csse)
 
 
 window = 7.0
-min_confirmed = 500
+min_confirmed = 50
 
 for country_name in coviddata_csse.columns:
     cvdff.add_mov_avg(coviddata_csse, country_name, window=window)
@@ -71,7 +74,7 @@ for country_name in coviddata_csse.columns:
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
-fig, ax = plt.subplots(figsize=(11, 11))
+fig, ax = plt.subplots(figsize=(10, 10))
 
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_casecase(coviddata_csse,
@@ -79,15 +82,21 @@ cvp.plot_casecase(coviddata_csse,
                   min_confirmed=min_confirmed,
                   legendlabel=" CSSE")
 
-ax.set_position([0.1, 0.1, 0.7, 0.8])
+conf = np.arange(min_confirmed,np.max([coviddata_csse[country].max() for country in countries]),10)
+ax.plot(conf,0.05*conf,":k", label="5%")
+ax.plot(conf,0.1*conf,"-k", label="10%")
+# ax.plot(conf,0.2*conf,"-.k", label="20%")
+ax.plot(conf,0.3*conf,"--k", label="30%")
+
+ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
     yscale='log',
     xscale='log',
-    title='New cases of COVID-19 against confirmed cases',
-    xlabel='Confirmed cases',
-    ylabel='New cases',
+    title='New '+switch+' of COVID-19 against confirmed '+switch,
+    xlabel='Total '+switch,
+    ylabel='New '+switch,
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend(bbox_to_anchor=(1.0, 1.0))
+ax.legend()
 
 plt.show()
