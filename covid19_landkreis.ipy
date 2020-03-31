@@ -22,16 +22,16 @@ landkreise = [
     "Kreis Minden-Lübbecke",  #
     "Kreis Heinsberg",  #
     "Kreis Düren",  #
-    "Landkreis München", #
+    # "Landkreis München", #
     "Kreisfreie Stadt München", #
-    "Kreisfreie Stadt Kassel", #
-    "Landkreis Kassel", #
-    "Landkreis Region Hannover", #
-    "Kreisfreie Stadt Würzburg", #
+    # "Kreisfreie Stadt Kassel", #
+    # "Landkreis Kassel", #
+    # "Landkreis Region Hannover", #
+    # "Kreisfreie Stadt Würzburg", #
 ]
 
 coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
-window = 3.0
+window = 7.0
 
 for landkreis_name in landkreise:
     cvdff.add_growth_factor(coviddata_rlay, landkreis_name)
