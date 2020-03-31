@@ -83,7 +83,7 @@ ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
     yscale='log',
     xscale='log',
-    title='New cases of COVID-19 against already confirmed cases',
+    title='New cases of COVID-19 against confirmed cases',
     xlabel='Confirmed cases',
     ylabel='New cases',
 )
