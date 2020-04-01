@@ -131,9 +131,9 @@ cvp.plot_casecase(coviddata_rlay,
                   legendlabel=" RLAY")
 
 conf = np.arange(min_confirmed,np.max([coviddata_rlay[landkreis].max() for landkreis in landkreise]),1)
+ax.plot(conf,0.01*conf,"-.k", label="1%")
 ax.plot(conf,0.05*conf,":k", label="5%")
 ax.plot(conf,0.1*conf,"-k", label="10%")
-# ax.plot(conf,0.2*conf,"-.k", label="20%")
 ax.plot(conf,0.3*conf,"--k", label="30%")
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
