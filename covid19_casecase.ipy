@@ -19,7 +19,7 @@ import covidplots as cvp
 sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
-switch="Deaths"              # "Deaths" / "Confirmed"
+switch="Confirmed"              # "Deaths" / "Confirmed"
 
 countries = [
     "Germany",  #
@@ -63,8 +63,8 @@ cvdf.add_x(coviddata_csse)
 # cvdf.add_x(coviddata_csse)
 
 
-window = 7.0
-min_confirmed = 50
+window = 6.9
+min_confirmed = 500
 
 for country_name in coviddata_csse.columns:
     cvdff.add_mov_avg(coviddata_csse, country_name, window=window)
