@@ -26,7 +26,7 @@ countries = [
     # "China", #
 ]  #["US", "Korea, South", "China"]
 
-coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
+coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
 cvdf.add_x(coviddata_csse)
 # for country in countries:
 #     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
@@ -82,10 +82,12 @@ cvdf.add_x(coviddata_csse)
 # coviddata_csse = eudata.coviddata_eudata_france()
 # cvdf.add_x(coviddata_csse)
 
+window_td = 6.9
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
     cvdff.add_log(coviddata_csse, country_name)
     cvdff.add_diff(coviddata_csse, country_name)
+    cvdff.add_tdouble(coviddata_csse, country_name, window=window_td)
 
 # Plots -----------------------------------------------------------
 
@@ -161,6 +163,28 @@ ax.set(
     xlabel='Dates',
     ylabel='New Cases',
     # ylim=[0.0,3.0]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 4
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for country_name in countries:
+    cvp.plot_countries(coviddata_csse, [country_name + " TDouble" + str(window_td)],
+                   min_confirmed=1.0,
+                   legendlabel=" CSSE")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    title='T-Double plot of COVID-19 in countries',
+    xlabel='Days',
+    ylabel='Doubling time [days]',
+    ylim=[100.0,0.0]
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))

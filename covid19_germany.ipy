@@ -91,7 +91,7 @@ cvdff.add_diff(coviddata_zeit, country)
 cvdff.add_diff(coviddata_rlay, country)
 cvdff.add_diff(coviddata_rki2, country)
 
-window=7.0
+window=6.9
 cvdff.add_mov_avg(coviddata_csse, country, window=window)
 cvdff.add_mov_avg(coviddata_who, country, window=window)
 cvdff.add_mov_avg(coviddata_rki, country, window=window)
@@ -99,6 +99,15 @@ cvdff.add_mov_avg(coviddata_ecdc, country, window=window)
 cvdff.add_mov_avg(coviddata_zeit, country, window=window)
 cvdff.add_mov_avg(coviddata_rlay, country, window=window)
 cvdff.add_mov_avg(coviddata_rki2, country, window=window)
+
+window_td=6.9
+cvdff.add_tdouble(coviddata_csse, country, window=window_td)
+cvdff.add_tdouble(coviddata_who, country, window=window_td)
+cvdff.add_tdouble(coviddata_rki, country, window=window_td)
+cvdff.add_tdouble(coviddata_ecdc, country, window=window_td)
+cvdff.add_tdouble(coviddata_zeit, country, window=window_td)
+cvdff.add_tdouble(coviddata_rlay, country, window=window_td)
+cvdff.add_tdouble(coviddata_rki2, country, window=window_td)
 
 # Plot 1
 line_styles = ['-', ':', '--', '-.']
@@ -425,5 +434,48 @@ ax.set(
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 0.5))
+
+plt.show()
+
+# Plot 6
+line_styles = ['-', ':', '--', '-.']
+n_colors = 7
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 10))
+
+cvp.plot_countries(coviddata_csse, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_ecdc, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" ECDC")
+cvp.plot_countries(coviddata_zeit, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " TDouble" + str(window_td)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI2")
+
+ax.set_position([0.1, 0.1, 0.8, 0.8])
+ax.set(
+    # yscale='log',
+    # xscale='log',
+    title='T-Double plot of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='Doubling time [days]',
+    ylim=[10.0,0.0]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend()
 
 plt.show()
