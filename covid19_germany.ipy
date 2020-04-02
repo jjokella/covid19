@@ -137,41 +137,41 @@ cvp.plot_countries(coviddata_rlay, [country],
 cvp.plot_countries(coviddata_rki2, [country],
                    min_confirmed=100,
                    legendlabel=" RKI2")
-cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ECDC")
-cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ZEIT")
-cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RLAY")
-cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI2")
+# cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -212,41 +212,41 @@ cvp.plot_countries(coviddata_rlay, [country + " (Log)"],
 cvp.plot_countries(coviddata_rki2, [country + " (Log)"],
                    min_confirmed=2.0,
                    legendlabel=" RKI2")
-cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_ecdc, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ECDC")
-cvp.plot_countries(coviddata_zeit, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ZEIT")
-cvp.plot_countries(coviddata_rlay, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RLAY")
-cvp.plot_countries(coviddata_rki2, [country + " Fit (Log)"],
-                   min_confirmed=2.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI2")
+# cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2")
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 
 # 28000 ICU beds total, 80% occupied, 5% critical symptoms
@@ -299,41 +299,41 @@ cvp.plot_countries(coviddata_rlay, [country + " (Growth Factor)"],
 cvp.plot_countries(coviddata_rki2, [country + " (Growth Factor)"],
                    min_confirmed=0.0,
                    legendlabel=" RKI2")
-cvp.plot_countries(coviddata_csse, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" CSSE")
-cvp.plot_countries(coviddata_who, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" WHO")
-cvp.plot_countries(coviddata_rki, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI")
-cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ECDC")
-cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" ZEIT")
-cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RLAY")
-cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp) (Growth Factor)"],
-                   min_confirmed=0.0,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI2")
+# cvp.plot_countries(coviddata_csse, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp) (Growth Factor)"],
+#                    min_confirmed=0.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
