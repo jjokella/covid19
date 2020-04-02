@@ -23,9 +23,9 @@ landkreise = [
     "Kreis Heinsberg",  #
     "Kreis Düren",  #
     # "Landkreis München", #
-    "Kreisfreie Stadt München", #
+    "Kreisfreie Stadt München",  #
     # "Kreisfreie Stadt Kassel", #
-    "Landkreis Kassel", #
+    "Landkreis Kassel",  #
     # "Landkreis Region Hannover", #
     # "Kreisfreie Stadt Würzburg", #
 ]
@@ -39,7 +39,6 @@ for landkreis_name in landkreise:
     cvdff.add_log(coviddata_rlay, landkreis_name)
     cvdff.add_diff(coviddata_rlay, landkreis_name)
     cvdff.add_mov_avg(coviddata_rlay, landkreis_name, window=window)
-
 
 # Plot 1
 sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
@@ -119,22 +118,24 @@ ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
 
-
 # Plot 4
 sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
                                 s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(10, 10))
 
-cvp.plot_casecase(coviddata_rlay,
-                  [landkreis + " MA" + str(window) for landkreis in landkreise],
-                  min_confirmed=min_confirmed,
-                  legendlabel=" RLAY")
+cvp.plot_casecase(
+    coviddata_rlay,
+    [landkreis + " MA" + str(window) for landkreis in landkreise],
+    min_confirmed=min_confirmed,
+    legendlabel=" RLAY")
 
-conf = np.arange(min_confirmed,np.max([coviddata_rlay[landkreis].max() for landkreis in landkreise]),1)
-ax.plot(conf,0.01*conf,"-.k", label="1%")
-ax.plot(conf,0.05*conf,":k", label="5%")
-ax.plot(conf,0.1*conf,"-k", label="10%")
-ax.plot(conf,0.3*conf,"--k", label="30%")
+conf = np.arange(
+    min_confirmed,
+    np.max([coviddata_rlay[landkreis].max() for landkreis in landkreise]), 1)
+ax.plot(conf, 0.01 * conf, "-.k", label="1%")
+ax.plot(conf, 0.05 * conf, ":k", label="5%")
+ax.plot(conf, 0.1 * conf, "-k", label="10%")
+ax.plot(conf, 0.3 * conf, "--k", label="30%")
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(

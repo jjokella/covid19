@@ -91,7 +91,7 @@ cvdff.add_diff(coviddata_zeit, country)
 cvdff.add_diff(coviddata_rlay, country)
 cvdff.add_diff(coviddata_rki2, country)
 
-window=6.9
+window = 6.9
 cvdff.add_mov_avg(coviddata_csse, country, window=window)
 cvdff.add_mov_avg(coviddata_who, country, window=window)
 cvdff.add_mov_avg(coviddata_rki, country, window=window)
@@ -100,7 +100,7 @@ cvdff.add_mov_avg(coviddata_zeit, country, window=window)
 cvdff.add_mov_avg(coviddata_rlay, country, window=window)
 cvdff.add_mov_avg(coviddata_rki2, country, window=window)
 
-window_td=6.9
+window_td = 6.9
 cvdff.add_tdouble(coviddata_csse, country, window=window_td)
 cvdff.add_tdouble(coviddata_who, country, window=window_td)
 cvdff.add_tdouble(coviddata_rki, country, window=window_td)
@@ -397,31 +397,31 @@ sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(10, 10))
 
 cvp.plot_casecase(coviddata_csse, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" CSSE")
+                  min_confirmed=100.0,
+                  legendlabel=" CSSE")
 cvp.plot_casecase(coviddata_who, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" WHO")
+                  min_confirmed=100.0,
+                  legendlabel=" WHO")
 cvp.plot_casecase(coviddata_rki, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" RKI")
+                  min_confirmed=100.0,
+                  legendlabel=" RKI")
 cvp.plot_casecase(coviddata_ecdc, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" ECDC")
+                  min_confirmed=100.0,
+                  legendlabel=" ECDC")
 cvp.plot_casecase(coviddata_zeit, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" ZEIT")
+                  min_confirmed=100.0,
+                  legendlabel=" ZEIT")
 cvp.plot_casecase(coviddata_rlay, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" RLAY")
+                  min_confirmed=100.0,
+                  legendlabel=" RLAY")
 cvp.plot_casecase(coviddata_rki2, [country + " MA" + str(window)],
-                   min_confirmed=100.0,
-                   legendlabel=" RKI2")
+                  min_confirmed=100.0,
+                  legendlabel=" RKI2")
 
-conf = np.arange(0,coviddata_csse[country].max(),10)
-ax.plot(conf,0.05*conf,"-.k", label="5%")
-ax.plot(conf,0.1*conf,"-k", label="10%")
-ax.plot(conf,0.3*conf,"--k", label="30%")
+conf = np.arange(0, coviddata_csse[country].max(), 10)
+ax.plot(conf, 0.05 * conf, "-.k", label="5%")
+ax.plot(conf, 0.1 * conf, "-k", label="10%")
+ax.plot(conf, 0.3 * conf, "--k", label="30%")
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
@@ -473,8 +473,7 @@ ax.set(
     title='T-Double plot of COVID-19 in ' + country,
     xlabel='Days',
     ylabel='Doubling time [days]',
-    ylim=[10.0,0.0]
-)
+    ylim=[10.0, 0.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 

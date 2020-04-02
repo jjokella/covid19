@@ -40,7 +40,7 @@ for country in countries:
 
 for country in countries:
     cvdff.add_diff(coviddata_csse_now_infected, country)
-    
+
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max

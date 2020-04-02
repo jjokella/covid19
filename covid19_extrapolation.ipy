@@ -25,8 +25,7 @@ fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 50000, 100000)
 fit_ecdc = cvdff.get_log_fit(coviddata_ecdc, "Germany", 50000, 100000)
 fit_zeit = cvdff.get_log_fit(coviddata_zeit, "Germany", 50000, 100000)
 
-
-print("Country: "+ countries[0])
+print("Country: " + countries[0])
 print("Infected at date ", extrapoldat.date(), " (exponential)")
 print("CSSE-JHU: ",
       np.int64(np.exp(np.log(10) * fit_csse(cvdf.dat_to_int(extrapoldat)))))
