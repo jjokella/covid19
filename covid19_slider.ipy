@@ -1,0 +1,273 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+from matplotlib.widgets import Slider, Button, RadioButtons
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+# Input -----------------------------------------------------
+country = "Germany"
+
+# CSSE-JHU Data, Germany
+coviddata_csse = csse.coviddata_csse([country])
+cvdff.add_log(coviddata_csse, country)
+cvdff.add_growth_factor(coviddata_csse, country)
+coviddata_csse.name = ("CSSE-JHU " + country)
+
+# WHO-data, Germany
+coviddata_who = who.coviddata_who([country])
+cvdff.add_log(coviddata_who, country)
+cvdff.add_growth_factor(coviddata_who, country)
+coviddata_who.name = ("WHO-JHU " + country)
+
+# Robert Koch Institut
+coviddata_rki = eudata.coviddata_eudata_germany()
+coviddata_rki.name = ("Robert-Koch-Institut " + country)
+cvdff.add_log(coviddata_rki, country)
+cvdff.add_growth_factor(coviddata_rki, country)
+
+# ECDC data
+coviddata_ecdc = eudata.coviddata_eudata_europe()
+coviddata_ecdc.name = ("ECDC " + country)
+cvdff.add_log(coviddata_ecdc, country)
+cvdff.add_growth_factor(coviddata_ecdc, country)
+
+# Zeit data
+coviddata_zeit = zeit.coviddata_zeit_germany()
+coviddata_zeit.name = ("Die ZEIT " + country)
+cvdff.add_log(coviddata_zeit, country)
+cvdff.add_growth_factor(coviddata_zeit, country)
+
+# Risklayer Landkreis data
+coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
+coviddata_rlay.name = ("Risklayer (Landkreise) " + country)
+cvdff.add_log(coviddata_rlay, country)
+cvdff.add_growth_factor(coviddata_rlay, country)
+
+# RKI Landkreis data
+coviddata_rki2 = lkdt.coviddata_landkreise(switch="rki")
+coviddata_rki2.name = ("RKI (Landkreise) " + country)
+cvdff.add_log(coviddata_rki2, country)
+cvdff.add_growth_factor(coviddata_rki2, country)
+
+# Fits -----------------------------------------------------
+
+# Fit exponential
+startdat = pd.Timestamp("2020/03/01")
+cvdff.add_exponential_fit(coviddata_csse, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_who, country, 1000, 100000)
+cvdff.add_exponential_fit(coviddata_rki, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_ecdc, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_zeit, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_rlay, country, 20000, 100000)
+cvdff.add_exponential_fit(coviddata_rki2, country, 20000, 100000)
+
+# Plots -----------------------------------------------------------
+cvdf.add_x(coviddata_csse)
+cvdf.add_x(coviddata_who)
+cvdf.add_x(coviddata_rki)
+cvdf.add_x(coviddata_ecdc)
+cvdf.add_x(coviddata_zeit)
+cvdf.add_x(coviddata_rlay)
+cvdf.add_x(coviddata_rki2)
+
+cvdff.add_diff(coviddata_csse, country)
+cvdff.add_diff(coviddata_who, country)
+cvdff.add_diff(coviddata_rki, country)
+cvdff.add_diff(coviddata_ecdc, country)
+cvdff.add_diff(coviddata_zeit, country)
+cvdff.add_diff(coviddata_rlay, country)
+cvdff.add_diff(coviddata_rki2, country)
+
+window = 6.9
+cvdff.add_mov_avg(coviddata_csse, country, window=window)
+cvdff.add_mov_avg(coviddata_who, country, window=window)
+cvdff.add_mov_avg(coviddata_rki, country, window=window)
+cvdff.add_mov_avg(coviddata_ecdc, country, window=window)
+cvdff.add_mov_avg(coviddata_zeit, country, window=window)
+cvdff.add_mov_avg(coviddata_rlay, country, window=window)
+cvdff.add_mov_avg(coviddata_rki2, country, window=window)
+
+window_td = 6.9
+cvdff.add_tdouble(coviddata_csse, country, window=window_td)
+cvdff.add_tdouble(coviddata_who, country, window=window_td)
+cvdff.add_tdouble(coviddata_rki, country, window=window_td)
+cvdff.add_tdouble(coviddata_ecdc, country, window=window_td)
+cvdff.add_tdouble(coviddata_zeit, country, window=window_td)
+cvdff.add_tdouble(coviddata_rlay, country, window=window_td)
+cvdff.add_tdouble(coviddata_rki2, country, window=window_td)
+
+# Plot 1
+line_styles = ['-', ':', '--', '-.']
+n_colors = 7
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(20, 10))
+
+line = cvp.plot_countries(coviddata_csse, [country],
+                          min_confirmed=100,
+                          legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" RKI2")
+# cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2")
+
+ax.set_position([0.1, 0.2, 0.8, 0.7])
+ax.set(
+    # yscale='log',
+    title='Exponential growth of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='Confirmed cases')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend()
+
+# Define an axes area and draw a slider in it
+mc_slicer_ax = fig.add_axes([0.25, 0.05, 0.65, 0.03])
+mc_slicer = Slider(mc_slicer_ax, 'Min confirmed', 0, 7, valinit=100)
+
+
+# Define an action for modifying the line when any slider's value changes
+def mc_slider_on_changed(val):
+    ax.clear()
+    line = cvp.plot_countries(coviddata_csse, [country],
+                              min_confirmed=10**(mc_slicer.val),
+                              legendlabel=" CSSE",
+                              ax=ax)
+    fig.canvas.draw_idle()
+
+
+mc_slicer.on_changed(mc_slider_on_changed)
+
+plt.show()
+
+# Plot 6
+line_styles = ['-', ':', '--', '-.']
+n_colors = 7
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 10))
+
+line = cvp.plot_countries(coviddata_csse,
+                          [country + " TDouble" + str(window_td)],
+                          min_confirmed=0.0,
+                          legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" WHO")
+# cvp.plot_countries(coviddata_rki, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " TDouble" + str(window_td)],
+#                    min_confirmed=0.0,
+#                    legendlabel=" RKI2")
+
+ax.set_position([0.1, 0.2, 0.8, 0.7])
+ax.set(
+    # yscale='log',
+    # xscale='log',
+    title='T-Double plot of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='Doubling time [days]',
+    ylim=[10.0, 0.0])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend()
+
+# Draw another slider
+window_slider_ax = fig.add_axes([0.25, 0.05, 0.65, 0.03])
+window_slider = Slider(window_slider_ax, 'Time window', 1.0, 30.0, valinit=6.9)
+
+
+# Define an action for modifying the line when any slider's value changes
+def window_slider_on_changed(val):
+    ax.clear()
+    cvdff.add_tdouble(coviddata_csse, country, window=window_slider.val)
+    line = cvp.plot_countries(coviddata_csse,
+                              [country + " TDouble" + str(window_slider.val)],
+                              min_confirmed=0.0,
+                              legendlabel=" CSSE",
+                              ax=ax)
+    ax.set(
+    # yscale='log',
+        # xscale='log',
+        title='T-Double plot of COVID-19 in ' + country,
+        xlabel='Days',
+        ylabel='Doubling time [days]',
+        ylim=[10.0, 0.0])
+    ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    fig.canvas.draw_idle()
+
+    
+window_slider.on_changed(window_slider_on_changed)
+
+plt.show()
