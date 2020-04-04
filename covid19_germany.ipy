@@ -18,9 +18,9 @@ sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
 # Input -----------------------------------------------------
+country = "Germany"  # 11: Germany
 
 # CSSE-JHU Data, Germany
-country = "Germany"  # 11: Germany
 coviddata_csse = csse.coviddata_csse([country])
 cvdff.add_log(coviddata_csse, country)
 cvdff.add_growth_factor(coviddata_csse, country)
