@@ -17,15 +17,17 @@ countries = [
     "Germany",  #
     "Italy",  #
     "France",  #
-    # "Belgium",  #
+    "Belgium",  #
     "Spain",  #
-    # "Netherlands",  #
+    "Netherlands",  #
     "US",  #
-    # "Korea, South",  #
+    "Korea, South",  #
     "Sweden",  #
-    "United Kingdom",  #
+    "United Kingdom", #
+    "Austria", #
     # "Poland",  #
     # "China", #
+    # "Chile", #
 ]  #["US", "Korea, South", "China"]
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
@@ -102,18 +104,20 @@ fig, ax = plt.subplots(figsize=(15, 8))
 cvp.plot_countries(coviddata_csse,
                    countries,
                    min_confirmed=min_confirmed,
+                   norm_min_confirmed=True,
+                   max_num_entries=14,
                    legendlabel=" CSSE",
                    same_start=True)
 
-ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
-    yscale='log',
+    # yscale='log',
     title='Exponential growth of COVID-19 across countries',
     xlabel='Days',
     ylabel='Confirmed cases/deaths',
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend(bbox_to_anchor=(1.0, 1.0))
+ax.legend()
 
 plt.show()
 
@@ -133,7 +137,7 @@ for country_name in countries:
         legend=True,
         grid=True)
 
-ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(title='Growth Factor of COVID-19 across countries',
        xlabel='Dates',
        ylabel='Growth Factor',
