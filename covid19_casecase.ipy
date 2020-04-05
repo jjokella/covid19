@@ -21,46 +21,46 @@ plt.style.use('seaborn-whitegrid')
 
 switch="Confirmed"              # "Deaths" / "Confirmed"
 
-# countries = [
-#     "Germany",  #
-#     "Italy",  #
-#     "France",  #
-#     # "Belgium",  #
-#     "Spain",  #
-#     # "Netherlands",  #
-#     "US",  #
-#     "Korea, South",  #
-#     # "Sweden",  #
-#     "United Kingdom",  #
-#     # "Poland",  #
-#     # "China",  #
-#     # "Chile", #
-# ]  #["US", "Korea, South", "China"]
-# coviddata_csse = csse.coviddata_csse(countries, switch=switch)
-# cvdf.add_x(coviddata_csse)
-
 countries = [
-    'Germany',  #
-    # 'Mecklenburg-Vorpommern',  #
-    # 'Bremen',  #
-    # 'Thüringen',  #
-    # 'Saarland',  #
-    # 'Brandenburg',  #
-    # 'Sachsen-Anhalt',  #
-    # 'Schleswig-Holstein',  #
-    # 'Sachsen',  #
-    # 'Hamburg',  #
-    # 'Berlin',  #
-    'Hessen',  #
-    # 'Rheinland-Pfalz',  #
-    'Niedersachsen',  #
-    'Bayern',  #
-    'Baden-Württemberg',  #
-    'Nordrhein-Westfalen'  #
-]
-coviddata_csse = eudata.coviddata_eudata_germany()
-# countries = [col for col in coviddata_csse.columns if "Deaths" in col]
+    "Germany",  #
+    "Italy",  #
+    "France",  #
+    # "Belgium",  #
+    "Spain",  #
+    # "Netherlands",  #
+    "US",  #
+    "Korea, South",  #
+    # "Sweden",  #
+    "United Kingdom",  #
+    # "Poland",  #
+    # "China",  #
+    # "Chile", #
+]  #["US", "Korea, South", "China"]
+coviddata_csse = csse.coviddata_csse(countries, switch=switch)
 cvdf.add_x(coviddata_csse)
+
+# countries = [
+#     'Germany',  #
+#     # 'Mecklenburg-Vorpommern',  #
+#     # 'Bremen',  #
+#     # 'Thüringen',  #
+#     # 'Saarland',  #
+#     # 'Brandenburg',  #
+#     # 'Sachsen-Anhalt',  #
+#     # 'Schleswig-Holstein',  #
+#     # 'Sachsen',  #
+#     # 'Hamburg',  #
+#     # 'Berlin',  #
+#     'Hessen',  #
+#     # 'Rheinland-Pfalz',  #
+#     'Niedersachsen',  #
+#     'Bayern',  #
+#     'Baden-Württemberg',  #
+#     'Nordrhein-Westfalen'  #
+# ]
+# coviddata_csse = eudata.coviddata_eudata_germany()
+# # countries = [col for col in coviddata_csse.columns if "Deaths" in col]
+# cvdf.add_x(coviddata_csse)
 
 
 window = 6.9
