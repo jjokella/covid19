@@ -11,7 +11,11 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
-min_confirmed = 1
+min_confirmed = 100
+norm_min_confirmed = False
+max_num_entries = 100
+
+yscale = "log"
 
 countries = [
     "Germany",  #
@@ -32,8 +36,8 @@ countries = [
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
 cvdf.add_x(coviddata_csse)
-for country in countries:
-    coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
+# for country in countries:
+#     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
 
 # countries = [
 #     'Germany',  #
@@ -104,14 +108,14 @@ fig, ax = plt.subplots(figsize=(15, 8))
 cvp.plot_countries(coviddata_csse,
                    countries,
                    min_confirmed=min_confirmed,
-                   norm_min_confirmed=True,
-                   max_num_entries=14,
+                   norm_min_confirmed=norm_min_confirmed,
+                   max_num_entries=max_num_entries,
                    legendlabel=" CSSE",
                    same_start=True)
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
-    # yscale='log',
+    yscale=yscale,
     title='Exponential growth of COVID-19 across countries',
     xlabel='Days',
     ylabel='Confirmed cases/deaths',
