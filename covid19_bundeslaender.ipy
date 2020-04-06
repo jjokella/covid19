@@ -12,7 +12,7 @@ import covidinput.eudata as eudata
 import covidplots as cvp
 
 min_confirmed = 1
-norm_min_confirmed = False
+norm_min_confirmed = True
 max_num_entries = 100
 
 yscale = "log"
@@ -53,9 +53,9 @@ laender = [
     # 'Hessen-Deaths',  #
     # 'Rheinland-Pfalz-Deaths',  #
     # 'Niedersachsen-Deaths',  #
-    # 'Bayern-Deaths',  #
+    'Bayern-Deaths',  #
     # 'Baden-Württemberg-Deaths',  #
-    # 'Nordrhein-Westfalen-Deaths',  #
+    'Nordrhein-Westfalen-Deaths',  #
 ]
 coviddata_rki = eudata.coviddata_eudata_germany()
 cvdf.add_x(coviddata_rki)
@@ -64,11 +64,11 @@ for land in laender:
     coviddata_rki[land] = coviddata_rki[land]/eudata.de_population[land.replace('-Deaths','')]
 
 window_td = 6.9
-for land_name in coviddata_rki.columns:
+for land_name in laender:
     cvdff.add_growth_factor(coviddata_rki, land_name)
     cvdff.add_log(coviddata_rki, land_name)
     cvdff.add_diff(coviddata_rki, land_name)
-    cvdff.add_tdouble(coviddata_rki, land_name, window=window_td)
+    cvdff.add_tdouble(coviddata_rki, land_name, window=window_td, mincol=min_confirmed)
 
 # Plots -----------------------------------------------------------
 
