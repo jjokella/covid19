@@ -26,6 +26,8 @@ landkreise = [
     "Kreisfreie Stadt München",  #
     # "Kreisfreie Stadt Kassel", #
     "Landkreis Kassel",  #
+    "Kreisfreie Stadt Bonn",
+    "Kreis Rhein-Sieg-Kreis",
     # "Landkreis Region Hannover", #
     # "Kreisfreie Stadt Würzburg", #
 ]
