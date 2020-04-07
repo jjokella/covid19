@@ -23,6 +23,7 @@ countries = [
     "Sweden",  #
     "United Kingdom",  #
     "Poland",  #
+    "Austria", #
     # "China", #
 ]  #["US", "Korea, South", "China"]
 
@@ -73,7 +74,7 @@ fig, ax = plt.subplots(figsize=(15, 8))
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_countries(coviddata_csse_now_infected,
                    [country + " Diff" for country in countries],
-                   min_confirmed=100,
+                   min_confirmed=-100000,
                    legendlabel=" CSSE",
                    same_start=True)
 

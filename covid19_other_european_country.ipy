@@ -16,7 +16,7 @@ sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
 # CSSE-JHU Data, Italy
-country = "Italy"  # 11: Italy
+country = "Austria"  # 11: Italy
 coviddata_csse = csse.coviddata_csse([country])
 cvdff.add_log(coviddata_csse, country)
 cvdff.add_growth_factor(coviddata_csse, country)

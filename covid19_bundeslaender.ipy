@@ -18,9 +18,9 @@ max_num_entries = 100
 yscale = "log"
 
 laender = [
-    # 'Germany',  #
-    # 'East-Germany',  #
-    # 'West-Germany',  #
+    'Germany',  #
+    'East-Germany',  #
+    'West-Germany',  #
     # 'Mecklenburg-Vorpommern',  #
     # 'Bremen',  #
     # 'Thüringen',  #
@@ -34,28 +34,28 @@ laender = [
     # 'Hessen',  #
     # 'Rheinland-Pfalz',  #
     # 'Niedersachsen',  #
-    # 'Bayern',  #
+    'Bayern',  #
     # 'Baden-Württemberg',  #
-    # 'Nordrhein-Westfalen',  #
-    'Germany-Deaths',  #
-    'East-Germany-Deaths',  #
-    'West-Germany-Deaths',  #
-    # 'Mecklenburg-Vorpommern-Deaths',  #
-    # 'Bremen-Deaths',  #
-    # 'Thüringen-Deaths',  #
-    # 'Saarland-Deaths',  #
-    # 'Brandenburg-Deaths',  #
-    # 'Sachsen-Anhalt-Deaths',  #
-    # 'Schleswig-Holstein-Deaths',  #
-    # 'Sachsen-Deaths',  #
-    # 'Hamburg-Deaths',  #
-    # 'Berlin-Deaths',  #
-    # 'Hessen-Deaths',  #
-    # 'Rheinland-Pfalz-Deaths',  #
-    # 'Niedersachsen-Deaths',  #
-    'Bayern-Deaths',  #
-    # 'Baden-Württemberg-Deaths',  #
-    'Nordrhein-Westfalen-Deaths',  #
+    'Nordrhein-Westfalen',  #
+    # 'Germany-Deaths',  #
+    # 'East-Germany-Deaths',  #
+    # 'West-Germany-Deaths',  #
+    # # 'Mecklenburg-Vorpommern-Deaths',  #
+    # # 'Bremen-Deaths',  #
+    # # 'Thüringen-Deaths',  #
+    # # 'Saarland-Deaths',  #
+    # # 'Brandenburg-Deaths',  #
+    # # 'Sachsen-Anhalt-Deaths',  #
+    # # 'Schleswig-Holstein-Deaths',  #
+    # # 'Sachsen-Deaths',  #
+    # # 'Hamburg-Deaths',  #
+    # # 'Berlin-Deaths',  #
+    # # 'Hessen-Deaths',  #
+    # # 'Rheinland-Pfalz-Deaths',  #
+    # # 'Niedersachsen-Deaths',  #
+    # 'Bayern-Deaths',  #
+    # # 'Baden-Württemberg-Deaths',  #
+    # 'Nordrhein-Westfalen-Deaths',  #
 ]
 coviddata_rki = eudata.coviddata_eudata_germany()
 cvdf.add_x(coviddata_rki)
