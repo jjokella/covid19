@@ -11,7 +11,7 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
-min_confirmed = 50
+min_confirmed = 1
 norm_min_confirmed = True
 max_num_entries = 100
 
@@ -21,12 +21,12 @@ countries = [
     "Germany",  #
     "Italy",  #
     "France",  #
-    "Belgium",  #
     "Spain",  #
+    "Sweden",  #
     "Netherlands",  #
     "US",  #
-    "Korea, South",  #
-    "Sweden",  #
+    # "Korea, South",  #
+    "Belgium",  #
     "United Kingdom", #
     "Austria", #
     # "Poland",  #
@@ -34,7 +34,7 @@ countries = [
     # "Chile", #
 ]  #["US", "Korea, South", "China"]
 
-coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
 cvdf.add_x(coviddata_csse)
 for country in countries:
     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
