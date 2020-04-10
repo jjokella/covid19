@@ -100,6 +100,14 @@ cvdff.add_mov_avg(coviddata_zeit, country, window=window)
 cvdff.add_mov_avg(coviddata_rlay, country, window=window)
 cvdff.add_mov_avg(coviddata_rki2, country, window=window)
 
+cvdff.add_mov_avg(coviddata_csse, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_who, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_rki, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_ecdc, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_zeit, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_rlay, country + " Diff", window=window)
+cvdff.add_mov_avg(coviddata_rki2, country + " Diff", window=window)
+
 window_td = 6.9
 cvdff.add_tdouble(coviddata_csse, country, window=window_td)
 cvdff.add_tdouble(coviddata_who, country, window=window_td)
@@ -478,3 +486,46 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
 plt.show()
+
+# Plot 7
+line_styles = ['-', ':', '--', '-.']
+n_colors = 7
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(20, 10))
+
+cvp.plot_countries(coviddata_csse, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_ecdc, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" ECDC")
+cvp.plot_countries(coviddata_zeit, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " Diff"+" MA" + str(window)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI2")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='New cases of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='New confirmed cases',
+    # ylim=[0.5,2.5]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
