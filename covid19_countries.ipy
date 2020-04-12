@@ -15,20 +15,20 @@ min_confirmed = 1
 norm_min_confirmed = True
 max_num_entries = 100
 
-yscale = "log"
+yscale = "linear"                  # "log"/ "linear"
 
 countries = [
     "Germany",  #
-    "Italy",  #
-    "France",  #
-    "Spain",  #
-    "Sweden",  #
-    "Netherlands",  #
-    "US",  #
-    # "Korea, South",  #
-    "Belgium",  #
-    "United Kingdom", #
-    "Austria", #
+    # "Italy",  #
+    # "France",  #
+    # "Spain",  #
+    # "Sweden",  #
+    # "Netherlands",  #
+    # "US",  #
+    # # "Korea, South",  #
+    # "Belgium",  #
+    # "United Kingdom", #
+    # "Austria", #
     # "Poland",  #
     # "China", #
     # "Chile", #
@@ -36,8 +36,8 @@ countries = [
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
 cvdf.add_x(coviddata_csse)
-for country in countries:
-    coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
+# for country in countries:
+#     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
 
 # countries = [
 #     'Germany',  #
