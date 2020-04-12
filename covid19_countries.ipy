@@ -116,9 +116,9 @@ cvp.plot_countries(coviddata_csse,
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
     yscale=yscale,
-    title='Exponential growth of COVID-19 across countries',
+    title='COVID-19 across countries',
     xlabel='Days',
-    ylabel='Confirmed cases/deaths',
+    ylabel='Confirmed deaths',
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
