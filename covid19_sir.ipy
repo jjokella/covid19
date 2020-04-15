@@ -28,7 +28,7 @@ coviddata_csse_rec = csse.coviddata_csse([country], switch="Recovered")
 N = csse.population[country] * 10**6
 
 # Starting infections
-startinfs = 50000
+startinfs = 100000
 I0 = coviddata_csse[country][coviddata_csse[country] > startinfs][0]
 Rec0 = coviddata_csse_rec[country][coviddata_csse[country] > startinfs][0]
 # I0 = coviddata_csse[country][-1]
@@ -42,8 +42,8 @@ gamma = 1 / 16.6
 tdouble = cvsir.get_tdouble(coviddata_csse,
                             country,
                             mincol=startinfs,
-                            maxcol=100000)
-r0 = cvsir.get_r0(coviddata_csse, country, mincol=startinfs, maxcol=100000)
+                            maxcol=1000000)
+r0 = cvsir.get_r0(coviddata_csse, country, mincol=startinfs, maxcol=1000000)
 # r0 = 0.5*r0
 
 print(country)
