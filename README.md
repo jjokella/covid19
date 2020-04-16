@@ -20,3 +20,8 @@ These are the data repository used:
 
 - clone `https://github.com/jgehrcke/covid-19-germany-gae.git` from Github
   and into `/path/to/covid19`
+
+- csv data for German Landkreise from
+  `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
+  and download as spreadsheet `RKI_Corona_Landkreise.csv` intto
+  `/path/to/covid19`
