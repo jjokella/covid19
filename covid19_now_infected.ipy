@@ -22,7 +22,7 @@ countries = [
     "Korea, South",  #
     "Sweden",  #
     "United Kingdom",  #
-    "Poland",  #
+    # "Poland",  #
     "Austria", #
     # "China", #
 ]  #["US", "Korea, South", "China"]
