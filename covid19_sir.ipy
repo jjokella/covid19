@@ -1,4 +1,4 @@
-# Source https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/
+# Original source: https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/
 
 import pandas as pd
 import numpy as np
