@@ -28,7 +28,7 @@ cvdff.add_log(coviddata_who, country)
 cvdff.add_growth_factor(coviddata_who, country)
 coviddata_who.name = ("WHO-JHU " + country)
 
-# SPF, Frankreich, händischer Input
+# SPF, Frankreich
 coviddata_spf = eudata.coviddata_eudata_france()
 coviddata_spf.name = ("Santé-Publique France ")
 cvdff.add_log(coviddata_spf, "France")
@@ -43,10 +43,10 @@ cvdff.add_growth_factor(coviddata_ecdc, country)
 # Fits -----------------------------------------------------
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, country, 100, 20000)
-cvdff.add_exponential_fit(coviddata_who, country, 100, 20000)
-cvdff.add_exponential_fit(coviddata_spf, country, 100, 20000)
-cvdff.add_exponential_fit(coviddata_ecdc, country, 100, 20000)
+cvdff.add_exponential_fit(coviddata_csse, country, 100, 100000)
+cvdff.add_exponential_fit(coviddata_who, country, 100, 100000)
+cvdff.add_exponential_fit(coviddata_spf, country, 100, 100000)
+cvdff.add_exponential_fit(coviddata_ecdc, country, 100, 100000)
 
 # Plots -----------------------------------------------------------
 cvdf.add_x(coviddata_csse)

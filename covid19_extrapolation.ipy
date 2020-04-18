@@ -18,7 +18,7 @@ coviddata_zeit = zeit.coviddata_zeit_germany()
 
 # Infected beginning of April
 startdat = pd.Timestamp("2020/03/01")
-extrapoldat = pd.Timestamp("2020/04/15")
+extrapoldat = pd.Timestamp("2020/05/01")
 fit_csse = cvdff.get_log_fit(coviddata_csse, "Germany", 50000, 200000)
 fit_who = cvdff.get_log_fit(coviddata_who, "Germany", 1000, 200000)
 fit_rki = cvdff.get_log_fit(coviddata_rki, "Germany", 50000, 200000)
