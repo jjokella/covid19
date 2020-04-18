@@ -43,3 +43,6 @@ More sources/inspirations for SIR model and plotting:
   `https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/`
 
 - Plot function idea from `https://github.com/twiecki/covid19`
+
+
+![alt text](figs/cases_germany.pdf)
