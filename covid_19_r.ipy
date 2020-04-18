@@ -81,13 +81,20 @@ cvp.plot_countries(coviddata_rki2, [country + " R" + str(gentime)],
                    legendlabel=" RKI2")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.axhline(1.0,
+           color='.1',
+           ls='-.',
+           label='Reproduction number 1.0')
 ax.set(
     # yscale='log',
     title='Reproduction number of COVID-19 in ' + country,
     xlabel='Days',
     ylabel='Reproduction number R',
-    ylim=[0.0, 3.5])
+    ylim=[0.0, 3.5],
+    xlim=[10.0, coviddata_rki2["x"][-1]])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_germany.pdf")
 
 plt.show()
