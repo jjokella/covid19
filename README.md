@@ -25,3 +25,8 @@ These are the data repository used:
   `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
   and download as spreadsheet `RKI_Corona_Landkreise.csv` intto
   `/path/to/covid19`
+
+- SIR model in Python from
+  `https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/`
+
+- Plot function idea from `https://github.com/twiecki/covid19`
