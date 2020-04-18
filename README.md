@@ -44,5 +44,15 @@ More sources/inspirations for SIR model and plotting:
 
 - Plot function idea from `https://github.com/twiecki/covid19`
 
+## Plots for Germany
 
 ![Cases Germany](/figs/cases_germany.png)
+![New Cases Germany](/figs/newcases_germany.png)
+![Doubling time Germany](/figs/tdouble_germany.png)
+![Reproduction number](/figs/reproductionnumber_germany.png)
+
+## Plots for multiple countries
+
+
+![Deaths Countries](/figs/deaths_countries.png)
+![Reproduction number](/figs/reproductionnumber_deaths_countries.png)
