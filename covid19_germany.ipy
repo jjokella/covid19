@@ -429,6 +429,7 @@ cvp.plot_casecase(coviddata_rki2, [country + " MA" + str(window)],
                   legendlabel=" RKI2")
 
 conf = np.arange(0, coviddata_csse[country].max(), 10)
+ax.plot(conf, 0.01 * conf, ":k", label="1%")
 ax.plot(conf, 0.05 * conf, "-.k", label="5%")
 ax.plot(conf, 0.1 * conf, "-k", label="10%")
 ax.plot(conf, 0.3 * conf, "--k", label="30%")
