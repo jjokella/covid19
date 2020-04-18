@@ -1,0 +1,93 @@
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+# Input -----------------------------------------------------
+country = "Germany"
+gentime = 7.0
+
+# CSSE-JHU Data, Germany
+coviddata_csse = csse.coviddata_csse([country])
+cvdff.add_r(coviddata_csse, country, gentime=gentime)
+
+# WHO-data, Germany
+coviddata_who = who.coviddata_who([country])
+cvdff.add_r(coviddata_who, country, gentime=gentime)
+
+# Robert Koch Institut
+coviddata_rki = eudata.coviddata_eudata_germany()
+cvdff.add_r(coviddata_rki, country, gentime=gentime)
+
+# ECDC data
+coviddata_ecdc = eudata.coviddata_eudata_europe()
+cvdff.add_r(coviddata_ecdc, country, gentime=gentime)
+
+# Zeit data
+coviddata_zeit = zeit.coviddata_zeit_germany()
+cvdff.add_r(coviddata_zeit, country, gentime=gentime)
+
+# Risklayer Landkreis data
+coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
+cvdff.add_r(coviddata_rlay, country, gentime=gentime)
+
+# RKI Landkreis data
+coviddata_rki2 = lkdt.coviddata_landkreise(switch="rki")
+cvdff.add_r(coviddata_rki2, country, gentime=gentime)
+
+
+# Plot 1
+line_styles = ['-', ':', '--', '-.']
+n_colors = 7
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(20, 10))
+
+cvp.plot_countries(coviddata_csse, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+cvp.plot_countries(coviddata_who, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI")
+cvp.plot_countries(coviddata_ecdc, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" ECDC")
+cvp.plot_countries(coviddata_zeit, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" ZEIT")
+cvp.plot_countries(coviddata_rlay, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" RLAY")
+cvp.plot_countries(coviddata_rki2, [country + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" RKI2")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Reproduction number of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='Reproduction number R',
+    ylim=[0.0, 3.5])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
