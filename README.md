@@ -13,18 +13,18 @@ Some Python functions for analyzing COVID-19
 These are the data repository used:
 
 - clone `https://github.com/CSSEGISandData/COVID-19.git` from Github
-  and into `/path/to/covid19`
+  and into `/path/to/covid19/data`
 
 - clone `https://github.com/covid19-eu-zh/covid19-eu-data.git` from Github
-  and into `/path/to/covid19`
+  and into `/path/to/covid19/data`
 
 - clone `https://github.com/jgehrcke/covid-19-germany-gae.git` from Github
-  and into `/path/to/covid19`
+  and into `/path/to/covid19/data`
 
 - csv data for German Landkreise from
   `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
   and download as spreadsheet `RKI_Corona_Landkreise.csv` intto
-  `/path/to/covid19`
+  `/path/to/covid19/data`
 
 - SIR model in Python from
   `https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/`
