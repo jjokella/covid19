@@ -91,11 +91,13 @@ for country in countries:
 # cvdf.add_x(coviddata_csse)
 
 window_td = 6.9
+gentime = 7.0
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
     cvdff.add_log(coviddata_csse, country_name)
     cvdff.add_diff(coviddata_csse, country_name)
     cvdff.add_tdouble(coviddata_csse, country_name, window=window_td)
+    cvdff.add_r(coviddata_csse, country_name, gentime=gentime)
 
 # Plots -----------------------------------------------------------
 
@@ -195,6 +197,29 @@ ax.set(
     xlabel='Days',
     ylabel='Doubling time [days]',
     ylim=[100.0,0.0]
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+
+# Plot 4
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for country_name in countries:
+    cvp.plot_countries(coviddata_csse, [country_name + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    title='Reproduction number of deaths of COVID-19',
+    xlabel='Days',
+    ylabel='Reproduction number R [from deaths]',
+    ylim=[0.0,5.0]
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
