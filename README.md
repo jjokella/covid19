@@ -19,7 +19,7 @@ Structure
 - heavily dependent on `pandas`
 
 ### Data
-These are the data repository used:
+These are the used data repositories:
 
 - clone `https://github.com/CSSEGISandData/COVID-19.git` from Github
   and into `/path/to/covid19/data`
@@ -30,10 +30,14 @@ These are the data repository used:
 - clone `https://github.com/jgehrcke/covid-19-germany-gae.git` from Github
   and into `/path/to/covid19/data`
 
+This csv file is used for German districts:
+
 - csv data for German Landkreise from
   `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
   and download as spreadsheet `RKI_Corona_Landkreise.csv` intto
   `/path/to/covid19/data`
+
+More sources/inspirations for SIR model and plotting:
 
 - SIR model in Python from
   `https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/`
