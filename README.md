@@ -34,7 +34,7 @@ This csv file is used for German districts:
 
 - csv data for German Landkreise from
   `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
-  and download as spreadsheet `RKI_Corona_Landkreise.csv` intto
+  and download as spreadsheet `RKI_Corona_Landkreise.csv` into
   `/path/to/covid19/data`
 
 More sources/inspirations for SIR model and plotting:
