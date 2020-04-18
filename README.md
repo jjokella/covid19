@@ -47,7 +47,7 @@ More sources/inspirations for SIR model and plotting:
 ## Plots for Germany
 
 ![Cases Germany](/figs/cases_germany.png)
-![New Cases Germany](/figs/newcases_germany.png)
+![New Cases Germany](/figs/newcases_smooth_germany.png)
 ![Doubling time Germany](/figs/tdouble_germany.png)
 ![Reproduction number](/figs/reproductionnumber_germany.png)
 
