@@ -1,6 +1,14 @@
 # Python functions for analyzing COVID-19 #
 
-Some Python functions for analyzing COVID-19
+Some Python functions for analyzing COVID-19.
+
+Structure
+- IPython scripts in the main directory
+- `/data/` for downloaded csv files and git repositories
+- `/figs/` for figures
+- `/site-packages/` for Python functions
+  - `/covidfuncs/`: Functions for dataframes
+  - `/covidinput/`: Functions for data import
 
 ## Prerequisites
 
@@ -8,6 +16,7 @@ Some Python functions for analyzing COVID-19
 - Python3 (tested: 3.7.5)
 - IPython7 (tested: 7.11.1) for running the `.ipy` scripts
 - add `/path/to/covid19/site-packages` to your `PYTHONPATH`
+- heavily dependent on `pandas`
 
 ### Data
 These are the data repository used:
