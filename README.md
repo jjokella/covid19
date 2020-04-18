@@ -45,4 +45,4 @@ More sources/inspirations for SIR model and plotting:
 - Plot function idea from `https://github.com/twiecki/covid19`
 
 
-![Cases Germany](/figs/cases_germany.pdf)
+![Cases Germany](/figs/cases_germany.png)
