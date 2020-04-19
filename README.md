@@ -2,7 +2,8 @@
 
 Some Python functions for analyzing COVID-19.
 
-Structure
+## Structure
+
 - IPython scripts in the main directory
 - `/data/` for downloaded csv files and git repositories
 - `/figs/` for figures
