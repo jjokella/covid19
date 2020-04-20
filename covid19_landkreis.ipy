@@ -64,7 +64,7 @@ ax.set(
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
-plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_landkreise.pdf")
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_landkreise.pdf")
 plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_landkreise.png")
 plt.show()
 
@@ -153,6 +153,6 @@ ax.set(
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
-plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_landkreise.pdf")
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_landkreise.pdf")
 plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_landkreise.png")
 plt.show()
