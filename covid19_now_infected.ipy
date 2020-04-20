@@ -64,7 +64,7 @@ ax.set(
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
-plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_countries.pdf")
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_countries.pdf")
 plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_countries.png")
 plt.show()
 

@@ -95,7 +95,7 @@ ax.set(
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
-plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_germany.pdf")
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_germany.pdf")
 plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_germany.png")
 
 plt.show()
