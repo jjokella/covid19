@@ -32,6 +32,7 @@ countries = [
     "Korea, South",  #
     # "Sweden",  #
     "United Kingdom",  #
+    "Sweden", #
     # "Poland",  #
     # "China",  #
     # "Chile", #
@@ -74,7 +75,7 @@ for country_name in coviddata_csse.columns:
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
-fig, ax = plt.subplots(figsize=(10, 10))
+fig, ax = plt.subplots(figsize=(12, 12))
 
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_casecase(coviddata_csse,
@@ -99,4 +100,6 @@ ax.set(
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_countries.pdf")
+plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_countries.png")
 plt.show()
