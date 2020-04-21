@@ -11,6 +11,9 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
+# sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
 min_confirmed = 1
 norm_min_confirmed = True
 max_num_entries = 100
