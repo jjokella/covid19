@@ -1,0 +1,74 @@
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+
+sns.set_context('notebook')
+plt.style.use('seaborn-whitegrid')
+
+gentime = 7.0
+
+# Input -----------------------------------------------------
+countries = [
+    "Germany",  #
+    "Italy",  #
+    "France",  #
+    "Spain",  #
+    "Sweden",  #
+    "Netherlands",  #
+    "US",  #
+    # "Korea, South",  #
+    "Belgium",  #
+    "United Kingdom", #
+    "Austria", #
+    # "Poland",  #
+    # "China", #
+    # "Chile", #
+]  #["US", "Korea, South", "China"]
+
+coviddata_csse = csse.coviddata_csse(countries, switch="Confirmed")
+cvdf.add_x(coviddata_csse)
+for country in countries:
+    coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
+
+
+for country in countries:
+    cvdff.add_r(coviddata_csse, country, gentime=gentime)
+    
+# Plot 1
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for country_name in countries:
+    cvp.plot_countries(coviddata_csse, [country_name + " R" + str(gentime)],
+                   min_confirmed=0.0,
+                   legendlabel=" CSSE")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    title='Reproduction number of confirmed cases of COVID-19',
+    xlabel='Days',
+    ylabel='Reproduction number R [cases]',
+    ylim=[0.0,2.5],
+    xlim=20,
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_countries.pdf")
+plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_countries.png")
+
+plt.show()
