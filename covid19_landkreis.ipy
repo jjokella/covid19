@@ -125,7 +125,9 @@ plt.show()
 # Plot 4
 sns.set_palette(sns.hls_palette(len(landkreise), l=.45,
                                 s=.8))  # 8 countries max
-fig, ax = plt.subplots(figsize=(10, 10))
+fig, ax = plt.subplots(figsize=(15, 10))
+
+min_confirmed = 160
 
 cvp.plot_casecase(
     coviddata_rlay,
@@ -142,16 +144,17 @@ ax.plot(conf, 0.05 * conf, ":k", label="5%")
 ax.plot(conf, 0.1 * conf, "-k", label="10%")
 ax.plot(conf, 0.3 * conf, "--k", label="30%")
 
-ax.set_position([0.1, 0.1, 0.8, 0.8])
+ax.set_position([0.1, 0.1, 0.1+0.7*2.0/3.0, 0.1+0.7])
 ax.set(
     yscale='log',
     xscale='log',
     title='New cases of COVID-19 against already confirmed cases',
     xlabel='Confirmed cases',
     ylabel='New cases',
+    xlim=[min_confirmed, np.max([coviddata_rlay[landkreis].max() for landkreis in landkreise])]
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend()
+ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_landkreise.pdf")
 plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_landkreise.png")

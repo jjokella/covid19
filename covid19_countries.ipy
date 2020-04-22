@@ -11,7 +11,7 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
-# sns.set_context('talk')
+sns.set_context('talk')
 plt.style.use('seaborn-whitegrid')
 
 min_confirmed = 1
@@ -94,11 +94,13 @@ for country in countries:
 # cvdf.add_x(coviddata_csse)
 
 window_td = 6.9
+window_ma = 6.9
 gentime = 7.0
 for country_name in coviddata_csse.columns:
     cvdff.add_growth_factor(coviddata_csse, country_name)
     cvdff.add_log(coviddata_csse, country_name)
     cvdff.add_diff(coviddata_csse, country_name)
+    cvdff.add_mov_avg(coviddata_csse, country_name + " Diff", window=window_ma)
     cvdff.add_tdouble(coviddata_csse, country_name, window=window_td)
     cvdff.add_r(coviddata_csse, country_name, gentime=gentime)
 
@@ -150,7 +152,7 @@ for country_name in countries:
         grid=True)
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
-ax.set(title='Growth Factor of COVID-19 across countries',
+ax.set(title='Growth Factor deaths of COVID-19 across countries',
        xlabel='Dates',
        ylabel='Growth Factor',
        ylim=[0.0, 3.0])
@@ -193,6 +195,34 @@ sns.set_palette(sns.hls_palette(len(countries), l=.45,
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for country_name in countries:
+    coviddata_csse[country_name + " Diff" + " MA" + str(window_ma)].shift(0).plot(
+        style='o-',
+        # ms=4,
+        # lw=1,
+        # c=colors[country_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    title='New deaths of COVID-19 across countries',
+    xlabel='Dates',
+    ylabel='New Cases, moving average' + str(window_ma),
+    # ylim=[0.0,3.0],
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 5
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for country_name in countries:
     cvp.plot_countries(coviddata_csse, [country_name + " TDouble" + str(window_td)],
                    min_confirmed=1.0,
                    legendlabel=" CSSE")
@@ -210,7 +240,7 @@ ax.legend(bbox_to_anchor=(1.0, 1.0))
 plt.show()
 
 
-# Plot 4
+# Plot 6
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
 fig, ax = plt.subplots(figsize=(15, 8))

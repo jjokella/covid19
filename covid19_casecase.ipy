@@ -16,29 +16,32 @@ import covidplots as cvp
 
 # Idea for this plot: Minute Physics
 
-sns.set_context('talk')
+sns.set_context('notebook')
 plt.style.use('seaborn-whitegrid')
 
-switch="Confirmed"              # "Deaths" / "Confirmed"
+switch = "Confirmed"  # "Deaths" / "Confirmed"
 
 countries = [
     "Germany",  #
     "Italy",  #
     "France",  #
-    # "Belgium",  #
     "Spain",  #
-    # "Netherlands",  #
+    "Sweden",  #
+    "Netherlands",  #
     "US",  #
     "Korea, South",  #
-    # "Sweden",  #
+    "Belgium",  #
     "United Kingdom",  #
-    "Sweden", #
+    "Austria",  #
     # "Poland",  #
     # "China",  #
     # "Chile", #
 ]  #["US", "Korea, South", "China"]
 coviddata_csse = csse.coviddata_csse(countries, switch=switch)
 cvdf.add_x(coviddata_csse)
+for country in countries:
+    coviddata_csse[country +
+                   " Pop"] = coviddata_csse[country] / csse.population[country]
 
 # countries = [
 #     'Germany',  #
@@ -63,19 +66,19 @@ cvdf.add_x(coviddata_csse)
 # # countries = [col for col in coviddata_csse.columns if "Deaths" in col]
 # cvdf.add_x(coviddata_csse)
 
-
 window = 6.9
 min_confirmed = 500
 
-for country_name in coviddata_csse.columns:
+for country_name in countries:
     cvdff.add_mov_avg(coviddata_csse, country_name, window=window)
+    cvdff.add_mov_avg(coviddata_csse, country_name + " Pop", window=window)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
-fig, ax = plt.subplots(figsize=(12, 12))
+fig, ax = plt.subplots(figsize=(15, 10))
 
 # countries = [country+" (Log)" for country in countries]
 cvp.plot_casecase(coviddata_csse,
@@ -83,23 +86,63 @@ cvp.plot_casecase(coviddata_csse,
                   min_confirmed=min_confirmed,
                   legendlabel=" CSSE")
 
-conf = np.arange(min_confirmed,np.max([coviddata_csse[country].max() for country in countries]),10)
-ax.plot(conf,0.05*conf,":k", label="5%")
-ax.plot(conf,0.1*conf,"-k", label="10%")
+conf = np.arange(
+    min_confirmed,
+    np.max([coviddata_csse[country].max() for country in countries]), 10)
+ax.plot(conf, 0.01 * conf, "-.k", label="1%")
+ax.plot(conf, 0.05 * conf, ":k", label="5%")
+ax.plot(conf, 0.1 * conf, "-k", label="10%")
 # ax.plot(conf,0.2*conf,"-.k", label="20%")
-ax.plot(conf,0.3*conf,"--k", label="30%")
+ax.plot(conf, 0.3 * conf, "--k", label="30%")
 
-ax.set_position([0.1, 0.1, 0.8, 0.8])
+ax.set_position([0.1, 0.1, 0.1 + 1.4 / 3.0, 0.8])
 ax.set(
     yscale='log',
     xscale='log',
-    title='New '+switch+' of COVID-19 against confirmed '+switch,
-    xlabel='Total '+switch,
-    ylabel='New '+switch,
+    title='New ' + switch + ' of COVID-19 against confirmed ' + switch,
+    xlabel='Total ' + switch,
+    ylabel='New ' + switch,
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend()
+ax.legend(bbox_to_anchor=(1.5, 1.0))
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_countries.pdf")
-plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_countries.png")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/casecase_countries.png")
+plt.show()
+
+# Plot 1
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 10))
+
+# countries = [country+" (Log)" for country in countries]
+cvp.plot_casecase(coviddata_csse,
+                  [country + " Pop MA" + str(window) for country in countries],
+                  min_confirmed=min_confirmed / 100.0,
+                  legendlabel=" CSSE")
+
+conf = np.arange(
+    min_confirmed / 100.0,
+    np.max([coviddata_csse[country + " Pop"].max() for country in countries]),
+    10)
+ax.plot(conf, 0.01 * conf, "-.k", label="1%")
+ax.plot(conf, 0.05 * conf, ":k", label="5%")
+ax.plot(conf, 0.1 * conf, "-k", label="10%")
+# ax.plot(conf,0.2*conf,"-.k", label="20%")
+ax.plot(conf, 0.3 * conf, "--k", label="30%")
+
+ax.set_position([0.1, 0.1, 0.1 + 1.4 / 3.0, 0.8])
+ax.set(
+    yscale='log',
+    xscale='log',
+    title='New ' + switch + ' of COVID-19 against confirmed ' + switch +
+    ' (per Million)',
+    xlabel='Total ' + switch + ' (per Million)',
+    ylabel='New ' + switch + ' (per Million)',
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.5, 1.0))
+
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/casecase_perpop_countries.pdf")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/casecase_perpop_countries.png")
 plt.show()

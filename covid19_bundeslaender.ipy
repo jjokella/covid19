@@ -11,6 +11,9 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
 min_confirmed = 1
 norm_min_confirmed = True
 max_num_entries = 100
@@ -35,7 +38,7 @@ laender = [
     # 'Rheinland-Pfalz',  #
     # 'Niedersachsen',  #
     'Bayern',  #
-    # 'Baden-Württemberg',  #
+    'Baden-Württemberg',  #
     'Nordrhein-Westfalen',  #
     # 'Germany-Deaths',  #
     # 'East-Germany-Deaths',  #
@@ -61,20 +64,25 @@ coviddata_rki = eudata.coviddata_eudata_germany()
 cvdf.add_x(coviddata_rki)
 
 for land in laender:
-    coviddata_rki[land] = coviddata_rki[land]/eudata.de_population[land.replace('-Deaths','')]
+    coviddata_rki[land] = coviddata_rki[land] / eudata.de_population[
+        land.replace('-Deaths', '')]
 
 window_td = 6.9
 for land_name in laender:
     cvdff.add_growth_factor(coviddata_rki, land_name)
     cvdff.add_log(coviddata_rki, land_name)
     cvdff.add_diff(coviddata_rki, land_name)
-    cvdff.add_tdouble(coviddata_rki, land_name, window=window_td, mincol=min_confirmed)
+    cvdff.add_mov_avg(coviddata_rki, land_name + " Diff", window=window)
+    cvdff.add_tdouble(coviddata_rki,
+                      land_name,
+                      window=window_td,
+                      mincol=min_confirmed)
+    cvdff.add_r(coviddata_rki, land_name, gentime=7.0)
 
 # Plots -----------------------------------------------------------
 
 # Plot 1
-sns.set_palette(sns.hls_palette(len(laender), l=.45,
-                                s=.8))  # 8 laender max
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 # laender = [land+" (Log)" for land in laender]
@@ -99,8 +107,7 @@ ax.legend()
 plt.show()
 
 # Plot 2
-sns.set_palette(sns.hls_palette(len(laender), l=.45,
-                                s=.8))  # 8 laender max
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for land_name in laender:
@@ -125,8 +132,7 @@ ax.legend(bbox_to_anchor=(1.0, 1.0))
 plt.show()
 
 # Plot 3
-sns.set_palette(sns.hls_palette(len(laender), l=.45,
-                                s=.8))  # 8 laender max
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for land_name in laender:
@@ -153,22 +159,70 @@ ax.legend(bbox_to_anchor=(1.0, 1.0))
 plt.show()
 
 # Plot 4
-sns.set_palette(sns.hls_palette(len(laender), l=.45,
-                                s=.8))  # 8 laender max
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for land_name in laender:
-    cvp.plot_countries(coviddata_rki, [land_name + " TDouble" + str(window_td)],
-                   min_confirmed=1.0,
-                   legendlabel=" RKI")
+    coviddata_rki[land_name + " Diff"+" MA" + str(window)].shift(0).plot(
+        style='o-',
+        # ms=4,
+        # lw=1,
+        # c=colors[land_name],
+        # ylim=[ymin, ymax],
+        # yticks=range(ymin, ymax, 500),
+        legend=True,
+        grid=True)
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
-    title='T-Double plot of COVID-19 in laender',
-    xlabel='Days',
-    ylabel='Doubling time [days]',
-    ylim=[100.0,0.0]
+    title='Exponential growth of COVID-19 across laender',
+    xlabel='Dates',
+    ylabel='New Cases, moving average' + str(window),
+    # ylim=[0.0,3.0]
 )
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 5
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+for land_name in laender:
+    cvp.plot_countries(coviddata_rki,
+                       [land_name + " TDouble" + str(window_td)],
+                       min_confirmed=1.0,
+                       legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='T-Double plot of COVID-19 in laender',
+       xlabel='Days',
+       ylabel='Doubling time [days]',
+       ylim=[50.0, 0.0])
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 6
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+line_styles = [':', '--']
+
+for i, land_name in enumerate(laender):
+    cvp.plot_countries(coviddata_rki, [land_name + " R" + str(7.0)],
+                       min_confirmed=0.0,
+                       ls=line_styles[np.mod(i,2)],
+                       legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='R plot of COVID-19 in laender',
+       xlabel='Days',
+       ylabel='Reproduction number R',
+       ylim=[0.0, 2.0],
+       xlim=25)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 

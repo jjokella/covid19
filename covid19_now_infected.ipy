@@ -11,6 +11,9 @@ import covidinput.csse as csse
 import covidinput.eudata as eudata
 import covidplots as cvp
 
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
 countries = [
     "Germany",  #
     "Italy",  #
@@ -41,6 +44,7 @@ for country in countries:
 
 for country in countries:
     cvdff.add_diff(coviddata_csse_now_infected, country)
+    cvdff.add_mov_avg(coviddata_csse_now_infected, country+" Diff", window=6.9)
 
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
@@ -86,6 +90,31 @@ ax.set(
     title='New current infections with COVID-19 across countries',
     xlabel='Days',
     ylabel='New Currently infected (Confirmed - Recovered - Deaths)',
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend()
+
+plt.show()
+
+# Plot 3
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+# countries = [country+" (Log)" for country in countries]
+cvp.plot_countries(coviddata_csse_now_infected,
+                   [country + " Diff" + " MA"+str(6.9) for country in countries],
+                   min_confirmed=-100000,
+                   legendlabel=" CSSE",
+                   same_start=True)
+
+ax.set_position([0.1, 0.1, 0.8, 0.8])
+ax.set(
+    # yscale='log',
+    title='New current infections with COVID-19 across countries (moving average)',
+    xlabel='Days',
+    ylabel='New Currently infected (Confirmed - Recovered - Deaths), moving average'+str(6.9),
+    xlim=40,
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()

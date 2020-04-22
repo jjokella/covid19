@@ -485,7 +485,7 @@ ax.set(
     title='T-Double plot of COVID-19 in ' + country,
     xlabel='Days',
     ylabel='Doubling time [days]',
-    ylim=[40.0, 0.0])
+    ylim=[50.0, 0.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
