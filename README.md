@@ -63,3 +63,4 @@ More sources/inspirations for SIR model and plotting:
 ![Reproduction number cases](./figs/reproductionnumber_countries.png)
 ![Now infected](./figs/now_infected_countries.png)
 ![Casecase countries](./figs/casecase_countries.png)
+![Casecase countries](./figs/casecase_perpop_countries.png)
