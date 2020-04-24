@@ -39,11 +39,11 @@ tdays = 120
 
 # beta from exponential fit
 gamma = 1 / 16.6
-tdouble = cvsir.get_tdouble(coviddata_csse,
+tdouble = cvdff.get_tdouble(coviddata_csse,
                             country,
                             mincol=startinfs,
                             maxcol=1000000)
-r0 = cvsir.get_r0(coviddata_csse, country, mincol=startinfs, maxcol=1000000)
+r0 = cvdff.get_r0(coviddata_csse, country, mincol=startinfs, maxcol=1000000)
 # r0 = 0.5*r0
 
 print(country)
