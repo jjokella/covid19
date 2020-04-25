@@ -102,7 +102,7 @@ for i in range(ntimes):
     plt.clf()
 
 proc = subprocess.run([
-    "convert", "-delay", "20", "-loop", "0", "r_bundeslaender_bar_*.png",
+    "convert", "-delay", "40", "-loop", "0", "r_bundeslaender_bar_*.png",
     "r_bundeslaender_bar.gif"
 ],
                       cwd=os.environ["HOME"] + "/covid19/figs",
