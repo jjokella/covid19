@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.ticker
@@ -26,7 +27,7 @@ countries = [
     "Sweden",  #
     "United Kingdom",  #
     # "Poland",  #
-    "Austria", #
+    "Austria",  #
     # "China", #
 ]  #["US", "Korea, South", "China"]
 
@@ -36,15 +37,15 @@ coviddata_csse_dead = csse.coviddata_csse(countries, switch="Deaths")
 cvdf.add_x(coviddata_csse_dead)
 coviddata_csse_reco = csse.coviddata_csse(countries, switch="Recovered")
 cvdf.add_x(coviddata_csse_reco)
-# for country in countries:
-#     coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
 
 for country in countries:
     coviddata_csse_now_infected = coviddata_csse_conf - coviddata_csse_dead - coviddata_csse_reco
 
 for country in countries:
     cvdff.add_diff(coviddata_csse_now_infected, country)
-    cvdff.add_mov_avg(coviddata_csse_now_infected, country+" Diff", window=6.9)
+    cvdff.add_mov_avg(coviddata_csse_now_infected,
+                      country + " Diff",
+                      window=6.9)
 
 # Plot 1
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
@@ -69,7 +70,7 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_countries.pdf")
-plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_countries.png")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/now_infected_countries.png")
 plt.show()
 
 # Plot 2
@@ -102,21 +103,56 @@ sns.set_palette(sns.hls_palette(len(countries), l=.45,
 fig, ax = plt.subplots(figsize=(15, 8))
 
 # countries = [country+" (Log)" for country in countries]
-cvp.plot_countries(coviddata_csse_now_infected,
-                   [country + " Diff" + " MA"+str(6.9) for country in countries],
-                   min_confirmed=-100000,
-                   legendlabel=" CSSE",
-                   same_start=True)
+cvp.plot_countries(
+    coviddata_csse_now_infected,
+    [country + " Diff" + " MA" + str(6.9) for country in countries],
+    min_confirmed=-100000,
+    legendlabel=" CSSE",
+    same_start=True)
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
     # yscale='log',
-    title='New current infections with COVID-19 across countries (moving average)',
+    title=
+    'New current infections with COVID-19 across countries (moving average)',
     xlabel='Days',
-    ylabel='New Currently infected (Confirmed - Recovered - Deaths), moving average'+str(6.9),
+    ylabel=
+    'New Currently infected (Confirmed - Recovered - Deaths), moving average' +
+    str(6.9),
     xlim=40,
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
+plt.show()
+
+# Plot 4
+for country in countries:
+    coviddata_csse_now_infected[
+        country] = coviddata_csse_now_infected[country] / csse.population[country]
+
+sns.set_palette(sns.hls_palette(len(countries), l=.45,
+                                s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(16, 8))
+
+# countries = [country+" (Log)" for country in countries]
+cvp.plot_countries(coviddata_csse_now_infected,
+                   countries,
+                   min_confirmed=10,
+                   legendlabel=" CSSE",
+                   same_start=True)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    yscale='log',
+    title='Currently infected with COVID-19 across countries per population',
+    xlabel='Days',
+    ylabel='Currently infected per population (Confirmed - Recovered - Deaths)',
+)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/now_infected_perpop_countries.pdf")
+plt.savefig(os.environ["HOME"] +
+            "/covid19/figs/now_infected_perpop_countries.png")
 plt.show()
