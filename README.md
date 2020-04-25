@@ -14,8 +14,8 @@ Some Python functions for analyzing COVID-19.
 ## Prerequisites
 
 ### Python
-- Python3 (tested: 3.7.5)
-- IPython7 (tested: 7.11.1) for running the `.ipy` scripts
+- Python3 (currently used: 3.6.9)
+- IPython7 (currently used: 7.8.0) for running the `.ipy` scripts
 - add `/path/to/covid19/site-packages` to your `PYTHONPATH`
 - heavily dependent on `pandas`
 
@@ -49,6 +49,7 @@ More sources/inspirations for SIR model and plotting:
 
 ## Plots for Germany
 
+![Bundeslaender R](./figs/r_bundeslaender_bar.gif)
 ![Cases Germany](./figs/cases_germany.png)
 ![New Cases Germany](./figs/newcases_smooth_germany.png)
 ![Doubling time Germany](./figs/tdouble_germany.png)
