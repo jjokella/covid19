@@ -1,4 +1,5 @@
 import os
+import subprocess
 import numpy as np
 import matplotlib.ticker
 import matplotlib.pyplot as plt
@@ -69,13 +70,13 @@ plt.show()
 
 # Plot 2
 ntimes = 30
-for i in range(30):
+for i in range(ntimes):
 
     fig, ax = plt.subplots(figsize=(15, 8))
 
     coviddata_rki_r_today = coviddata_rki[[
         land + " R" + str(gentime) for land in laender
-    ]][coviddata_rki["x"] == coviddata_rki["x"][i-ntimes]]
+    ]][coviddata_rki["x"] == coviddata_rki["x"][i - ntimes]]
 
     ax.axhline(1.0, color='r', ls=':')
     ax.axhline(0.5, color='y', ls=':')
@@ -90,8 +91,23 @@ for i in range(30):
     sns.barplot(data=coviddata_rki_r_today, ax=ax, palette=bar_colors)
 
     ax.set_position([0.05, 0.4, 0.9, 0.5])
-    ax.set(title='Current R values of COVID-19 in laender', ylim=[0.0, 2.0])
+    ax.set(title='Current R values of COVID-19 in laender' +
+           str(coviddata_rki_r_today.index[0]),
+           ylim=[0.0, 2.0])
     ax.tick_params(axis="x", labelrotation=90, labelsize=14)
 
     # plt.savefig(os.environ["HOME"]+"/covid19/figs/r_bundeslaender_bar.pdf")
-    plt.savefig(os.environ["HOME"] + "/covid19/figs/r_bundeslaender_bar_"+str(i).zfill(3)+".png")
+    plt.savefig(os.environ["HOME"] + "/covid19/figs/r_bundeslaender_bar_" +
+                str(i).zfill(3) + ".png")
+
+proc = subprocess.run([
+    "convert", "-delay", "10", "-loop", "0", "r_bundeslaender_bar_*.png",
+    "r_bundeslaender_bar.gif"
+],
+                      cwd=os.environ["HOME"] + "/covid19/figs",
+                      stdout=None,
+                      input=None)
+proc.check_returncode()
+for i in range(ntimes):
+    os.remove(os.environ["HOME"] + "/covid19/figs/" + "r_bundeslaender_bar_" +
+              str(i).zfill(3) + ".png")
