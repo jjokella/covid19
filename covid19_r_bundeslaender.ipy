@@ -1,0 +1,97 @@
+import os
+import numpy as np
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import seaborn as sns
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.eudata as eudata
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+laender = [
+    'Germany',  #
+    'East-Germany',  #
+    'West-Germany',  #
+    'Mecklenburg-Vorpommern',  #
+    'Bremen',  #
+    'Thüringen',  #
+    'Saarland',  #
+    'Brandenburg',  #
+    'Sachsen-Anhalt',  #
+    'Schleswig-Holstein',  #
+    'Sachsen',  #
+    'Hamburg',  #
+    'Berlin',  #
+    'Hessen',  #
+    'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen',  #
+]
+coviddata_rki = eudata.coviddata_eudata_germany()
+cvdf.add_x(coviddata_rki)
+
+for land in laender:
+    coviddata_rki[land] = coviddata_rki[land] / eudata.de_population[land]
+
+gentime = 7.0
+for land_name in laender:
+    cvdff.add_r(coviddata_rki, land_name, gentime=gentime)
+
+# Plots -----------------------------------------------------------
+
+# Plot 1
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+line_styles = [':', '--']
+
+for i, land_name in enumerate(laender):
+    cvp.plot_countries(coviddata_rki, [land_name + " R" + str(7.0)],
+                       min_confirmed=0.0,
+                       ls=line_styles[np.mod(i, 2)],
+                       legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='R plot of COVID-19 in laender',
+       xlabel='Days',
+       ylabel='Reproduction number R',
+       ylim=[0.0, 2.0],
+       xlim=25)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 2
+ntimes = 30
+for i in range(30):
+
+    fig, ax = plt.subplots(figsize=(15, 8))
+
+    coviddata_rki_r_today = coviddata_rki[[
+        land + " R" + str(gentime) for land in laender
+    ]][coviddata_rki["x"] == coviddata_rki["x"][i-ntimes]]
+
+    ax.axhline(1.0, color='r', ls=':')
+    ax.axhline(0.5, color='y', ls=':')
+
+    bar_colors = [
+        "r" if coviddata_rki_r_today[land + " R" + str(gentime)][0] > 1.0 else
+        ("y" if coviddata_rki_r_today[land + " R" +
+                                      str(gentime)][0] > 0.5 else "g")
+        for land in laender
+    ]
+
+    sns.barplot(data=coviddata_rki_r_today, ax=ax, palette=bar_colors)
+
+    ax.set_position([0.05, 0.4, 0.9, 0.5])
+    ax.set(title='Current R values of COVID-19 in laender', ylim=[0.0, 2.0])
+    ax.tick_params(axis="x", labelrotation=90, labelsize=14)
+
+    # plt.savefig(os.environ["HOME"]+"/covid19/figs/r_bundeslaender_bar.pdf")
+    plt.savefig(os.environ["HOME"] + "/covid19/figs/r_bundeslaender_bar_"+str(i).zfill(3)+".png")
