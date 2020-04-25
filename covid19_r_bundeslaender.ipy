@@ -99,9 +99,10 @@ for i in range(ntimes):
     # plt.savefig(os.environ["HOME"]+"/covid19/figs/r_bundeslaender_bar.pdf")
     plt.savefig(os.environ["HOME"] + "/covid19/figs/r_bundeslaender_bar_" +
                 str(i).zfill(3) + ".png")
+    plt.clf()
 
 proc = subprocess.run([
-    "convert", "-delay", "10", "-loop", "0", "r_bundeslaender_bar_*.png",
+    "convert", "-delay", "20", "-loop", "0", "r_bundeslaender_bar_*.png",
     "r_bundeslaender_bar.gif"
 ],
                       cwd=os.environ["HOME"] + "/covid19/figs",
