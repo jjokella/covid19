@@ -47,7 +47,13 @@ More sources/inspirations for SIR model and plotting:
 
 - Idea for casecase plot from Minute Physics Youtube Channel
 
-## Plots for Germany
+## Plots for Germany (reliable)
+
+The German data is most reliable, since it is compared from different
+sources, including the official data from Robert-Koch-Institut (both
+by date of local reporting and date of reporting to the RKI). For the
+Landkreise the data becomes less reliable because the numbers are
+small.
 
 ![Bundeslaender R](./figs/r_bundeslaender_bar.gif)
 ![Cases Germany](./figs/cases_germany.png)
@@ -57,12 +63,29 @@ More sources/inspirations for SIR model and plotting:
 ![Cases Landkreise](./figs/cases_landkreise.png)
 ![Casecase Landkreise](./figs/casecase_landkreise.png)
 
-## Plots for multiple countries
+## Plots for multiple countries (possibly unreliable, hardly comparable)
+
+The country-data (from JHU-CSSE) are hardly comparable, as the number
+of confirmed cases in a country depends on a number of influences. Two
+examples: (1) the number of tests per week and (2) the modalities of
+reporting.
+
+For the number of deaths, one country may only report fatalities with
+a positive test, while other countries may additionally report
+fatalities that showed symptoms, but were not tested.
 
 ![Deaths Countries](./figs/deaths_countries.png)
 ![Reproduction number deaths](./figs/reproductionnumber_deaths_countries.png)
 ![Reproduction number cases](./figs/reproductionnumber_countries.png)
-![Now infected](./figs/now_infected_countries.png)
-![Now infected](./figs/now_infected_perpop_countries.png)
 ![Casecase countries](./figs/casecase_countries.png)
 ![Casecase countries](./figs/casecase_perpop_countries.png)
+
+## Currenly infected (almost completely unreliable)
+
+This data is even more uncertain than the numbers of confirmed cases
+and deaths across countries. The number of recovered cases is only
+crudely estimated, for example by taking the new cases from two weeks
+ago.
+
+![Now infected](./figs/now_infected_countries.png)
+![Now infected](./figs/now_infected_perpop_countries.png)
