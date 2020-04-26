@@ -273,9 +273,10 @@ ax.axhline(np.log10(icu_germany * icu_germany_free / p_crit),
 
 ax.set(
     # yscale='log',
-    title='Growth of COVID-19 in ' + country,
+    title='Number of confirmed cases of COVID-19 in ' + country +
+    ' (logarithmic)',
     xlabel='Days',
-    ylabel='Confirmed cases (logarithmic)')
+    ylabel=r'Confirmed cases ($\log_{10}$)')
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_germany.pdf")
@@ -485,7 +486,7 @@ ax.set(
     title='T-Double plot of COVID-19 in ' + country,
     xlabel='Days',
     ylabel='Doubling time [days]',
-    ylim=[50.0, 0.0])
+    ylim=[80.0, 0.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
@@ -525,7 +526,8 @@ cvp.plot_countries(coviddata_rki2, [country + " Diff" + " MA" + str(window)],
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
     # yscale='log',
-    title='New cases of COVID-19 in ' + country,
+    title='New cases of COVID-19 in ' + country + '(Moving average ' +
+    str(window) + ' )',
     xlabel='Days',
     ylabel='New confirmed cases (Moving average ' + str(window) + ' )',
     # ylim=[0.5,2.5]
@@ -534,5 +536,5 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/newcases_smooth_germany.pdf")
-plt.savefig(os.environ["HOME"]+"/covid19/figs/newcases_smooth_germany.png")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/newcases_smooth_germany.png")
 plt.show()

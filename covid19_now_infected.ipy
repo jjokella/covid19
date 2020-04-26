@@ -128,8 +128,8 @@ plt.show()
 
 # Plot 4
 for country in countries:
-    coviddata_csse_now_infected[
-        country] = coviddata_csse_now_infected[country] / csse.population[country]
+    coviddata_csse_now_infected[country] = coviddata_csse_now_infected[
+        country] / csse.population[country]
 
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
                                 s=.8))  # 8 countries max
