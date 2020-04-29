@@ -1,0 +1,75 @@
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidinput.rki as rki
+import covidplots as cvp
+
+coviddata_rki = rki.coviddata_all_rki
+coviddata_rki["Refdatum"] = pd.to_datetime(coviddata_rki["Refdatum"], utc=True)
+coviddata_rki["Meldedatum"] = pd.to_datetime(coviddata_rki["Meldedatum"], utc=True)
+
+cvdf.add_x_col(coviddata_rki, "Refdatum")
+cvdf.add_x_col(coviddata_rki, "Meldedatum")
+
+coviddata_rki = coviddata_rki.drop(
+    coviddata_rki[coviddata_rki["xMeldedatum"] -
+                  coviddata_rki["xRefdatum"] < 0.0]["xRefdatum"].index)
+coviddata_rki = coviddata_rki.drop(
+    coviddata_rki[coviddata_rki["xMeldedatum"] -
+                  coviddata_rki["xRefdatum"] > 30.0]["xRefdatum"].index)
+
+coviddata_rki["xImputationsdatum"] = coviddata_rki["xRefdatum"]
+coviddata_rki["xImputationsdatum"][
+    coviddata_rki["IstErkrankungsbeginn"] == 0] = (
+        coviddata_rki["xImputationsdatum"][
+            coviddata_rki["IstErkrankungsbeginn"] == 0] -
+        np.random.default_rng(10).choice(
+            coviddata_rki[coviddata_rki["IstErkrankungsbeginn"] == 1]
+            ["xMeldedatum"] - coviddata_rki[
+                coviddata_rki["IstErkrankungsbeginn"] == 1]["xRefdatum"],
+            40061))
+
+daten = pd.DataFrame(
+    {
+        "nMeldung": [
+            coviddata_rki[coviddata_rki["xMeldedatum"] >= x][
+                coviddata_rki["xMeldedatum"] < x + 1.0]["AnzahlFall"].sum()
+            for x in np.arange(coviddata_rki["xMeldedatum"].max())
+        ],
+        "nErkrankung": [
+            coviddata_rki[coviddata_rki["xRefdatum"] >= x][
+                coviddata_rki["xRefdatum"] < x + 1.0]
+            [coviddata_rki["IstErkrankungsbeginn"] == 1]["AnzahlFall"].sum()
+            for x in np.arange(coviddata_rki["xMeldedatum"].max())
+        ],
+        "nImputation": [
+            coviddata_rki[coviddata_rki["xImputationsdatum"] >= x]
+            [coviddata_rki["xImputationsdatum"] < x + 1.0]["AnzahlFall"].sum()
+            for x in np.arange(coviddata_rki["xMeldedatum"].max())
+        ],
+        "Daten": [
+            str(cvdf.zero_dat + pd.Timedelta(days=x))[:10]
+            for x in np.arange(coviddata_rki["xMeldedatum"].max())
+        ],
+    },
+    index=np.arange(coviddata_rki["xMeldedatum"].max()),
+)
+
+fig, ax = plt.subplots(figsize=(20, 10))
+
+daten.plot.bar(x="Daten",
+               y=["nErkrankung", "nImputation"],
+               ax=ax)
+plt.show()

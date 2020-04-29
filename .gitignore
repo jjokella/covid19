@@ -2,4 +2,5 @@ COVID-19/
 covid19-eu-data/
 covid-19-germany-gae/
 RKI_Corona_Landkreise.csv
+RKI_COVID19.csv
 *.pyc

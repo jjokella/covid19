@@ -38,6 +38,8 @@ This csv file is used for German districts:
   and download as spreadsheet `RKI_Corona_Landkreise.csv` into
   `/path/to/covid19/data`
 
+- csv data from RKI `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0?selectedAttribute=AnzahlTodesfall` as spreadsheet `RKI_COVID19.csv` in `/path/to/covid19/data`
+
 More sources/inspirations for SIR model and plotting:
 
 - SIR model in Python from
