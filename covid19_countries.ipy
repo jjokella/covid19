@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.ticker
@@ -18,7 +19,7 @@ min_confirmed = 1
 norm_min_confirmed = True
 max_num_entries = 100
 
-yscale = "linear"                  # "log"/ "linear"
+yscale = "linear"  # "log"/ "linear"
 
 countries = [
     "Germany",  #
@@ -30,17 +31,18 @@ countries = [
     "US",  #
     # "Korea, South",  #
     "Belgium",  #
-    "United Kingdom", #
-    "Austria", #
+    "United Kingdom",  #
+    "Austria",  #
     # "Poland",  #
     # "China", #
     # "Chile", #
-]  #["US", "Korea, South", "China"]
+]  # ["US", "Korea, South", "China"]
 
 coviddata_csse = csse.coviddata_csse(countries, switch="Deaths")
 cvdf.add_x(coviddata_csse)
 for country in countries:
-    coviddata_csse[country] = coviddata_csse[country]/csse.population[country]
+    coviddata_csse[
+        country] = coviddata_csse[country] / csse.population[country]
 
 # countries = [
 #     'Germany',  #
@@ -131,7 +133,7 @@ ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend()
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/deaths_countries.pdf")
-plt.savefig(os.environ["HOME"]+"/covid19/figs/deaths_countries.png")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/deaths_countries.png")
 
 plt.show()
 
@@ -146,7 +148,7 @@ for country_name in countries:
         coviddata_csse[country_name + " (Growth Factor)"],
         'o-',
         label=country_name + " (Growth Factor)",
-        )
+    )
 
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(title='Growth Factor deaths of COVID-19 across countries',
@@ -169,7 +171,7 @@ for country_name in countries:
         coviddata_csse[country_name + " Diff"],
         'o-',
         label=country_name + " Diff",
-        )
+    )
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -194,7 +196,7 @@ for country_name in countries:
         coviddata_csse[country_name + " Diff" + " MA" + str(window_ma)],
         'o-',
         label=country_name + " Diff" + " MA" + str(window_ma),
-        )
+    )
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
@@ -214,22 +216,20 @@ sns.set_palette(sns.hls_palette(len(countries), l=.45,
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for country_name in countries:
-    cvp.plot_countries(coviddata_csse, [country_name + " TDouble" + str(window_td)],
-                   min_confirmed=1.0,
-                   legendlabel=" CSSE")
+    cvp.plot_countries(coviddata_csse,
+                       [country_name + " TDouble" + str(window_td)],
+                       min_confirmed=1.0,
+                       legendlabel=" CSSE")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
-ax.set(
-    title='T-Double plot of COVID-19 in countries',
-    xlabel='Days',
-    ylabel='Doubling time [days]',
-    ylim=[100.0,0.0]
-)
+ax.set(title='T-Double plot of COVID-19 in countries',
+       xlabel='Days',
+       ylabel='Doubling time [days]',
+       ylim=[100.0, 0.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 plt.show()
-
 
 # Plot 6
 sns.set_palette(sns.hls_palette(len(countries), l=.45,
@@ -238,20 +238,19 @@ fig, ax = plt.subplots(figsize=(15, 8))
 
 for country_name in countries:
     cvp.plot_countries(coviddata_csse, [country_name + " R" + str(gentime)],
-                   min_confirmed=0.0,
-                   legendlabel=" CSSE")
+                       min_confirmed=0.0,
+                       legendlabel=" CSSE")
 
 ax.set_position([0.1, 0.1, 0.7, 0.8])
-ax.set(
-    title='Reproduction number of deaths of COVID-19',
-    xlabel='Days',
-    ylabel='Reproduction number R [from deaths]',
-    ylim=[0.0,5.0]
-)
+ax.set(title='Reproduction number of deaths of COVID-19',
+       xlabel='Days',
+       ylabel='Reproduction number R [from deaths]',
+       ylim=[0.0, 5.0])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_deaths_countries.pdf")
-plt.savefig(os.environ["HOME"]+"/covid19/figs/reproductionnumber_deaths_countries.png")
+plt.savefig(os.environ["HOME"] +
+            "/covid19/figs/reproductionnumber_deaths_countries.png")
 
 plt.show()
