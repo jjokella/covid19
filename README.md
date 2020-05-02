@@ -89,7 +89,7 @@ fatalities that showed symptoms, but were not tested.
 ![Casecase countries](./figs/casecase_countries.png)
 ![Casecase countries](./figs/casecase_perpop_countries.png)
 
-## Currenly infected (almost completely unreliable)
+## Currently infected (almost completely unreliable)
 
 This data is even more uncertain than the numbers of confirmed cases
 and deaths across countries. The number of recovered cases is only
