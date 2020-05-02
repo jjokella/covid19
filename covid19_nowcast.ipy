@@ -39,24 +39,34 @@ coviddata_rki["xImputationsdatum"][
             coviddata_rki[coviddata_rki["IstErkrankungsbeginn"] == 1]
             ["xMeldedatum"] - coviddata_rki[
                 coviddata_rki["IstErkrankungsbeginn"] == 1]["xRefdatum"],
-            40061))
+            coviddata_rki["xImputationsdatum"][
+                coviddata_rki["IstErkrankungsbeginn"] == 0].size))
+
+coviddata_rki["Imputationsdatum"] = pd.Series([
+    cvdf.zero_dat +
+    pd.Timedelta(days=np.array(coviddata_rki["xImputationsdatum"])[i])
+    for i in range(len(np.array(coviddata_rki["xImputationsdatum"])))
+],
+                                              index=coviddata_rki.index)
 
 daten = pd.DataFrame(
     {
         "nMeldung": [
-            coviddata_rki[coviddata_rki["xMeldedatum"] >= x][
-                coviddata_rki["xMeldedatum"] < x + 1.0]["AnzahlFall"].sum()
+            coviddata_rki[(coviddata_rki["xMeldedatum"] >= x) & (
+                coviddata_rki["xMeldedatum"] < x + 1.0)]["AnzahlFall"].sum()
             for x in np.arange(coviddata_rki["xMeldedatum"].max())
         ],
         "nErkrankung": [
-            coviddata_rki[coviddata_rki["xRefdatum"] >= x][
-                coviddata_rki["xRefdatum"] < x + 1.0]
-            [coviddata_rki["IstErkrankungsbeginn"] == 1]["AnzahlFall"].sum()
+            coviddata_rki[(coviddata_rki["xRefdatum"] >= x)
+                          & (coviddata_rki["xRefdatum"] < x + 1.0) &
+                          (coviddata_rki["IstErkrankungsbeginn"]
+                           == 1)]["AnzahlFall"].sum()
             for x in np.arange(coviddata_rki["xMeldedatum"].max())
         ],
         "nImputation": [
-            coviddata_rki[coviddata_rki["xImputationsdatum"] >= x]
-            [coviddata_rki["xImputationsdatum"] < x + 1.0]["AnzahlFall"].sum()
+            coviddata_rki[(coviddata_rki["xImputationsdatum"] >= x)
+                          & (coviddata_rki["xImputationsdatum"] < x + 1.0)]
+            ["AnzahlFall"].sum()
             for x in np.arange(coviddata_rki["xMeldedatum"].max())
         ],
         "Daten": [
@@ -73,3 +83,66 @@ daten.plot.bar(x="Daten",
                y=["nErkrankung", "nImputation"],
                ax=ax)
 plt.show()
+
+
+cvdff.add_mov_avg(daten, "nMeldung", 4.0)
+cvdff.add_mov_avg(daten, "nErkrankung", 4.0)
+cvdff.add_mov_avg(daten, "nImputation", 4.0)
+
+fig, ax = plt.subplots(figsize=(20, 10))
+
+daten.plot.bar(x="Daten",
+               y=["nErkrankung MA4.0", "nImputation MA4.0"],
+               ax=ax)
+plt.show()
+
+
+# Save data for R script (future: possibly remove dates out of bounds see above 0-30 days difference)
+f = open(os.environ["HOME"] + "/Code/biom12194/data/coviddata_rki.csv", 'w')
+f.write(",Meldedatum,Imputationsdatum\n")
+j=1
+for i1 in range(len(coviddata_rki.index)):
+    for i2 in range(coviddata_rki["AnzahlFall"][coviddata_rki.index[i1]]):
+        f.write(str(j)+","+str(coviddata_rki["Meldedatum"][coviddata_rki.index[i1]])+","+str(coviddata_rki["Imputationsdatum"][coviddata_rki.index[i1]])+"\n")
+        j=j+1
+f.close()
+
+# Source code: Function nowcast
+#
+# https://github.com/cran/surveillance
+#
+# Code: R script
+#
+# https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fbiom.12194&file=biom12194-sm-0001-SuppDataCode.zip
+#
+
+# Read data from R script
+nowcast = pd.read_csv(os.environ["HOME"]+"/Code/biom12194/data/nowcast.csv")
+
+nowcast.index = pd.to_datetime(
+    pd.read_csv(os.environ["HOME"] +
+                "/Code/biom12194/data/nowcast_dates.csv")["x"])
+
+# Insert nowcast in daten
+for dat in nowcast.index:
+    if len(np.where(pd.to_datetime(daten["Daten"]) == dat)[0]) > 0:
+        idx = np.float64(np.where(pd.to_datetime(daten["Daten"]) == dat)[0][0])
+        # print(idx)
+        if idx in daten.index:
+            # print(nowcast["observed1"][dat])
+            daten.at[idx, "nowcast"] = nowcast["observed1"][dat]
+            # print(daten["nowcast"][idx])
+
+# Moving average of nowcast
+cvdff.add_mov_avg(daten, "nowcast", 4.0)
+
+# Figure
+fig, ax = plt.subplots(figsize=(20, 10))
+
+daten.plot.bar(x="Daten",
+               y=["nErkrankung MA4.0", "nImputation MA4.0", "nowcast MA4.0"],
+               ax=ax)
+plt.show()
+
+# R from Nowcast
+r = daten["nowcast MA4.0"][58.0]/daten["nowcast MA4.0"][58.0-4.0]
