@@ -4,3 +4,4 @@ covid-19-germany-gae/
 RKI_Corona_Landkreise.csv
 RKI_COVID19.csv
 *.pyc
+*.R
