@@ -40,6 +40,13 @@ This csv file is used for German districts:
 
 - csv data from RKI `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0?selectedAttribute=AnzahlTodesfall` as spreadsheet `RKI_COVID19.csv` in `/path/to/covid19/data`
 
+R-Script for nowcast
+
+- R-script `nowcast_dem.R` from
+  `https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fbiom.12194&file=biom12194-sm-0001-SuppDataCode.zip`
+  put in `/path/to/covid19/` and adapted to run with
+  `coviddata_rki.csv`
+
 More sources/inspirations for SIR model and plotting:
 
 - SIR model in Python from
