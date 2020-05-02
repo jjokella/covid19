@@ -68,11 +68,12 @@ for land in laender:
         land.replace('-Deaths', '')]
 
 window_td = 6.9
+window_ma = 6.9
 for land_name in laender:
     cvdff.add_growth_factor(coviddata_rki, land_name)
     cvdff.add_log(coviddata_rki, land_name)
     cvdff.add_diff(coviddata_rki, land_name)
-    cvdff.add_mov_avg(coviddata_rki, land_name + " Diff", window=window)
+    cvdff.add_mov_avg(coviddata_rki, land_name + " Diff", window=window_ma)
     cvdff.add_tdouble(coviddata_rki,
                       land_name,
                       window=window_td,
@@ -163,7 +164,7 @@ sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
 fig, ax = plt.subplots(figsize=(15, 8))
 
 for land_name in laender:
-    coviddata_rki[land_name + " Diff"+" MA" + str(window)].shift(0).plot(
+    coviddata_rki[land_name + " Diff"+" MA" + str(window_ma)].shift(0).plot(
         style='o-',
         # ms=4,
         # lw=1,
@@ -177,7 +178,7 @@ ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(
     title='Exponential growth of COVID-19 across laender',
     xlabel='Dates',
-    ylabel='New Cases, moving average' + str(window),
+    ylabel='New Cases, moving average' + str(window_ma),
     # ylim=[0.0,3.0]
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
