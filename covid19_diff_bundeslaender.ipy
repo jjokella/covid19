@@ -80,8 +80,8 @@ for i in range(ntimes):
         land + " Diff MA" + str(window_ma) for land in laender
     ]][coviddata_rki["x"] == coviddata_rki["x"][i - ntimes]]
 
-    ax.axhline(1.0, color='r', ls=':')
-    ax.axhline(0.5, color='y', ls=':')
+    ax.axhline(30.0, color='r', ls=':')
+    ax.axhline(10.0, color='y', ls=':')
 
     bar_colors = [
         "r" if coviddata_rki_r_today[land + " Diff MA" +
