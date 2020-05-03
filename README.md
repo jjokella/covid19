@@ -65,6 +65,7 @@ Landkreise the data becomes less reliable because the numbers are
 small.
 
 ![Bundeslaender R](./figs/r_bundeslaender_bar.gif)
+![Bundeslaender R](./figs/diff_bundeslaender_bar.gif)
 ![Cases Germany](./figs/cases_germany.png)
 ![New Cases Germany](./figs/newcases_smooth_germany.png)
 ![Doubling time Germany](./figs/tdouble_germany.png)

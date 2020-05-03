@@ -1,0 +1,119 @@
+import os
+import subprocess
+import numpy as np
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import seaborn as sns
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.eudata as eudata
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+laender = [
+    'Germany',  #
+    'East-Germany',  #
+    'West-Germany',  #
+    'Mecklenburg-Vorpommern',  #
+    'Bremen',  #
+    'Thüringen',  #
+    'Saarland',  #
+    'Brandenburg',  #
+    'Sachsen-Anhalt',  #
+    'Schleswig-Holstein',  #
+    'Sachsen',  #
+    'Hamburg',  #
+    'Berlin',  #
+    'Hessen',  #
+    'Rheinland-Pfalz',  #
+    'Niedersachsen',  #
+    'Bayern',  #
+    'Baden-Württemberg',  #
+    'Nordrhein-Westfalen',  #
+]
+coviddata_rki = eudata.coviddata_eudata_germany()
+cvdf.add_x(coviddata_rki)
+
+for land in laender:
+    coviddata_rki[land] = coviddata_rki[land] / eudata.de_population[land]
+
+window_ma = 6.9
+for land_name in laender:
+    cvdff.add_diff(coviddata_rki, land_name)
+    cvdff.add_mov_avg(coviddata_rki, land_name + " Diff", window=window_ma)
+
+# Plots -----------------------------------------------------------
+
+# Plot 1
+sns.set_palette(sns.hls_palette(len(laender), l=.45, s=.8))  # 8 laender max
+fig, ax = plt.subplots(figsize=(15, 8))
+
+line_styles = [':', '--']
+
+for i, land_name in enumerate(laender):
+    cvp.plot_countries(coviddata_rki,
+                       [land_name + " Diff MA" + str(window_ma)],
+                       min_confirmed=0.0,
+                       ls=line_styles[np.mod(i, 2)],
+                       legendlabel=" RKI")
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(title='New cases of COVID-19 in laender',
+       xlabel='Days',
+       ylabel='New cases per Million (moving average week)',
+       ylim=[0.0, 130.0],
+       xlim=25)
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+plt.show()
+
+# Plot 2
+ntimes = 30
+for i in range(ntimes):
+
+    fig, ax = plt.subplots(figsize=(15, 8))
+
+    coviddata_rki_r_today = coviddata_rki[[
+        land + " Diff MA" + str(window_ma) for land in laender
+    ]][coviddata_rki["x"] == coviddata_rki["x"][i - ntimes]]
+
+    ax.axhline(1.0, color='r', ls=':')
+    ax.axhline(0.5, color='y', ls=':')
+
+    bar_colors = [
+        "r" if coviddata_rki_r_today[land + " Diff MA" +
+                                     str(window_ma)][0] > 30.0 else
+        ("y" if coviddata_rki_r_today[land + " Diff MA" +
+                                      str(window_ma)][0] > 10.0 else "g")
+        for land in laender
+    ]
+
+    sns.barplot(data=coviddata_rki_r_today, ax=ax, palette=bar_colors)
+
+    ax.set_position([0.05, 0.4, 0.9, 0.5])
+    ax.set(
+        title=
+        'New cases of COVID-19 in Germany/Bundesländer per million inhabitants (Moving Average week), date: '
+        + str(coviddata_rki_r_today.index[0]),
+        ylim=[0.0, 50.0])
+    ax.tick_params(axis="x", labelrotation=90, labelsize=14)
+
+    # plt.savefig(os.environ["HOME"]+"/covid19/figs/diff_bundeslaender_bar.pdf")
+    plt.savefig(os.environ["HOME"] + "/covid19/figs/diff_bundeslaender_bar_" +
+                str(i).zfill(3) + ".png")
+    plt.close()
+
+proc = subprocess.run([
+    "convert", "-delay", "40", "-loop", "0", "diff_bundeslaender_bar_*.png",
+    "diff_bundeslaender_bar.gif"
+],
+                      cwd=os.environ["HOME"] + "/covid19/figs",
+                      stdout=None,
+                      input=None)
+proc.check_returncode()
+for i in range(ntimes):
+    os.remove(os.environ["HOME"] + "/covid19/figs/" +
+              "diff_bundeslaender_bar_" + str(i).zfill(3) + ".png")
