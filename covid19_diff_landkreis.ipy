@@ -1,0 +1,140 @@
+import os
+import subprocess
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidinput.landkreise as lk
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+# # Read DataFrame from covid-19-germany-gae data (a little behind)
+# coviddata_lk = lkdt.coviddata_landkreise(switch="rki")
+# coviddata_lk = coviddata_lk.drop("Berlin", axis="columns")
+# coviddata_lk = coviddata_lk.drop("Germany", axis="columns")
+
+# # Read DataFrame from raw data (takes long)
+# coviddata_lk = lkdt.coviddata_landkreise_raw()
+
+# Saved DataFrame (06.05.2020)
+coviddata_lk = pd.read_pickle(os.environ["HOME"] +
+                              "/covid19/data/coviddata_landkreise_raw.pkl")
+
+
+landkreisnamen = coviddata_lk.columns
+
+cvdf.add_x(coviddata_lk)
+
+# Per Population
+for landkreis in landkreisnamen:
+    coviddata_lk[landkreis] = coviddata_lk[landkreis] / lk.landkreis_einwohner[
+        landkreis][0]
+
+# Moving sum of New cases
+window_ms = 6.9
+for landkreis in landkreisnamen:
+    cvdff.add_diff(coviddata_lk, landkreis)
+    cvdff.add_mov_sum(coviddata_lk, landkreis + " Diff", window=window_ms)
+
+# Print Landkreise that were at least once part of the top ten
+ntimes = 60
+printcols = []
+for i in range(ntimes):
+    newcols = np.array(coviddata_lk[[
+        col for col in coviddata_lk.columns if "SUM" in col
+    ]].sort_values(by=coviddata_lk.index[i - ntimes],
+                   axis="columns").columns[-10:])
+    for newcol in newcols:
+        if newcol not in printcols:
+            printcols.append(newcol)
+
+
+# Plot 1
+fig, ax = plt.subplots(figsize=(20, 8))
+
+# Extract Landkreise from printcols
+coviddata_lk_today = coviddata_lk[printcols][coviddata_lk["x"] ==
+                                             coviddata_lk["x"][-1]]
+
+ax.axhline(30.0, color='r', ls=':')
+ax.axhline(10.0, color='y', ls=':')
+
+bar_colors = [
+    "k" if coviddata_lk_today[col][0] > 50.0 else
+    ("r" if coviddata_lk_today[col][0] > 30.0 else
+     ("y" if coviddata_lk_today[col][0] > 10.0 else "g"))
+    for col in coviddata_lk_today.columns
+]
+
+sns.barplot(data=coviddata_lk_today, ax=ax, palette=bar_colors)
+
+ax.set_position([0.05, 0.4, 0.9, 0.5])
+ax.set(
+    title=
+    'New cases of COVID-19 in Landkreise per 100,000 (SUM week), date: '
+    + str(coviddata_lk_today.index[0]),
+    ylim=[0.0, 100.0])
+ax.tick_params(axis="x", labelrotation=90, labelsize=14)
+
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/diff_landkreis_bar.pdf")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/diff_landkreis_bar.png")
+plt.show()
+
+# Plot 2
+
+for i in range(ntimes):
+
+    fig, ax = plt.subplots(figsize=(20, 8))
+
+    # Extract Landkreise from printcols
+    coviddata_lk_today = coviddata_lk[printcols][coviddata_lk["x"] ==
+                                                 coviddata_lk["x"][i - ntimes]]
+
+    ax.axhline(30.0, color='r', ls=':')
+    ax.axhline(10.0, color='y', ls=':')
+
+    bar_colors = [
+        "k" if coviddata_lk_today[col][0] > 50.0 else
+        ("r" if coviddata_lk_today[col][0] > 30.0 else
+         ("y" if coviddata_lk_today[col][0] > 10.0 else "g"))
+        for col in coviddata_lk_today.columns
+    ]
+
+    sns.barplot(data=coviddata_lk_today, ax=ax, palette=bar_colors)
+
+    ax.set_position([0.05, 0.4, 0.9, 0.5])
+    ax.set(
+        title=
+        'New cases of COVID-19 in Landkreise per 100,000 (SUM week), date: '
+        + str(coviddata_lk_today.index[0]),
+        ylim=[0.0, 100.0])
+    ax.tick_params(axis="x", labelrotation=90, labelsize=14)
+
+    # plt.savefig(os.environ["HOME"]+"/covid19/figs/diff_landkreis_bar.pdf")
+    plt.savefig(os.environ["HOME"] + "/covid19/figs/diff_landkreis_bar_" +
+                str(i).zfill(3) + ".png")
+    plt.close()
+
+proc = subprocess.run([
+    "convert", "-delay", "40", "-loop", "0", "diff_landkreis_bar_*.png",
+    "diff_landkreis_bar.gif"
+],
+                      cwd=os.environ["HOME"] + "/covid19/figs",
+                      stdout=None,
+                      input=None)
+proc.check_returncode()
+for i in range(ntimes):
+    os.remove(os.environ["HOME"] + "/covid19/figs/" + "diff_landkreis_bar_" +
+              str(i).zfill(3) + ".png")
