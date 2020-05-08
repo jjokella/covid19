@@ -26,12 +26,11 @@ plt.style.use('seaborn-whitegrid')
 # coviddata_lk = coviddata_lk.drop("Germany", axis="columns")
 
 # # Read DataFrame from raw data (takes long)
-# coviddata_lk = lkdt.coviddata_landkreise_raw()
+coviddata_lk = lkdt.coviddata_landkreise_raw()
 
-# Saved DataFrame (06.05.2020)
-coviddata_lk = pd.read_pickle(os.environ["HOME"] +
-                              "/covid19/data/coviddata_landkreise_raw.pkl")
-
+# Saved DataFrame (max date = 05.05.2020)
+# coviddata_lk = pd.read_pickle(os.environ["HOME"] +
+#                               "/covid19/data/coviddata_landkreise_raw.pkl")
 
 landkreisnamen = coviddata_lk.columns
 
@@ -60,7 +59,6 @@ for i in range(ntimes):
         if newcol not in printcols:
             printcols.append(newcol)
 
-
 # Plot 1
 fig, ax = plt.subplots(figsize=(20, 8))
 
@@ -82,8 +80,7 @@ sns.barplot(data=coviddata_lk_today, ax=ax, palette=bar_colors)
 
 ax.set_position([0.05, 0.4, 0.9, 0.5])
 ax.set(
-    title=
-    'New cases of COVID-19 in Landkreise per 100,000 (SUM week), date: '
+    title='New cases of COVID-19 in Landkreise per 100,000 (SUM week), date: '
     + str(coviddata_lk_today.index[0]),
     ylim=[0.0, 100.0])
 ax.tick_params(axis="x", labelrotation=90, labelsize=14)
@@ -95,6 +92,8 @@ plt.show()
 # Plot 2
 
 for i in range(ntimes):
+
+    print("Fortschritt: ", str(np.round(i / ntimes * 100.0, 1)), "%")
 
     fig, ax = plt.subplots(figsize=(20, 8))
 
@@ -115,11 +114,10 @@ for i in range(ntimes):
     sns.barplot(data=coviddata_lk_today, ax=ax, palette=bar_colors)
 
     ax.set_position([0.05, 0.4, 0.9, 0.5])
-    ax.set(
-        title=
-        'New cases of COVID-19 in Landkreise per 100,000 (SUM week), date: '
-        + str(coviddata_lk_today.index[0]),
-        ylim=[0.0, 100.0])
+    ax.set(title='New cases of COVID-19' +
+           ' in Landkreise per 100,000 (SUM week), date: ' +
+           str(coviddata_lk_today.index[0]),
+           ylim=[0.0, 100.0])
     ax.tick_params(axis="x", labelrotation=90, labelsize=14)
 
     # plt.savefig(os.environ["HOME"]+"/covid19/figs/diff_landkreis_bar.pdf")

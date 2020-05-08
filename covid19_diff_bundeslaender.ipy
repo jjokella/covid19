@@ -62,7 +62,7 @@ for i, land_name in enumerate(laender):
 ax.set_position([0.1, 0.1, 0.7, 0.8])
 ax.set(title='New cases of COVID-19 in laender',
        xlabel='Days',
-       ylabel='New cases per Million (moving average week)',
+       ylabel='New cases per 100,000 (moving sum week)',
        ylim=[0.0, 130.0],
        xlim=25)
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
@@ -74,6 +74,8 @@ plt.show()
 ntimes = 30
 for i in range(ntimes):
 
+    print("Fortschritt: ", str(np.round(i / ntimes * 100.0, 1)), "%")
+
     fig, ax = plt.subplots(figsize=(15, 8))
 
     coviddata_rki_r_today = coviddata_rki[[
@@ -82,11 +84,11 @@ for i in range(ntimes):
 
     bar_colors = [
         "k" if coviddata_rki_r_today[land + " Diff SUM" +
-                                     str(window_ms)][0] > 10.0 else
+                                     str(window_ms)][0] > 20.0 else
         ("r" if coviddata_rki_r_today[land + " Diff SUM" +
-                                      str(window_ms)][0] > 5.0 else
+                                      str(window_ms)][0] > 10.0 else
          ("y" if coviddata_rki_r_today[land + " Diff SUM" +
-                                       str(window_ms)][0] > 2.5 else "g"))
+                                       str(window_ms)][0] > 5.0 else "g"))
         for land in laender
     ]
 
@@ -96,7 +98,7 @@ for i in range(ntimes):
     ax.set(title='New cases of COVID-19 in ' + 'Germany/Bundesländer ' +
            'per 100,000 inhabitants ' + '(Sum week), date: ' +
            str(coviddata_rki_r_today.index[0]),
-           ylim=[0.0, 15.0])
+           ylim=[0.0, 50.0])
     ax.tick_params(axis="x", labelrotation=90, labelsize=14)
 
     # plt.savefig(os.environ["HOME"]+"/covid19/figs/diff_bundeslaender_bar.pdf")
