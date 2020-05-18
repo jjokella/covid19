@@ -44,16 +44,17 @@ for landkreis in landkreisnamen:
 # Moving sum of New cases
 window_ms = 6.9
 for landkreis in landkreisnamen:
+    print(landkreis)
     cvdff.add_diff(coviddata_lk, landkreis)
     cvdff.add_mov_sum(coviddata_lk, landkreis + " Diff", window=window_ms)
 
 # Print Landkreise that were at least once part of the top ten
-ntimes = 60
+ntimes_topten = 70
 printcols = []
-for i in range(ntimes):
+for i in range(ntimes_topten):
     newcols = np.array(coviddata_lk[[
         col for col in coviddata_lk.columns if "SUM" in col
-    ]].sort_values(by=coviddata_lk.index[i - ntimes],
+    ]].sort_values(by=coviddata_lk.index[i - ntimes_topten],
                    axis="columns").columns[-10:])
     for newcol in newcols:
         if newcol not in printcols:
@@ -90,7 +91,7 @@ plt.savefig(os.environ["HOME"] + "/covid19/figs/diff_landkreis_bar.png")
 plt.show()
 
 # Plot 2
-
+ntimes = 60
 for i in range(ntimes):
 
     print("Fortschritt: ", str(np.round(i / ntimes * 100.0, 1)), "%")

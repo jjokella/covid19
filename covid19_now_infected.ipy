@@ -1,15 +1,15 @@
 import os
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 import matplotlib.ticker
 import matplotlib.pyplot as plt
-import matplotlib.dates as dates
-import matplotlib.cm as cm
+# import matplotlib.dates as dates
+# import matplotlib.cm as cm
 import seaborn as sns
 import covidfuncs.datfuncs as cvdf
 import covidfuncs.dffuncs as cvdff
 import covidinput.csse as csse
-import covidinput.eudata as eudata
+# import covidinput.eudata as eudata
 import covidplots as cvp
 
 sns.set_context('talk')
@@ -29,7 +29,7 @@ countries = [
     # "Poland",  #
     "Austria",  #
     # "China", #
-]  #["US", "Korea, South", "China"]
+]  # ["US", "Korea, South", "China"]
 
 coviddata_csse_conf = csse.coviddata_csse(countries, switch="Confirmed")
 cvdf.add_x(coviddata_csse_conf)
@@ -39,7 +39,8 @@ coviddata_csse_reco = csse.coviddata_csse(countries, switch="Recovered")
 cvdf.add_x(coviddata_csse_reco)
 
 for country in countries:
-    coviddata_csse_now_infected = coviddata_csse_conf - coviddata_csse_dead - coviddata_csse_reco
+    coviddata_csse_now_infected = (coviddata_csse_conf - coviddata_csse_dead -
+                                   coviddata_csse_reco)
 
 for country in countries:
     cvdff.add_diff(coviddata_csse_now_infected, country)
@@ -113,12 +114,11 @@ cvp.plot_countries(
 ax.set_position([0.1, 0.1, 0.8, 0.8])
 ax.set(
     # yscale='log',
-    title=
-    'New current infections with COVID-19 across countries (moving average)',
+    title='New current infections with COVID-19' +
+    ' across countries (moving average)',
     xlabel='Days',
-    ylabel=
-    'New Currently infected (Confirmed - Recovered - Deaths), moving average' +
-    str(6.9),
+    ylabel='New Currently infected (Confirmed - Recovered - Deaths)' +
+    ', moving average' + str(6.9),
     xlim=40,
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
@@ -147,7 +147,8 @@ ax.set(
     yscale='log',
     title='Currently infected with COVID-19 across countries per population',
     xlabel='Days',
-    ylabel='Currently infected per population (Confirmed - Recovered - Deaths)',
+    ylabel='Currently infected per population ' +
+    '(Confirmed - Recovered - Deaths)',
 )
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.legend(bbox_to_anchor=(1.0, 1.0))
