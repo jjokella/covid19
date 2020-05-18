@@ -22,39 +22,44 @@ Some Python functions for analyzing COVID-19.
 ### Data
 These are the used data repositories:
 
-- clone `https://github.com/CSSEGISandData/COVID-19.git` from Github
-  and into `/path/to/covid19/data`
+- clone https://github.com/CSSEGISandData/COVID-19.git from Github and
+  into `/path/to/covid19/data`
 
-- clone `https://github.com/covid19-eu-zh/covid19-eu-data.git` from Github
-  and into `/path/to/covid19/data`
+- clone https://github.com/covid19-eu-zh/covid19-eu-data.git from
+  Github and into `/path/to/covid19/data`
 
-- clone `https://github.com/jgehrcke/covid-19-germany-gae.git` from Github
+- clone https://github.com/jgehrcke/covid-19-germany-gae.git from Github
   and into `/path/to/covid19/data`
 
 This csv file is used for German districts:
 
 - csv data for German Landkreise from
-  `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0`
+  https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0
   and download as spreadsheet `RKI_Corona_Landkreise.csv` into
   `/path/to/covid19/data`
 
-- csv data from RKI `https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0?selectedAttribute=AnzahlTodesfall` as spreadsheet `RKI_COVID19.csv` in `/path/to/covid19/data`
+- csv data from RKI
+  https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0?selectedAttribute=AnzahlTodesfall
+  as spreadsheet `RKI_COVID19.csv` in `/path/to/covid19/data`
 
 R-Script for nowcast
 
 - R-script `nowcast_dem.R` from
-  `https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fbiom.12194&file=biom12194-sm-0001-SuppDataCode.zip`
+  https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fbiom.12194&file=biom12194-sm-0001-SuppDataCode.zip
   put in `/path/to/covid19/` and adapted to run with
   `coviddata_rki.csv`
 
 More sources/inspirations for SIR model and plotting:
 
 - SIR model in Python from
-  `https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/`
+  https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/
 
 - Plot function idea from `https://github.com/twiecki/covid19`
 
 - Idea for casecase plot from Minute Physics Youtube Channel
+
+- Risklayer Google Spreadsheet:
+  https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/edit#gid=0
 
 ## Plots for Germany (reliable)
 
