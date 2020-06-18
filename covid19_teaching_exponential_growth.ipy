@@ -1,0 +1,252 @@
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+# import scipy.optimize as sco
+import matplotlib.ticker
+import matplotlib.pyplot as plt
+# import matplotlib.dates as dates
+# import covidfuncs.datfuncs as cvdf
+import covidfuncs.dffuncs as cvdff
+import covidinput.csse as csse
+import covidinput.who as who
+import covidinput.eudata as eudata
+import covidinput.zeit as zeit
+import covidinput.landkreisdaten as lkdt
+import covidplots as cvp
+
+sns.set_context('talk')
+plt.style.use('seaborn-whitegrid')
+
+# Input -----------------------------------------------------
+country = "Germany"
+
+# CSSE-JHU Data, Germany
+coviddata_csse = csse.coviddata_csse([country])[:62]
+coviddata_csse.name = ("CSSE-JHU " + country)
+cvdff.add_log(coviddata_csse, country)
+
+# # WHO-data, Germany
+# coviddata_who = who.coviddata_who([country])
+# coviddata_who.name = ("WHO-JHU " + country)
+# cvdff.add_log(coviddata_who, country)
+
+# Robert Koch Institut
+coviddata_rki = eudata.coviddata_eudata_germany()[:27]
+coviddata_rki.name = ("Robert-Koch-Institut " + country)
+cvdff.add_log(coviddata_rki, country)
+
+# # ECDC data
+# coviddata_ecdc = eudata.coviddata_eudata_europe()
+# coviddata_ecdc.name = ("ECDC " + country)
+# cvdff.add_log(coviddata_ecdc, country)
+
+# # Zeit data
+# coviddata_zeit = zeit.coviddata_zeit_germany()
+# coviddata_zeit.name = ("Die ZEIT " + country)
+# cvdff.add_log(coviddata_zeit, country)
+
+# # Risklayer Landkreis data
+# coviddata_rlay = lkdt.coviddata_landkreise(switch="rl")
+# coviddata_rlay.name = ("Risklayer (Landkreise) " + country)
+# cvdff.add_log(coviddata_rlay, country)
+
+# # RKI Landkreis data
+# coviddata_rki2 = lkdt.coviddata_landkreise(switch="rki")
+# coviddata_rki2.name = ("RKI (Landkreise) " + country)
+# cvdff.add_log(coviddata_rki2, country)
+
+# Fits -----------------------------------------------------
+
+# Fit exponential
+startdat = pd.Timestamp("2020/03/01")
+cvdff.add_exponential_fit(coviddata_csse, country, 1000, 20000)
+# cvdff.add_exponential_fit(coviddata_who, country, 1000, 20000)
+cvdff.add_exponential_fit(coviddata_rki, country, 1000, 20000)
+# cvdff.add_exponential_fit(coviddata_ecdc, country, 1000, 20000)
+# cvdff.add_exponential_fit(coviddata_zeit, country, 1000, 20000)
+# cvdff.add_exponential_fit(coviddata_rlay, country, 1000, 20000)
+# cvdff.add_exponential_fit(coviddata_rki2, country, 1000, 20000)
+
+
+# Plot 1
+line_styles = ['-', ':', '--', '-.']
+n_colors = 2
+num_entries_plus = 10
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(20, 10))
+
+cvp.plot_countries(coviddata_csse, [country],
+                   min_confirmed=100,
+                   legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" WHO",
+#                    max_num_entries=30+num_entries_plus)
+cvp.plot_countries(coviddata_rki, [country],
+                   min_confirmed=100,
+                   legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" ECDC",
+#                    max_num_entries=14+num_entries_plus)
+# cvp.plot_countries(coviddata_zeit, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" ZEIT",
+#                    max_num_entries=20+num_entries_plus)
+# cvp.plot_countries(coviddata_rlay, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" RLAY",
+#                    max_num_entries=30+num_entries_plus)
+# cvp.plot_countries(coviddata_rki2, [country],
+#                    min_confirmed=100,
+#                    legendlabel=" RKI2",
+#                    max_num_entries=30+num_entries_plus)
+
+
+cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO",
+#                    max_num_entries=30+num_entries_plus)
+cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC",
+#                    max_num_entries=14+num_entries_plus)
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT",
+#                    max_num_entries=20+num_entries_plus)
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY",
+#                    max_num_entries=30+num_entries_plus)
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Exp)"],
+#                    min_confirmed=100,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2",
+#                    max_num_entries=30+num_entries_plus)
+
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set(
+    # yscale='log',
+    title='Number of confirmed cases of COVID-19 in ' + country,
+    xlabel='Days',
+    ylabel='Confirmed cases')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_germany.pdf")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/cases_teaching_exponential_growth.png")
+plt.show()
+
+# Plot 2
+line_styles = ['-', ':', '--', '-.']
+n_colors = 2
+
+sns.set_palette(sns.hls_palette(n_colors, l=.45, s=.8))  # 8 countries max
+fig, ax = plt.subplots(figsize=(20, 10))
+
+cvp.plot_countries(coviddata_csse, [country + " (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " (Log)"],
+#                    min_confirmed=2.0,
+#                    legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " (Log)"],
+                   min_confirmed=2.0,
+                   legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " (Log)"],
+#                    min_confirmed=2.0,
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " (Log)"],
+#                    min_confirmed=2.0,
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " (Log)"],
+#                    min_confirmed=2.0,
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " (Log)"],
+#                    min_confirmed=2.0,
+#                    legendlabel=" RKI2")
+
+
+cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" CSSE")
+# cvp.plot_countries(coviddata_who, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" WHO")
+cvp.plot_countries(coviddata_rki, [country + " Fit (Log)"],
+                   min_confirmed=2.0,
+                   ls="-",
+                   marker="",
+                   legendlabel=" RKI")
+# cvp.plot_countries(coviddata_ecdc, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ECDC")
+# cvp.plot_countries(coviddata_zeit, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" ZEIT")
+# cvp.plot_countries(coviddata_rlay, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RLAY")
+# cvp.plot_countries(coviddata_rki2, [country + " Fit (Log)"],
+#                    min_confirmed=2.0,
+#                    ls="-",
+#                    marker="",
+#                    legendlabel=" RKI2")
+ax.set_position([0.1, 0.1, 0.7, 0.8])
+
+# # 28000 ICU beds total, 80% occupied, 5% critical symptoms
+# icu_germany = 28000
+# icu_germany_free = .2
+# p_crit = .05
+# ax.axhline(np.log10(icu_germany / p_crit),
+#            color='.3',
+#            ls='-.',
+#            label='Total ICU beds')
+# ax.axhline(np.log10(icu_germany * icu_germany_free / p_crit),
+#            color='.5',
+#            ls=':',
+#            label='Free ICU beds')
+
+ax.set(
+    # yscale='log',
+    title='Number of confirmed cases of COVID-19 in ' + country +
+    ' (logarithmic)',
+    xlabel='Days',
+    ylabel=r'Confirmed cases ($\log_{10}$)')
+ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.legend(bbox_to_anchor=(1.0, 1.0))
+# plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_germany.pdf")
+plt.savefig(os.environ["HOME"] + "/covid19/figs/cases_teaching_exponential_growth_log.png")
+plt.show()
