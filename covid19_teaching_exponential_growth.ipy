@@ -12,7 +12,7 @@ import covidinput.csse as csse
 import covidinput.who as who
 import covidinput.eudata as eudata
 import covidinput.zeit as zeit
-import covidinput.landkreisdaten as lkdt
+# import covidinput.landkreisdaten as lkdt
 import covidplots as cvp
 
 sns.set_context('talk')
@@ -60,9 +60,9 @@ cvdff.add_log(coviddata_rki, country)
 
 # Fit exponential
 startdat = pd.Timestamp("2020/03/01")
-cvdff.add_exponential_fit(coviddata_csse, country, 1000, 20000)
+cvdff.add_exponential_fit(coviddata_csse, country, 100, 20000)
 # cvdff.add_exponential_fit(coviddata_who, country, 1000, 20000)
-cvdff.add_exponential_fit(coviddata_rki, country, 1000, 20000)
+cvdff.add_exponential_fit(coviddata_rki, country, 100, 20000)
 # cvdff.add_exponential_fit(coviddata_ecdc, country, 1000, 20000)
 # cvdff.add_exponential_fit(coviddata_zeit, country, 1000, 20000)
 # cvdff.add_exponential_fit(coviddata_rlay, country, 1000, 20000)
@@ -79,14 +79,24 @@ fig, ax = plt.subplots(figsize=(20, 10))
 
 cvp.plot_countries(coviddata_csse, [country],
                    min_confirmed=100,
-                   legendlabel=" CSSE")
+                   legendlabel="Quelle: Johns-Hopkins-Universität")
 # cvp.plot_countries(coviddata_who, [country],
 #                    min_confirmed=100,
 #                    legendlabel=" WHO",
 #                    max_num_entries=30+num_entries_plus)
 cvp.plot_countries(coviddata_rki, [country],
                    min_confirmed=100,
-                   legendlabel=" RKI")
+                   legendlabel="Quelle: Robert-Koch-Institut")
+cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel="Angepasste Exponentialfunktion (bis 20000 Fälle)")
+cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
+                   min_confirmed=100,
+                   ls="-",
+                   marker="",
+                   legendlabel="Angepasste Exponentialfunktion (bis 20000 Fälle)")
 # cvp.plot_countries(coviddata_ecdc, [country],
 #                    min_confirmed=100,
 #                    legendlabel=" ECDC",
@@ -105,22 +115,12 @@ cvp.plot_countries(coviddata_rki, [country],
 #                    max_num_entries=30+num_entries_plus)
 
 
-cvp.plot_countries(coviddata_csse, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" CSSE")
 # cvp.plot_countries(coviddata_who, [country + " Fit (Exp)"],
 #                    min_confirmed=100,
 #                    ls="-",
 #                    marker="",
 #                    legendlabel=" WHO",
 #                    max_num_entries=30+num_entries_plus)
-cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
-                   min_confirmed=100,
-                   ls="-",
-                   marker="",
-                   legendlabel=" RKI")
 # cvp.plot_countries(coviddata_ecdc, [country + " Fit (Exp)"],
 #                    min_confirmed=100,
 #                    ls="-",
@@ -146,14 +146,18 @@ cvp.plot_countries(coviddata_rki, [country + " Fit (Exp)"],
 #                    legendlabel=" RKI2",
 #                    max_num_entries=30+num_entries_plus)
 
-ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.axhline(20000.0,
+           color='.3',
+           ls='-.')
+ax.set_position([0.1, 0.1, 0.65, 0.8])
 ax.set(
     # yscale='log',
-    title='Number of confirmed cases of COVID-19 in ' + country,
-    xlabel='Days',
-    ylabel='Confirmed cases')
+    title='Anzahl bestätigter COVID-19-Fälle in Deutschland',
+    xlabel='Tage nach dem 1.März 2020',
+    ylabel='Anzahl bestätigter Fälle')
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend(bbox_to_anchor=(1.0, 1.0))
+ax.legend(bbox_to_anchor=(1.0, 1.0), fontsize=13)
+# ax.legend()
 
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_germany.pdf")
 plt.savefig(os.environ["HOME"] + "/covid19/figs/cases_teaching_exponential_growth.png")
@@ -168,13 +172,13 @@ fig, ax = plt.subplots(figsize=(20, 10))
 
 cvp.plot_countries(coviddata_csse, [country + " (Log)"],
                    min_confirmed=2.0,
-                   legendlabel=" CSSE")
+                   legendlabel="Quelle: Johns-Hopkins-Universität")
 # cvp.plot_countries(coviddata_who, [country + " (Log)"],
 #                    min_confirmed=2.0,
 #                    legendlabel=" WHO")
 cvp.plot_countries(coviddata_rki, [country + " (Log)"],
                    min_confirmed=2.0,
-                   legendlabel=" RKI")
+                   legendlabel="Quelle: Robert-Koch-Institut")
 # cvp.plot_countries(coviddata_ecdc, [country + " (Log)"],
 #                    min_confirmed=2.0,
 #                    legendlabel=" ECDC")
@@ -193,7 +197,7 @@ cvp.plot_countries(coviddata_csse, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
-                   legendlabel=" CSSE")
+                   legendlabel="Logarithmierte angepasste Exponentialfunktion")
 # cvp.plot_countries(coviddata_who, [country + " Fit (Log)"],
 #                    min_confirmed=2.0,
 #                    ls="-",
@@ -203,7 +207,7 @@ cvp.plot_countries(coviddata_rki, [country + " Fit (Log)"],
                    min_confirmed=2.0,
                    ls="-",
                    marker="",
-                   legendlabel=" RKI")
+                   legendlabel="Logarithmierte angepasste Exponentialfunktion")
 # cvp.plot_countries(coviddata_ecdc, [country + " Fit (Log)"],
 #                    min_confirmed=2.0,
 #                    ls="-",
@@ -224,7 +228,7 @@ cvp.plot_countries(coviddata_rki, [country + " Fit (Log)"],
 #                    ls="-",
 #                    marker="",
 #                    legendlabel=" RKI2")
-ax.set_position([0.1, 0.1, 0.7, 0.8])
+ax.set_position([0.1, 0.1, 0.65, 0.8])
 
 # # 28000 ICU beds total, 80% occupied, 5% critical symptoms
 # icu_germany = 28000
@@ -241,12 +245,11 @@ ax.set_position([0.1, 0.1, 0.7, 0.8])
 
 ax.set(
     # yscale='log',
-    title='Number of confirmed cases of COVID-19 in ' + country +
-    ' (logarithmic)',
-    xlabel='Days',
-    ylabel=r'Confirmed cases ($\log_{10}$)')
+    title='Logarithmus der Anzahl bestätigter Fälle  COVID-19 in Deutschland',
+    xlabel='Tage nach dem 1.März 2020',
+    ylabel=r'Anzahl bestätigter Fälle ($\log_{10}$)')
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-ax.legend(bbox_to_anchor=(1.0, 1.0))
+ax.legend(bbox_to_anchor=(1.0, 1.0), fontsize=13)
 # plt.savefig(os.environ["HOME"]+"/covid19/figs/cases_germany.pdf")
 plt.savefig(os.environ["HOME"] + "/covid19/figs/cases_teaching_exponential_growth_log.png")
 plt.show()
